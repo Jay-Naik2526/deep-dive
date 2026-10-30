@@ -78,7 +78,7 @@ export const featured: Project[] = [
     id: 'skyflix', title: 'Skyflix', tag: 'Movies and series · admin panel', year: '2025', hue: 5, image: '/img/skyflix.webp',
     blurb: 'A streaming-style catalogue with a full admin panel.',
     long: 'Movies and series website with an admin panel for managing the catalogue, built on the MERN stack.',
-    stack: ['React', 'Tailwind', 'Node.js', 'MongoDB'], url: 'https://skyflix-smoky.vercel.app', repo: GH + 'skyflix',
+    stack: ['React', 'Tailwind', 'Node.js', 'MongoDB'], url: 'https://skyflixer.fun', repo: GH + 'skyflix',
   },
   {
     id: 'ambiora', title: 'Ambiora Techfest', tag: 'Technical lead · 500+ visitors', year: '2025', hue: 265, image: '/img/ambiora.webp',
