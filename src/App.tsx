@@ -14,6 +14,7 @@ import { Atmosphere } from './components/Atmosphere'
 import { allProjects, profile } from './data'
 import { ripple, world } from './world'
 import { sound } from './audio'
+import { track } from './analytics'
 import { SceneGate } from './components/SceneGate'
 
 // below-the-fold and on-demand pieces load in their own chunks, then get prefetched when the browser is idle
@@ -41,6 +42,7 @@ export default function App() {
 
   const setOpenId = useCallback((id: string | null) => {
     setOpenIdState(id)
+    if (id) track(`case-${id}`)
     history.replaceState(null, '', id ? `#/dive/${id}` : location.pathname)
   }, [])
 
@@ -50,6 +52,7 @@ export default function App() {
   }, [])
 
   const copy = useCallback(() => {
+    track('email-copy')
     navigator.clipboard?.writeText(profile.email).then(
       () => say('Email copied to clipboard'),
       () => say(profile.email),

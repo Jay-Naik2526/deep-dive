@@ -7,8 +7,10 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App'
 import { startWorld } from './world'
+import { initAnalytics } from './analytics'
 
 startWorld()
+initAnalytics()
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />

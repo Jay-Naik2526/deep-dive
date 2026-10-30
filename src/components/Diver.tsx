@@ -4,6 +4,7 @@ import { ask, SUGGESTIONS, type Answer } from '../diver/search.ts'
 import { caseFx } from '../caseFx'
 import { ripple } from '../world'
 import { sound } from '../audio'
+import { track } from '../analytics'
 
 interface Msg { id: number; role: 'me' | 'diver'; text: string; answer?: Answer }
 
@@ -43,6 +44,7 @@ export default function Diver({ open, onClose, onOpenCase }: { open: boolean; on
     setBusy(true)
     setMsgs((m) => [...m, { id: nextId.current++, role: 'me', text: t }])
     sound.tick(900)
+    track('diver-ask') // only the fact that a question was asked; its text is never sent
     // a short beat so it feels like it is reading its notes
     setTimeout(() => {
       const a = ask(t)
