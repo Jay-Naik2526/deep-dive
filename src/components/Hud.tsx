@@ -2,11 +2,20 @@ import { useEffect, useRef, useState } from 'react'
 import { motion } from 'motion/react'
 import { goTo, onFrame, toggleNight, world } from '../world'
 import { sound } from '../audio'
-import { sections } from '../data'
+import { MAX_DEPTH, sections } from '../data'
 import { quality } from '../quality'
 
-const MAXD = 200
-const zones: [number, string][] = [[0, 'Sunlight zone'], [0.2, 'Twilight zone'], [0.58, 'Midnight zone'], [0.88, 'The seabed']]
+// zone names by metres, matching the labels on each section
+const zones: [number, string][] = [[0, 'Sunlight zone'], [35, 'Twilight zone'], [130, 'Midnight zone'], [198, 'The seabed']]
+
+/** Metres at scroll position y, interpolating between where each section starts. */
+function metresAt(y: number, tops: number[], end: number) {
+  let i = 0
+  while (i + 1 < sections.length && tops[i + 1] <= y) i++
+  const a = tops[i], b = i + 1 < sections.length ? tops[i + 1] : Math.max(end, a + 1)
+  const m0 = sections[i].m, m1 = i + 1 < sections.length ? sections[i + 1].m : MAX_DEPTH
+  return Math.min(MAX_DEPTH, Math.max(0, m0 + ((y - a) / (b - a)) * (m1 - m0)))
+}
 
 export function Hud({ onPalette, onAsk }: { onPalette: () => void; onAsk: () => void }) {
   const pin = useRef<HTMLDivElement>(null)
@@ -21,6 +30,8 @@ export function Hud({ onPalette, onAsk }: { onPalette: () => void; onAsk: () => 
   const last = useRef('')
   const inkKey = useRef('')
   const frame = useRef(0)
+  const tops = useRef<number[]>([])
+  const nav = useRef<HTMLElement>(null)
 
   useEffect(() => {
     const sync = () => setSnd(sound.enabled)
@@ -31,6 +42,12 @@ export function Hud({ onPalette, onAsk }: { onPalette: () => void; onAsk: () => 
     window.addEventListener('trench', onTrench)
     return () => { window.removeEventListener('snd', sync); window.removeEventListener('night', syncNight); window.removeEventListener('trench', onTrench) }
   }, [])
+
+  // on small screens the section list scrolls sideways: keep the current section in view
+  useEffect(() => {
+    const a = nav.current?.querySelector<HTMLElement>('a[data-on=true]')
+    if (nav.current && a) nav.current.scrollTo({ left: a.offsetLeft - nav.current.clientWidth / 2 + a.offsetWidth / 2, behavior: 'smooth' })
+  }, [active])
 
   useEffect(
     () =>
@@ -47,23 +64,29 @@ export function Hud({ onPalette, onAsk }: { onPalette: () => void; onAsk: () => 
           root.style.setProperty('--ink', ink)
           root.style.setProperty('--ink-inv', `rgb(${b.map((v, i) => Math.round(v + (a[i] - v) * e))})`)
         }
-        if (depth.current) depth.current.textContent = Math.round(d * MAXD) + ' m'
+        const t = tops.current
+        const metres = t.length === sections.length ? metresAt(scrollY, t, root.scrollHeight - innerHeight) : d * MAX_DEPTH
+        if (depth.current) depth.current.textContent = Math.round(metres) + ' m'
         let z = zones[0][1]
-        zones.forEach((zz) => d >= zz[0] && (z = zz[1]))
+        zones.forEach((zz) => metres >= zz[0] && (z = zz[1]))
         if (zone.current && z !== last.current) {
           zone.current.textContent = z
           if (last.current) window.dispatchEvent(new CustomEvent('zone', { detail: z }))
           last.current = z
         }
-        if (pin.current && gauge.current) pin.current.style.transform = `translateY(${(d * gauge.current.clientHeight).toFixed(1)}px)`
-        if (bar.current) bar.current.style.transform = `scaleX(${d})`
+        if (pin.current && gauge.current) pin.current.style.transform = `translateY(${((metres / MAX_DEPTH) * gauge.current.clientHeight).toFixed(1)}px)`
+        if (bar.current) bar.current.style.transform = `scaleX(${metres / MAX_DEPTH})`
         // active section: layout reads are throttled to ~10/sec
         if (++frame.current % 6 === 0) {
           let cur = 'top'
+          const next: number[] = []
           for (const s of sections) {
             const el = document.getElementById(s.id)
-            if (el && el.getBoundingClientRect().top < innerHeight * 0.45) cur = s.id
+            const top = el ? el.getBoundingClientRect().top : Infinity
+            next.push(el ? top + scrollY : Infinity)
+            if (el && top < innerHeight * 0.45) cur = s.id
           }
+          if (next.every(Number.isFinite)) tops.current = next
           setActive((p) => (p === cur ? p : cur))
         }
       }),
@@ -74,7 +97,7 @@ export function Hud({ onPalette, onAsk }: { onPalette: () => void; onAsk: () => 
     <>
       <div className="hud hud-top mono">
         <button className="brand" onClick={() => goTo(0)} data-cursor="Surface">JN</button>
-        <nav aria-label="Sections">
+        <nav aria-label="Sections" ref={nav}>
           {sections.slice(1).map((s) => (
             <a key={s.id} href={`#${s.id}`} data-on={active === s.id} onClick={(e) => { e.preventDefault(); goTo('#' + s.id) }}>
               {s.label}

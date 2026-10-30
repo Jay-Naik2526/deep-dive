@@ -191,8 +191,9 @@ export const allProjects: Project[] = [...featured, ...reef]
 /** The depth label shown beside a project (featured go −38 to −115 m, the reef continues below). */
 export const depthOf = (id: string) => {
   const f = featured.findIndex((p) => p.id === id)
-  if (f >= 0) return 38 + f * 11
-  return 130 + Math.max(0, reef.findIndex((p) => p.id === id)) * 4
+  if (f >= 0) return 40 + f * 13 // the dive log runs 40 to 130 m
+  const r = Math.max(0, reef.findIndex((p) => p.id === id))
+  return 130 + Math.round((r * 30) / Math.max(1, reef.length - 1)) // the reef runs 130 to 160 m
 }
 
 export interface Writeup {
@@ -600,12 +601,17 @@ export const skillGroups: { name: string; items: string[] }[] = [
   { name: 'Craft', items: ['Git', 'Vercel', 'Playwright', 'RAG'] },
 ]
 
+/** The dive, top to bottom. `m` is the depth in metres at the moment each section reaches the top of the screen:
+ *  the depth readout and gauge interpolate between these, so the numbers on screen always agree with the section labels. */
 export const sections = [
-  { id: 'top', label: 'Surface' },
-  { id: 'about', label: 'Logbook' },
-  { id: 'dives', label: 'Dives' },
-  { id: 'reef', label: 'Reef' },
-  { id: 'sonar', label: 'Sonar' },
-  { id: 'signal', label: 'Signal' },
-  { id: 'seabed', label: 'Contact' },
+  { id: 'top', label: 'Surface', m: 0 },
+  { id: 'about', label: 'Logbook', m: 10 },
+  { id: 'dives', label: 'Dives', m: 40 },
+  { id: 'reef', label: 'Reef', m: 130 },
+  { id: 'sonar', label: 'Sonar', m: 160 },
+  { id: 'signal', label: 'Signal', m: 175 },
+  { id: 'certificates', label: 'Credentials', m: 185 },
+  { id: 'offer', label: 'Hire me', m: 192 },
+  { id: 'seabed', label: 'Contact', m: 198 },
 ]
+export const MAX_DEPTH = 200

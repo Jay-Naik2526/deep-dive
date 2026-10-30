@@ -8,7 +8,7 @@ import { ripple } from '../world'
 export function Contact({ copy }: { copy: () => void }) {
   return (
     <section className="seabed" id="seabed">
-      <div className="zone mono glow">The seabed · say hello</div>
+      <div className="zone mono glow">198 m · The seabed · say hello</div>
       <motion.h2 className="h2 glow" aria-label="Let's build something" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}>
         <span className="serif">Let's</span> <BendText text="build" preset="h2" /> something
       </motion.h2>

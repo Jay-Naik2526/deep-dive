@@ -366,7 +366,7 @@ export function Contributions() {
 
   return (
     <section className="signal" id="signal">
-      <div className="zone mono">190 m · Open signal</div>
+      <div className="zone mono">175 m · Open signal</div>
       <h2 className="h2" aria-label="Plankton count"><span className="serif">Plankton</span> <BendText text="count" preset="h2" /></h2>
       <p className="mono hint">Every glowing cell is a day I shipped something · {quality.touch ? 'tap' : 'hover'} to read it</p>
 

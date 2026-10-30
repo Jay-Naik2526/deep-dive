@@ -8,7 +8,7 @@ const title = (id: string) => allProjects.find((p) => p.id === id)?.title ?? id
 export function Offer({ onOpen }: { onOpen: (id: string) => void }) {
   return (
     <section className="offer" id="offer">
-      <div className="zone mono">195 m · Work with me</div>
+      <div className="zone mono">192 m · Work with me</div>
       <h2 className="h2" aria-label="What I'd build for you"><span className="serif">What I’d</span> <BendText text="build for you" preset="h2" /></h2>
 
       <div className="offer-grid">

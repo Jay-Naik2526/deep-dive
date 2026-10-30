@@ -3,7 +3,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { existsSync, readFileSync, readdirSync } from 'node:fs'
-import { featured, reef, allProjects, sections, profile, logbook, skillGroups, writeups, offers, testimonials, nowItems, nowUpdated } from '../src/data.ts'
+import { featured, reef, allProjects, depthOf, sections, profile, logbook, skillGroups, writeups, offers, testimonials, nowItems, nowUpdated } from '../src/data.ts'
 
 const root = new URL('../', import.meta.url)
 const publicPath = (p) => new URL('public' + p, root)
@@ -113,4 +113,12 @@ test('certificates are complete and their images exist', async () => {
     if (c.verify) assert.match(c.verify, /^https:\/\/coursera\.org\/verify\/(specialization\/)?[A-Z0-9]{10,14}$/, `${c.id}: odd verify link`)
     for (const k of c.courses ?? []) if (k.verify) assert.match(k.verify, /^https:\/\/coursera\.org\/verify\/[A-Z0-9]{10,14}$/)
   }
+})
+
+test('the dive gets deeper section by section, and each project depth sits inside its section', () => {
+  for (let i = 1; i < sections.length; i++) assert.ok(sections[i].m > sections[i - 1].m, `${sections[i].id} is not deeper than ${sections[i - 1].id}`)
+  const m = (id) => sections.find((s) => s.id === id).m
+  const dive = featured.map((p) => depthOf(p.id)), reefD = reef.map((p) => depthOf(p.id))
+  assert.ok(Math.min(...dive) >= m('dives') && Math.max(...dive) <= m('reef'))
+  assert.ok(Math.min(...reefD) >= m('reef') && Math.max(...reefD) <= m('sonar'))
 })

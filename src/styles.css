@@ -73,8 +73,16 @@ kbd{font-family:var(--mono);font-size:11px;padding:2px 6px;border-radius:5px;bor
 .readout{left:var(--gutter);bottom:18px;display:flex;gap:16px;align-items:baseline;pointer-events:none;padding:8px 14px;border-radius:99px;border:1px solid var(--line);background:color-mix(in srgb,var(--ink-inv) 55%,transparent)}
 .readout b{font-weight:600;font-variant-numeric:tabular-nums;display:inline-block;min-width:5ch}
 .progress{position:fixed;left:0;top:0;height:2px;width:100%;background:var(--glow);transform-origin:left;transform:scaleX(0);z-index:30;box-shadow:0 0 12px var(--glow)}
-@media(max-width:860px){.gauge{display:none}.hud-top nav a:nth-child(n+4){display:none}.hud-tools button .tool-label{display:none}}
-@media(max-width:520px){.hud-top nav{display:none}}
+@media(max-width:1260px){.hud-top nav a{padding:8px 10px}.hud-tools button .tool-label{display:none}}
+/* eight sections do not fit beside the tools on a small screen: the list drops to its own row and scrolls sideways */
+@media(max-width:1000px){
+  .gauge{display:none}
+  .hud-top{flex-wrap:wrap;gap:10px;padding-bottom:6px}
+  .hud-top nav{order:3;width:100%;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+  .hud-top nav::-webkit-scrollbar{display:none}
+  .hud-top nav a{flex:0 0 auto;white-space:nowrap}
+  .hero{padding-top:176px}
+}
 
 /* ---------- cursor ---------- */
 .cursor-dot,.cursor-ring{position:fixed;left:0;top:0;pointer-events:none;z-index:200;border-radius:50%}

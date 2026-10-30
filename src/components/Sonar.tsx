@@ -140,7 +140,7 @@ export function Sonar() {
 
   return (
     <section className="sonar" id="sonar">
-      <div className="zone mono">175 m · Echo-location</div>
+      <div className="zone mono">160 m · Echo-location</div>
       <h2 className="h2" aria-label="What I work with"><span className="serif">Ping</span> <BendText text="the stack" preset="h2" /></h2>
       <div className="sonar-grid">
         <div className="radar" ref={wrap} data-cursor="Ping">

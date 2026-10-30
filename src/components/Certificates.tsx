@@ -36,7 +36,7 @@ export function Certificates() {
 
   return (
     <section className="certs" id="certificates">
-      <div className="zone mono">192 m · Credentials</div>
+      <div className="zone mono">185 m · Credentials</div>
       <h2 className="h2" aria-label="Things I've completed"><span className="serif">Things I’ve</span> <BendText text="completed" preset="h2" /></h2>
       <p className="mono hint">Courses and workshops, each one real · open a certificate to see it</p>
 

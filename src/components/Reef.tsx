@@ -79,7 +79,7 @@ export function Reef({ onOpen }: { onOpen: (id: string) => void }) {
 
   return (
     <section className="reef" id="reef">
-      <div className="zone mono">150 m · Midnight zone</div>
+      <div className="zone mono">130 – 160 m · Midnight zone</div>
       <h2 className="h2" aria-label="The reef"><span className="serif">The</span> <BendText text="reef" preset="h2" /></h2>
       <p className="mono hint">Everything else I've built · drag to explore · open one for its writeup</p>
 
