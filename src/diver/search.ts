@@ -243,6 +243,11 @@ export function ask(question: string): Answer {
   return { kind: 'answer', text: top.p.text, more, sources }
 }
 
+/** The best keyword matches, used to ground the AI answer. */
+export function retrieve(question: string, n: number): Passage[] {
+  return score(queryWeights(question)).slice(0, n).map((r) => r.p)
+}
+
 /** Questions that are known to work, shown as suggestions. */
 export const SUGGESTIONS = [
   'How accurate is Kupakosh?',

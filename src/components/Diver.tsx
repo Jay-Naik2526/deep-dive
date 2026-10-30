@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { ask, SUGGESTIONS, type Answer } from '../diver/search.ts'
+import { ASK_URL, askAI } from '../diver/llm.ts'
 import { caseFx } from '../caseFx'
 import { ripple } from '../world'
 import { sound } from '../audio'
@@ -14,7 +15,7 @@ const HELLO: Msg = {
   text: 'I’m the diver. I only know what’s written on this site, and I’ll say so when I don’t know. Ask me about a project, a skill, or a role.',
 }
 
-/** A chat that can only quote my own writing. See src/diver/search.ts: it retrieves, it never generates. */
+/** A chat grounded in my own writing. Offline it retrieves and quotes (src/diver/search.ts); with VITE_ASK_URL a model phrases the answer from those passages only (src/diver/llm.ts). */
 export default function Diver({ open, onClose, onOpenCase }: { open: boolean; onClose: () => void; onOpenCase: (id: string) => void }) {
   const [msgs, setMsgs] = useState<Msg[]>([HELLO])
   const [q, setQ] = useState('')
@@ -45,13 +46,18 @@ export default function Diver({ open, onClose, onOpenCase }: { open: boolean; on
     setMsgs((m) => [...m, { id: nextId.current++, role: 'me', text: t }])
     sound.tick(900)
     track('diver-ask') // only the fact that a question was asked; its text is never sent
-    // a short beat so it feels like it is reading its notes
-    setTimeout(() => {
-      const a = ask(t)
+    const reply = (a: Answer) => {
       setMsgs((m) => [...m, { id: nextId.current++, role: 'diver', text: a.text, answer: a }])
       setBusy(false)
       ripple(0.84, 0.82, 0.5)
-    }, 420 + Math.random() * 240)
+    }
+    if (ASK_URL) {
+      // AI-phrased answer grounded in my passages; if it fails for any reason the offline engine answers instead
+      askAI(t).then((a) => reply(a ?? ask(t)))
+      return
+    }
+    // a short beat so it feels like it is reading its notes
+    setTimeout(() => reply(ask(t)), 420 + Math.random() * 240)
   }
 
   const openCase = (id: string, e: React.MouseEvent) => {
@@ -79,7 +85,7 @@ export default function Diver({ open, onClose, onOpenCase }: { open: boolean; on
           <header className="dv-head">
             <div>
               <strong>Ask the diver</strong>
-              <span className="mono">Answers come only from my own notes</span>
+              <span className="mono">{ASK_URL ? 'AI-phrased · grounded in my own notes' : 'Answers come only from my own notes'}</span>
             </div>
             <button onClick={onClose} aria-label="Close" data-cursor="Close">✕</button>
           </header>
