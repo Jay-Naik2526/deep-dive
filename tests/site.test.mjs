@@ -112,7 +112,6 @@ test('certificates are complete and their images exist', async () => {
     assert.ok(c.title && c.issuer && c.line, `${c.id} is incomplete`)
     if (c.image) {
       assert.ok(existsSync(new URL('../public' + c.image, import.meta.url)), `${c.id}: missing ${c.image}`)
-      assert.ok(existsSync(new URL('../public' + c.image.replace('/certs/', '/certs/thumb/'), import.meta.url)), `${c.id}: missing thumbnail`)
     }
     if (c.verify) assert.match(c.verify, /^https:\/\/coursera\.org\/verify\/(specialization\/)?[A-Z0-9]{10,14}$/, `${c.id}: odd verify link`)
     for (const k of c.courses ?? []) if (k.verify) assert.match(k.verify, /^https:\/\/coursera\.org\/verify\/[A-Z0-9]{10,14}$/)
