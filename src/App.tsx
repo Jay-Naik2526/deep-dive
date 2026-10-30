@@ -121,7 +121,7 @@ export default function App() {
       <main data-go={go}>
         <Hero go={go} />
         <Marquee words={['Coding Club President', 'Full-stack', 'IoT', '3D web', 'Hackathon lead', 'Ships real things']} />
-        <About />
+        <About onOpen={(id) => setOpenId(id)} />
         <Dives openId={openId} setOpenId={setOpenId} />
         <Reef onOpen={(id) => setOpenId(id)} />
         <Suspense fallback={<Hold id="sonar" cls="sonar" h="120vh" />}><Sonar /></Suspense>

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { motion, useInView } from 'motion/react'
 import { BendText } from './BendText'
 import { logbook, numbers } from '../data'
+import { Now } from './Now'
 
 function Counter({ n, plus, pre }: { n: number; plus: boolean; pre?: string }) {
   const ref = useRef<HTMLSpanElement>(null)
@@ -24,7 +25,7 @@ function Counter({ n, plus, pre }: { n: number; plus: boolean; pre?: string }) {
 
 const rise = { hidden: { opacity: 0, y: 40 }, show: { opacity: 1, y: 0 } }
 
-export function About() {
+export function About({ onOpen }: { onOpen: (id: string) => void }) {
   return (
     <section className="about" id="about">
       <div className="zone mono">10 m · Sunlight zone</div>
@@ -64,6 +65,8 @@ export function About() {
           ))}
         </ol>
       </div>
+
+      <Now onOpen={onOpen} />
     </section>
   )
 }

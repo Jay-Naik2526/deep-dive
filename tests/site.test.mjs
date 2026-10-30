@@ -3,7 +3,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { existsSync, readFileSync, readdirSync } from 'node:fs'
-import { featured, reef, allProjects, sections, profile, logbook, skillGroups, writeups, offers, testimonials } from '../src/data.ts'
+import { featured, reef, allProjects, sections, profile, logbook, skillGroups, writeups, offers, testimonials, nowItems, nowUpdated } from '../src/data.ts'
 
 const root = new URL('../', import.meta.url)
 const publicPath = (p) => new URL('public' + p, root)
@@ -90,4 +90,14 @@ test('every "what I\'d build for you" claim points at a real project', () => {
 
 test('testimonials, when present, are complete (the section stays hidden while empty)', () => {
   for (const q of testimonials) assert.ok(q.quote && q.name && q.role, 'a testimonial needs a quote, a name and a role')
+})
+
+test('the "now" list is filled in, dated, and its proof points at real projects', () => {
+  const ids = new Set(allProjects.map((p) => p.id))
+  assert.match(nowUpdated, /^\d{4}-\d{2}$/, 'nowUpdated should look like 2026-10')
+  assert.ok(nowItems.length >= 3)
+  for (const n of nowItems) {
+    assert.ok(n.title && n.line.length > 30, `${n.title}: needs a real line`)
+    for (const id of n.proof ?? []) assert.ok(ids.has(id), `${n.title}: proof "${id}" is not a project`)
+  }
 })

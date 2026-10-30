@@ -405,3 +405,26 @@ kbd{font-family:var(--mono);font-size:11px;padding:2px 6px;border-radius:5px;bor
 .quote blockquote{font-size:clamp(24px,2.6vw,40px);line-height:1.15;color:var(--ink)}
 .quote figcaption{margin-top:16px;color:var(--ink-soft)}
 @media(max-width:900px){.offer-grid{grid-template-columns:1fr}}
+
+/* ---------- right now ---------- */
+.now{margin-top:clamp(70px,12vh,140px);border-top:1px solid var(--line);padding-top:clamp(30px,5vh,56px)}
+.now-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:clamp(26px,4vh,44px)}
+.now-head h3{font-size:clamp(40px,6vw,92px);font-weight:400;letter-spacing:-.03em;line-height:.9}
+.now-head .mono{color:var(--ink-soft)}
+.now-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:clamp(28px,5vw,80px);align-items:start}
+.now-list{list-style:none;display:flex;flex-direction:column}
+.now-list > li{padding:22px 0;border-bottom:1px solid var(--line)}
+.now-list > li:first-child{padding-top:0}
+.now-list h4{font-size:clamp(22px,2.4vw,34px);font-weight:340;letter-spacing:-.025em;line-height:1.05}
+.now-list p{margin-top:8px;font-size:clamp(15px,1.2vw,18px);line-height:1.5;font-weight:350;color:var(--ink-soft);max-width:54ch}
+.now-proof{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.now-live{border:1px solid var(--line);border-radius:22px;padding:22px 24px;background:linear-gradient(160deg,color-mix(in srgb,#fff 6%,transparent),transparent)}
+.now-live > .mono{display:flex;gap:10px;align-items:center;color:var(--ink-soft);margin-bottom:12px}
+.now-live ul{list-style:none}
+.now-live li a{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;padding:13px 0;border-top:1px solid var(--line);text-decoration:none;transition:padding .5s var(--ease)}
+.now-live li:first-child a{border-top:0}
+.now-live li a:hover{padding-left:10px}
+.now-live b{font-weight:450;font-size:18px;letter-spacing:-.01em}
+.now-live em{font-style:normal;color:var(--ink-soft);font-size:10.5px}
+.now-wait{color:var(--ink-soft)}
+@media(max-width:900px){.now-grid{grid-template-columns:1fr}}
