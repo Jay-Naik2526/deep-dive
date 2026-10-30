@@ -69,12 +69,6 @@ export const featured: Project[] = [
     url: 'https://studysync-inky.vercel.app', repo: GH + 'studysync',
   },
   {
-    id: 'w8', title: 'W8 Fitness', tag: 'React + TypeScript', year: '2025', hue: 150, image: '/img/w8fitness.webp',
-    blurb: 'A gym website with client, admin and trainer portals.',
-    long: 'A gym website with separate Client, Admin and Trainer portals: three roles, one product, typed end to end.',
-    stack: ['React', 'TypeScript', 'Tailwind'], stats: [['3', 'portals']], url: 'https://w8-fitness.vercel.app', repo: GH + 'W8-fitness',
-  },
-  {
     id: 'skyflix', title: 'Skyflix', tag: 'Movies and series · admin panel', year: '2025', hue: 5, image: '/img/skyflix.webp',
     blurb: 'A streaming-style catalogue with a full admin panel.',
     long: 'Movies and series website with an admin panel for managing the catalogue, built on the MERN stack.',
@@ -116,6 +110,12 @@ export const reef: Project[] = [
     blurb: 'Merge a pull request and your Spider-ID card goes live on the site.',
     long: 'The live roster for a workshop that teaches people to make their first pull request. Every card on the page is a real merged PR: students add a file, it merges, the site rebuilds, and their card appears. There is no database, only JSON files, Git and a strict sandbox.',
     stack: ['Next.js', 'TypeScript', 'GitHub', 'Vercel'], url: 'https://first-pr-festival.vercel.app', repo: GH + 'first-pr-festival',
+  },
+  {
+    id: 'w8', title: 'W8 Fitness', tag: 'React + TypeScript', year: '2025', hue: 150, image: '/img/w8fitness.webp',
+    blurb: 'A gym website with client, admin and trainer portals.',
+    long: 'A gym website with separate Client, Admin and Trainer portals: three roles, one product, typed end to end.',
+    stack: ['React', 'TypeScript', 'Tailwind'], stats: [['3', 'portals']], url: 'https://w8-fitness.vercel.app', repo: GH + 'W8-fitness',
   },
   {
     id: 'nash', title: 'NashSttrike', tag: 'Cyber division · CTF', year: '2026', hue: 140, image: '/img/nash.webp',
