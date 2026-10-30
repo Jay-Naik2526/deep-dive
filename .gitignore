@@ -11,3 +11,6 @@ dist
 
 # the GitHub profile README lives in its own repo (Jay-Naik2526/Jay-Naik2526)
 profile-readme
+
+# loop bookkeeping
+.loop-progress.md

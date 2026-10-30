@@ -10,7 +10,42 @@ import { quality } from '../quality'
 interface Day { date: string; count: number; level: number }
 interface Range { total: number; days: Day[] }
 const ranges = snapshot.ranges as Record<string, Range>
-const keys = ['last', ...Object.keys(ranges).filter((k) => k !== 'last').sort().reverse()].filter((k) => ranges[k]?.total > 0 || k === 'last')
+const tabKeys = (r: Record<string, Range>) => ['last', ...Object.keys(r).filter((k) => k !== 'last' && r[k].total > 0).sort().reverse()]
+
+/** Turns the public contributions API (every year, daily) into the same shape as the bundled snapshot. */
+function fromApi(j: { contributions?: Day[] }): Record<string, Range> | null {
+  if (!j.contributions?.length) return null
+  // the API lists the rest of the current year too; never show future days
+  const limit = new Date(Date.now() + 864e5).toISOString().slice(0, 10)
+  const days = j.contributions.filter((d) => d.date <= limit).map((d) => ({ date: d.date, count: d.count, level: d.level })).sort((a, b) => (a.date < b.date ? -1 : 1))
+  if (!days.length) return null
+  const out: Record<string, Range> = {}
+  for (const d of days) {
+    const y = d.date.slice(0, 4)
+    ;(out[y] ??= { total: 0, days: [] }).days.push(d)
+    out[y].total += d.count
+  }
+  const start = new Date(days[days.length - 1].date + 'T00:00:00Z')
+  start.setUTCDate(start.getUTCDate() - 364)
+  start.setUTCDate(start.getUTCDate() - start.getUTCDay()) // GitHub's grid begins on the Sunday of that week
+  const startISO = start.toISOString().slice(0, 10)
+  const last = days.filter((d) => d.date >= startISO)
+  out.last = { total: last.reduce((a, d) => a + d.count, 0), days: last }
+  return out
+}
+
+/** One count per day: the higher of the two sources. The public API can't see private-repo activity that the snapshot
+ *  (pulled with the owner's login) includes, while the live feed knows about days newer than the snapshot. */
+function mergeDays(a: Day[], b: Day[]): Day[] {
+  const m = new Map<string, Day>()
+  for (const d of [...a, ...b]) { const e = m.get(d.date); if (!e || d.count > e.count) m.set(d.date, d) }
+  return [...m.values()]
+}
+const snapshotDays: Day[] = Object.entries(ranges).filter(([k]) => k !== 'last').flatMap(([, r]) => r.days)
+const baseRanges = fromApi({ contributions: snapshotDays }) ?? ranges
+
+const CONTRIB_KEY = 'contrib-live-v3'
+const CONTRIB_TTL = 10 * 60 * 1000
 const label = (k: string) => (k === 'last' ? 'Last 12 months' : k)
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 const fmt = (iso: string) => new Date(iso + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })
@@ -51,46 +86,69 @@ function Count({ n }: { n: number }) {
 }
 
 
-/** Newest public push, straight from the GitHub events API (cached for 10 minutes; hidden if it can't be fetched). */
-function LatestPush() {
-  const [push, setPush] = useState<{ repo: string; msg: string; when: string } | null>(null)
-  useEffect(() => {
-    const KEY = 'latest-push-v1'
+/** Newest public activity from the GitHub events API: a push, a pull request or a new repo. Refreshes itself every 5 minutes. */
+interface Latest { kind: string; repo: string; msg: string; when: string }
+const LATEST_KEY = 'latest-activity-v2'
+const LATEST_TTL = 5 * 60 * 1000
+
+async function fetchLatest(signal: AbortSignal): Promise<Latest | null> {
+  type Ev = { type: string; created_at: string; repo: { name: string }; payload?: { head?: string; ref_type?: string; action?: string; commits?: { message: string }[]; pull_request?: { title?: string; merged?: boolean } } }
+  const res = await fetch(`https://api.github.com/users/${snapshot.login}/events/public?per_page=30`, { signal })
+  if (!res.ok) throw new Error(String(res.status))
+  const ev = (await res.json()) as Ev[]
+  const short = (n: string) => n.split('/')[1] ?? n
+  const e = ev.find((x) => x.type === 'PushEvent') ?? ev.find((x) => x.type === 'PullRequestEvent') ?? ev.find((x) => x.type === 'CreateEvent' && x.payload?.ref_type === 'repository')
+  if (!e) return null
+  if (e.type === 'PullRequestEvent') {
+    const pr = e.payload?.pull_request
+    return { kind: pr?.merged ? 'Merged PR' : 'Pull request', repo: short(e.repo.name), msg: (pr?.title ?? '').slice(0, 72), when: e.created_at }
+  }
+  if (e.type === 'CreateEvent') return { kind: 'New repo', repo: short(e.repo.name), msg: '', when: e.created_at }
+  // the events feed no longer carries commit messages, so ask for the head commit directly
+  let msg = e.payload?.commits?.at(-1)?.message ?? ''
+  if (!msg && e.payload?.head) {
     try {
-      const c = JSON.parse(sessionStorage.getItem(KEY) ?? 'null')
-      if (c && Date.now() - c.at < 600000) { setPush(c.v); return }
-    } catch { /* ignore */ }
-    const ctl = new AbortController()
-    type Ev = { type: string; created_at: string; repo: { name: string }; payload?: { head?: string; commits?: { message: string }[] } }
-    fetch(`https://api.github.com/users/${snapshot.login}/events/public?per_page=30`, { signal: ctl.signal })
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
-      .then(async (ev: Ev[]) => {
-        const e = ev.find((x) => x.type === 'PushEvent')
-        if (!e) return
-        // GitHub's events feed no longer carries commit messages, so ask for the head commit directly
-        let msg = e.payload?.commits?.at(-1)?.message ?? ''
-        if (!msg && e.payload?.head) {
-          try {
-            const c = await fetch(`https://api.github.com/repos/${e.repo.name}/commits/${e.payload.head}`, { signal: ctl.signal })
-            if (c.ok) msg = ((await c.json()) as { commit: { message: string } }).commit.message
-          } catch { /* message is optional */ }
-        }
-        const v = { repo: e.repo.name.split('/')[1] ?? e.repo.name, msg: msg.split('\n')[0].slice(0, 72), when: e.created_at }
-        setPush(v)
-        try { sessionStorage.setItem(KEY, JSON.stringify({ at: Date.now(), v })) } catch { /* ignore */ }
-      })
-      .catch(() => {})
-    return () => ctl.abort()
+      const c = await fetch(`https://api.github.com/repos/${e.repo.name}/commits/${e.payload.head}`, { signal })
+      if (c.ok) msg = ((await c.json()) as { commit: { message: string } }).commit.message
+    } catch { /* the message is optional */ }
+  }
+  return { kind: 'Latest push', repo: short(e.repo.name), msg: msg.split('\n')[0].slice(0, 72), when: e.created_at }
+}
+
+function LatestPush() {
+  const [item, setItem] = useState<Latest | null>(null)
+  const [now, setNow] = useState(() => Date.now())
+  useEffect(() => {
+    let alive = true
+    let ctl: AbortController | null = null
+    const load = async (force = false) => {
+      try {
+        const c = JSON.parse(sessionStorage.getItem(LATEST_KEY) ?? 'null')
+        if (c && (!force || Date.now() - c.at < 60000)) { if (alive) setItem(c.v); if (Date.now() - c.at < LATEST_TTL && !force) return }
+      } catch { /* ignore */ }
+      ctl?.abort()
+      ctl = new AbortController()
+      try {
+        const v = await fetchLatest(ctl.signal)
+        if (!v || !alive) return
+        setItem(v)
+        try { sessionStorage.setItem(LATEST_KEY, JSON.stringify({ at: Date.now(), v })) } catch { /* ignore */ }
+      } catch { /* rate-limited or offline: keep showing the last known activity */ }
+    }
+    void load()
+    const poll = setInterval(() => void load(true), LATEST_TTL)
+    const tick = setInterval(() => setNow(Date.now()), 60000) // keeps "5 min ago" honest while the page is open
+    return () => { alive = false; ctl?.abort(); clearInterval(poll); clearInterval(tick) }
   }, [])
-  if (!push) return null
-  const mins = Math.max(1, Math.round((Date.now() - new Date(push.when).getTime()) / 60000))
+  if (!item) return null
+  const mins = Math.max(1, Math.round((now - new Date(item.when).getTime()) / 60000))
   const ago = mins < 60 ? `${mins} min ago` : mins < 1440 ? `${Math.round(mins / 60)} h ago` : `${Math.round(mins / 1440)} d ago`
   return (
-    <a className="sig-push mono" href={`${profile.github}/${push.repo}`} target="_blank" rel="noopener" data-cursor="Open">
+    <a className="sig-push mono" href={`${profile.github}/${item.repo}`} target="_blank" rel="noopener" data-cursor="Open">
       <i className="live-dot" aria-hidden="true" />
-      <span>Latest push</span>
-      <b>{push.repo}</b>
-      <em>{push.msg ? `“${push.msg}”` : ''}</em>
+      <span>{item.kind}</span>
+      <b>{item.repo}</b>
+      <em>{item.msg ? `“${item.msg}”` : ''}</em>
       <span className="ago">{ago}</span>
     </a>
   )
@@ -233,27 +291,43 @@ const Grid = memo(function Grid({ cells, weeks, months, active, rangeKey, onTip 
 export function Contributions() {
   const [range, setRange] = useState('last')
   const [live, setLive] = useState(false)
-  const [data, setData] = useState<Record<string, Range>>(ranges)
+  const [data, setData] = useState<Record<string, Range>>(baseRanges)
   const card = useRef<HTMLDivElement>(null)
   const tipEl = useRef<HTMLDivElement>(null)
   const tipB = useRef<HTMLElement>(null)
   const tipS = useRef<HTMLSpanElement>(null)
   const inView = useInView(card, { once: true, margin: '-12% 0px' })
 
-  // progressive enhancement: fresh public data, snapshot as fallback
+  // Fully automatic: pull every year from the public API on load, then again every 10 minutes and whenever the
+  // tab becomes visible after a while. New years appear as tabs by themselves. The bundled snapshot is the fallback.
   useEffect(() => {
-    const ctl = new AbortController()
-    fetch(`https://github-contributions-api.jogruber.de/v4/${snapshot.login}?y=last`, { signal: ctl.signal })
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
-      .then((j: { contributions: { date: string; count: number; level: number }[] }) => {
-        if (!j.contributions?.length) return
-        const days = j.contributions.map((c) => ({ date: c.date, count: c.count, level: c.level }))
-        setData((p) => ({ ...p, last: { total: days.reduce((a, d) => a + d.count, 0), days } }))
-        setLive(true)
-      })
-      .catch(() => {})
-    return () => ctl.abort()
+    let alive = true
+    let ctl: AbortController | null = null
+    const apply = (r: Record<string, Range>) => { if (alive) { setData(r); setLive(true) } }
+    const load = async (force = false) => {
+      try {
+        const c = JSON.parse(sessionStorage.getItem(CONTRIB_KEY) ?? 'null')
+        if (c && !force && Date.now() - c.at < CONTRIB_TTL) { apply(c.ranges); return }
+      } catch { /* storage can be blocked */ }
+      ctl?.abort()
+      ctl = new AbortController()
+      try {
+        const res = await fetch(`https://github-contributions-api.jogruber.de/v4/${snapshot.login}?y=all`, { signal: ctl.signal })
+        if (!res.ok) throw new Error(String(res.status))
+        const live = (await res.json()) as { contributions?: Day[] }
+        const r = fromApi({ contributions: mergeDays(snapshotDays, live.contributions ?? []) })
+        if (!r) return
+        apply(r)
+        try { sessionStorage.setItem(CONTRIB_KEY, JSON.stringify({ at: Date.now(), ranges: r })) } catch { /* ignore */ }
+      } catch { /* offline or rate-limited: keep whatever we are already showing */ }
+    }
+    void load()
+    const timer = setInterval(() => void load(true), CONTRIB_TTL)
+    const vis = () => { if (document.visibilityState === 'visible') void load() }
+    document.addEventListener('visibilitychange', vis)
+    return () => { alive = false; ctl?.abort(); clearInterval(timer); document.removeEventListener('visibilitychange', vis) }
   }, [])
+  const keys = useMemo(() => tabKeys(data), [data])
 
   const cur = data[range] ?? data.last
   const st = useMemo(() => stats(cur.days), [cur])
