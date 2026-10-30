@@ -551,7 +551,8 @@ export const certificates: Certificate[] = [
   },
   {
     id: 'linkedin-programming', group: 'Cloud and tools', title: 'Programming Foundations: Fundamentals', issuer: 'LinkedIn Learning', kind: 'Course', date: 'May 22, 2021',
-    line: 'A two-hour LinkedIn Learning course, completed on May 22, 2021.',
+    line: 'A LinkedIn Learning course of 2 hours 10 minutes, completed on May 22, 2021.',
+    image: '/certs/linkedin-programming-foundations.webp',
   },
   {
     id: 'learnbay-data-science', group: 'Python and data', title: '5-day workshop on Data Science', issuer: 'Learnbay', kind: 'Workshop', date: 'May 17 to 21, 2021',
