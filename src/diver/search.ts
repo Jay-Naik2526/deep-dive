@@ -173,9 +173,9 @@ function fromPassages(ps: Passage[]): Answer {
 /** Questions about one of my projects: pick the section of its writeup that the question is really asking for. */
 const SECTIONS: { re: RegExp; ids: (id: string) => string[] }[] = [
   { re: /\b(stack|tech|technolog\w*|framework|librar\w*|language|built (with|using)|made (with|using)|(use|uses|used|using) )/, ids: (id) => [`${id}:stack`] },
-  { re: /accura|number|metric|result|stat|how (well|good|fast)|perform|measure|evaluat|test(s|ed)?\b|how many/, ids: (id) => [`${id}:numbers`] },
+  { re: /problem|motivat|inspir|why (did|was|is)|why .*(build|built|made)|solve|need(ed)?\b/, ids: (id) => [`${id}:problem`, `${id}:why`] },
+  { re: /accura|number|metric|result|\bstats?\b|statistics|how (well|good|fast)|perform|measure|evaluat|test(s|ed)?\b|how many/, ids: (id) => [`${id}:numbers`] },
   { re: /limit|claim|weak|caveat|honest|not do|doesn.?t|can.?t|cannot|downside|flaw/, ids: (id) => [`${id}:honest`] },
-  { re: /problem|why (did|was|is)|why .*(build|built|made)|solve|need(ed)?\b/, ids: (id) => [`${id}:problem`, `${id}:why`] },
   { re: /how (does|did|do) .*(work|built|build)|features?|what does it do|what (did|do) you (build|make)|built\b|architecture/, ids: (id) => [0, 1, 2, 3, 4].map((i) => `${id}:built${i}`) },
 ]
 

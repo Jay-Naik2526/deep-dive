@@ -89,3 +89,9 @@ test('"production grade" is not invented: answers with live-link count', () => {
 test('overview does not repeat the year', () => {
   assert.doesNotMatch(ask('what is niyamkosh').text, /2026, 2026/)
 })
+
+test('"problem statement" and "motivation" reach the problem section, not the numbers', () => {
+  for (const q of ['problem statement of niyamkosh?', 'problem statement motivation to build niyamkosh']) {
+    assert.equal(ask(q).sources[0].label, 'NiyamKosh · the problem')
+  }
+})
