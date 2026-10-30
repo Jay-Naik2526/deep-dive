@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
-import { featured, profile, sections, shallows } from '../data'
+import { allProjects, profile, sections } from '../data'
 import { goTo, lockScroll } from '../world'
 
 interface Item { id: string; label: string; hint: string; run: () => void }
@@ -13,8 +13,7 @@ export function Palette({ open, setOpen, openCase, copy, toggleSound }: { open: 
 
   const items = useMemo<Item[]>(() => [
     ...sections.map((s) => ({ id: 's' + s.id, label: s.label, hint: 'Go to section', run: () => goTo('#' + s.id) })),
-    ...featured.map((p) => ({ id: 'p' + p.id, label: p.title, hint: 'Open case study', run: () => openCase(p.id) })),
-    ...shallows.map((s) => ({ id: 'h' + s.id, label: s.title, hint: 'Open project ↗', run: () => window.open(s.url, '_blank', 'noopener') })),
+    ...allProjects.map((p) => ({ id: 'p' + p.id, label: p.title, hint: 'Open case study', run: () => openCase(p.id) })),
     { id: 'l1', label: 'GitHub', hint: 'Link ↗', run: () => window.open(profile.github, '_blank', 'noopener') },
     { id: 'l2', label: 'LinkedIn', hint: 'Link ↗', run: () => window.open(profile.linkedin, '_blank', 'noopener') },
     { id: 'l3', label: 'Holographic 3D portfolio', hint: 'jaynaik.tech ↗', run: () => window.open(profile.hologram, '_blank', 'noopener') },

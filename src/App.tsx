@@ -10,7 +10,7 @@ import { Dives } from './components/Dives'
 import { Reef } from './components/Reef'
 import { Contact } from './components/Contact'
 import { Atmosphere } from './components/Atmosphere'
-import { featured, profile } from './data'
+import { allProjects, profile } from './data'
 import { ripple, world } from './world'
 import { sound } from './audio'
 import { SceneGate } from './components/SceneGate'
@@ -23,7 +23,7 @@ const Hold = ({ id, cls, h }: { id: string; cls: string; h: string }) => <sectio
 
 const idFromHash = () => {
   const m = location.hash.match(/^#\/dive\/([\w-]+)/)
-  return m && featured.some((p) => p.id === m[1]) ? m[1] : null
+  return m && allProjects.some((p) => p.id === m[1]) ? m[1] : null
 }
 
 export default function App() {
@@ -122,7 +122,7 @@ export default function App() {
         <Marquee words={['Coding Club President', 'Full-stack', 'IoT', '3D web', 'Hackathon lead', 'Ships real things']} />
         <About />
         <Dives openId={openId} setOpenId={setOpenId} />
-        <Reef />
+        <Reef onOpen={(id) => setOpenId(id)} />
         <Suspense fallback={<Hold id="sonar" cls="sonar" h="120vh" />}><Sonar /></Suspense>
         <Suspense fallback={<Hold id="signal" cls="signal" h="100vh" />}><Contributions /></Suspense>
         <Contact copy={copy} />

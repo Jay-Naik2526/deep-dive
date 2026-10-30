@@ -3,7 +3,8 @@ import { createPortal } from 'react-dom'
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from 'motion/react'
 import { BendText } from './BendText'
 import { HoloPreview } from './Holo'
-import { featured, writeups, type Project } from '../data'
+import { allProjects, depthOf, featured, writeups, type Project } from '../data'
+import { caseFx } from '../caseFx'
 import { lockScroll, onFrame, ripple, world } from '../world'
 import { sound } from '../audio'
 import { quality } from '../quality'
@@ -61,7 +62,7 @@ function Preview({ project }: { project: Project | null }) {
 /* ---------- full-screen case study ---------- */
 function CaseStudy({ index, origin, from, onClose, onNav }: { index: number; origin: { x: number; y: number }; from: DOMRect | null; onClose: () => void; onNav: (d: number) => void }) {
   const fly = useRef<HTMLDivElement>(null)
-  const p = featured[index]
+  const p = allProjects[index]
   const mx = useMotionValue(0)
   const my = useMotionValue(0)
   const rx = useSpring(useTransform(my, [-1, 1], [7, -7]), { stiffness: 120, damping: 16 })
@@ -114,14 +115,14 @@ function CaseStudy({ index, origin, from, onClose, onNav }: { index: number; ori
       data-lenis-prevent
     >
       <div className="case-bar mono">
-        <span>{String(index + 1).padStart(2, '0')} / {String(featured.length).padStart(2, '0')}</span>
+        <span>{String(index + 1).padStart(2, '0')} / {String(allProjects.length).padStart(2, '0')}</span>
         <span>{p.tag}</span>
         <button onClick={() => { sound.whoosh(-1, 0.7); onClose() }} data-cursor="Close" aria-label="Close case study">Esc ✕</button>
       </div>
 
       <div className="case-grid">
         <div className="case-copy">
-          <motion.p className="mono eyebrow" {...stagger(0)}>{p.year} · −{38 + index * 11} m</motion.p>
+          <motion.p className="mono eyebrow" {...stagger(0)}>{p.year} · −{depthOf(p.id)} m</motion.p>
           <motion.h2 {...stagger(1)}>{p.title}{p.alt && <span className="dev">{p.alt}</span>}</motion.h2>
           <motion.p className="case-blurb serif" {...stagger(2)}>{p.blurb}</motion.p>
           <motion.p className="case-long" {...stagger(3)}>{p.long}</motion.p>
@@ -183,8 +184,8 @@ function CaseStudy({ index, origin, from, onClose, onNav }: { index: number; ori
       )}
 
       <div className="case-nav">
-        <button onClick={() => onNav(-1)} data-cursor="Prev" aria-label="Previous project">← <span className="mono">{featured[(index + featured.length - 1) % featured.length].title}</span></button>
-        <button onClick={() => onNav(1)} data-cursor="Next" aria-label="Next project"><span className="mono">{featured[(index + 1) % featured.length].title}</span> →</button>
+        <button onClick={() => onNav(-1)} data-cursor="Prev" aria-label="Previous project">← <span className="mono">{allProjects[(index + allProjects.length - 1) % allProjects.length].title}</span></button>
+        <button onClick={() => onNav(1)} data-cursor="Next" aria-label="Next project"><span className="mono">{allProjects[(index + 1) % allProjects.length].title}</span> →</button>
       </div>
     </motion.div>
   )
@@ -193,9 +194,7 @@ function CaseStudy({ index, origin, from, onClose, onNav }: { index: number; ori
 /* ---------- the dive list ---------- */
 export function Dives({ openId, setOpenId }: { openId: string | null; setOpenId: (id: string | null) => void }) {
   const [hover, setHover] = useState<Project | null>(null)
-  const origin = useRef({ x: innerWidth / 2, y: innerHeight / 2 })
-  const fromRect = useRef<DOMRect | null>(null)
-  const index = featured.findIndex((p) => p.id === openId)
+  const index = allProjects.findIndex((p) => p.id === openId)
 
   const wasOpen = useRef(false)
   useEffect(() => {
@@ -207,19 +206,20 @@ export function Dives({ openId, setOpenId }: { openId: string | null; setOpenId:
   }, [index])
 
   const open = useCallback((p: Project, e: React.MouseEvent) => {
-    origin.current = { x: e.clientX || innerWidth / 2, y: e.clientY || innerHeight / 2 }
+    caseFx.x = e.clientX || innerWidth / 2
+    caseFx.y = e.clientY || innerHeight / 2
     // remember where the hover preview card is, so it can fly into the case study
     const card = document.querySelector('.preview-card')
-    fromRect.current = card ? card.getBoundingClientRect() : null
-    ripple(origin.current.x / innerWidth, origin.current.y / innerHeight, 1.6)
+    caseFx.from = card ? card.getBoundingClientRect() : null
+    ripple(caseFx.x / innerWidth, caseFx.y / innerHeight, 1.6)
     sound.whoosh(1, 0.9)
     setOpenId(p.id)
   }, [setOpenId])
 
   const nav = useCallback((d: number) => {
-    const i = (index + d + featured.length) % featured.length
-    fromRect.current = null
-    setOpenId(featured[i].id)
+    const i = (index + d + allProjects.length) % allProjects.length
+    caseFx.from = null
+    setOpenId(allProjects[i].id)
   }, [index, setOpenId])
 
   return (
@@ -261,7 +261,7 @@ export function Dives({ openId, setOpenId }: { openId: string | null; setOpenId:
 
       {createPortal(
         <AnimatePresence>
-          {index >= 0 && <CaseStudy key="case" index={index} origin={origin.current} from={fromRect.current} onClose={() => setOpenId(null)} onNav={nav} />}
+          {index >= 0 && <CaseStudy key="case" index={index} origin={{ x: caseFx.x, y: caseFx.y }} from={caseFx.from} onClose={() => setOpenId(null)} onNav={nav} />}
         </AnimatePresence>,
         document.body,
       )}

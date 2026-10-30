@@ -88,25 +88,112 @@ export const featured: Project[] = [
   },
 ]
 
-export interface Shallow { id: string; live?: 'holo'; title: string; desc: string; url: string; image?: string; hue: number; stack: string[] }
-export const shallows: Shallow[] = [
-  { id: 'holo', live: 'holo', title: 'Holographic Portfolio', desc: 'Immersive 3D portfolio · React Three Fiber', url: 'https://jaynaik.tech', hue: 200, stack: ['Three.js', 'R3F', 'Bloom'] },
-  { id: 'base', title: 'Base Platform', desc: 'Tuition platform with student, teacher and parent portals', url: 'https://studyatbase.in', image: '/img/base.webp', hue: 215, stack: ['MERN', 'Role-based'] },
-  { id: 'choksi', title: 'Choksi Classes', desc: 'Tuition portal: tests, fees, doubts and homework for Sir, students and parents', url: 'https://choksi-classes.vercel.app', image: '/img/choksi.webp', hue: 24, stack: ['React', 'Node.js', 'MongoDB', 'Socket.IO'] },
-  { id: 'firstpr', title: 'First PR Festival', desc: 'Spider-Society mainframe: merge a pull request and your ID card goes live', url: 'https://first-pr-festival.vercel.app', image: '/img/firstpr.webp', hue: 355, stack: ['Next.js', 'GitHub', 'Open source'] },
-  { id: 'nash', title: 'NashSttrike', desc: 'Coding Club cyber-division event site with a matrix-style login', url: 'https://nash-sttrike.vercel.app', image: '/img/nash.webp', hue: 140, stack: ['HTML', 'CSS', 'JS', 'CTF'] },
-  { id: 'treasure', title: 'Treasure Hunt 26', desc: 'Ambiora 2026 team-based treasure hunt with admin and participant roles', url: 'https://treasurehunt26.vercel.app', image: '/img/treasure.webp', hue: 100, stack: ['React', 'Node.js', 'Docker'] },
-  { id: 'flavium', title: 'Flavium Official', desc: 'Official sports event broadcast site', url: 'https://flavium-official.vercel.app', image: '/img/flavium.webp', hue: 30, stack: ['React'] },
-  { id: 'money', title: 'Finance Tracker', desc: 'Multi-payer split bills and debt tracking', url: 'https://personal-finance-tracker-one-lime.vercel.app', image: '/img/moneymap.webp', hue: 140, stack: ['MERN', 'Tailwind'] },
-  { id: 'tiny', title: 'TinyTies', desc: 'URL shortener and analytics platform', url: 'https://tinyties.vercel.app', image: '/img/tinyties.webp', hue: 300, stack: ['React', 'Node.js'] },
-  { id: 'jam', title: 'Study Jam', desc: 'Guidelines, solutions and a leaderboard', url: 'https://studyjam-website.vercel.app', image: '/img/studyjam.webp', hue: 45, stack: ['React'] },
-  { id: 'imdb', title: 'Personal IMDb', desc: 'Movie details with React and Three.js', url: 'https://personal-imdb-eight.vercel.app', image: '/img/imdb.webp', hue: 340, stack: ['React', 'Three.js'] },
-  { id: 'stock', title: 'Smart Stock', desc: 'Real-time stock tracking dashboard', url: GH + 'smart-stock', image: '/img/smartstock.webp', hue: 160, stack: ['React'] },
-  { id: 'fire', title: 'Fire Evacuation', desc: 'DAIoT smart evacuation system', url: GH + 'fire-evacuation-system', image: '/img/fireguard.webp', hue: 12, stack: ['Python', 'IoT'] },
-  { id: 'resume', title: 'Resume Analyzer', desc: 'A simple resume analyser in Python', url: GH + 'Resume_Analyzer', image: '/img/resume.webp', hue: 250, stack: ['Python'] },
-  { id: 'tcs', title: 'TCS Notes', desc: 'Theory of computer science notes portal', url: 'https://tcs-notes.vercel.app', image: '/img/tcsnotes.webp', hue: 60, stack: ['HTML', 'CSS'] },
+
+
+
+/** Everything beyond the featured eight. Each one opens the same case-study window. */
+export const reef: Project[] = [
+  {
+    id: 'holo', live: 'holo', title: 'Holographic Portfolio', tag: 'Three.js · WebGL', year: '2026', hue: 200,
+    blurb: 'My previous portfolio: a holographic 3D world you fly through.',
+    long: 'A fully immersive portfolio built with React and Three.js. A glowing rotating core for home, hexagonal data nodes for about, a 3D carousel of projects, a floating cloud of skills and interactive icons for contact, all lit with bloom and a vignette, with separate camera rigs for phones and desktops.',
+    stack: ['React 19', 'Three.js', 'R3F', 'Bloom', 'Vite'], url: 'https://jaynaik.tech', repo: GH + '3d-portfolio',
+  },
+  {
+    id: 'base', title: 'Base Platform', tag: 'MERN · role dashboards', year: '2025', hue: 215, image: '/img/base.webp',
+    blurb: 'A tuition platform with student, parent and admin dashboards.',
+    long: 'The website and portal for BASE, a science tuition brand: a cinematic landing page with a background video, Firebase sign-in, and a separate dashboard for students, parents and the admin, plus a written admin guide for the owner.',
+    stack: ['React', 'Node.js', 'Firebase', 'Express'], url: 'https://studyatbase.in',
+  },
+  {
+    id: 'choksi', title: 'Choksi Classes', tag: 'Full-stack · tuition portal', year: '2026', hue: 24, image: '/img/choksi.webp',
+    blurb: 'A tuition management portal for a Navsari institute: tests, fees, doubts and homework.',
+    long: 'A full-stack portal for Choksi Classes in Navsari. Behind an animated public landing page sits a private dashboard where the teacher, students and parents each get their own view of tests, study material, homework, fees, doubts and progress.',
+    stack: ['React', 'Vite', 'Node.js', 'MongoDB', 'Socket.IO'], url: 'https://choksi-classes.vercel.app', repo: GH + 'choksi-classes',
+  },
+  {
+    id: 'firstpr', title: 'First PR Festival', tag: 'Open source · Next.js', year: '2026', hue: 355, image: '/img/firstpr.webp',
+    blurb: 'Merge a pull request and your Spider-ID card goes live on the site.',
+    long: 'The live roster for a workshop that teaches people to make their first pull request. Every card on the page is a real merged PR: students add a file, it merges, the site rebuilds, and their card appears. There is no database, only JSON files, Git and a strict sandbox.',
+    stack: ['Next.js', 'TypeScript', 'GitHub', 'Vercel'], url: 'https://first-pr-festival.vercel.app', repo: GH + 'first-pr-festival',
+  },
+  {
+    id: 'nash', title: 'NashSttrike', tag: 'Cyber division · CTF', year: '2026', hue: 140, image: '/img/nash.webp',
+    blurb: 'The Coding Club cyber-division event site, behind a matrix-rain login.',
+    long: 'The front door for the Coding Club cyber division’s NashSttrike event: a falling-code matrix background and a terminal-style login that leads into a challenge, with a companion Streamlit app that serves the flags from secrets instead of the code.',
+    stack: ['HTML', 'CSS', 'JavaScript', 'Streamlit'], url: 'https://nash-sttrike.vercel.app', repo: GH + 'NashSttrike',
+  },
+  {
+    id: 'treasure', title: 'Treasure Hunt 26', tag: 'Ambiora 2026 · event platform', year: '2026', hue: 100, image: '/img/treasure.webp',
+    blurb: 'A team-based treasure hunt with admin and participant roles.',
+    long: 'The platform behind the Ambiora 2026 treasure hunt. Explorers log in as participants, teams answer a seeded set of questions, uploads go through Cloudinary, and an admin side runs the hunt, with points calculated on the server.',
+    stack: ['React', 'Node.js', 'Express', 'Docker'], url: 'https://treasurehunt26.vercel.app',
+  },
+  {
+    id: 'flavium', title: 'Flavium Official', tag: 'Technical lead · sports fest', year: '2026', hue: 30, image: '/img/flavium.webp',
+    blurb: 'The official broadcast site for the Flavium sports festival.',
+    long: 'The official site for Flavium, the NMIMS sports festival, styled as a live broadcast: a dashboard with the year-wise medal tally, match cards, a branch-versus-branch scoreboard, results, rules, contact, and an admin page to publish scores.',
+    stack: ['React', 'Vite', 'Vercel'], url: 'https://flavium-official.vercel.app', repo: GH + 'flavium-official',
+  },
+  {
+    id: 'money', title: 'Finance Tracker', tag: 'MERN · money tools', year: '2026', hue: 140, image: '/img/moneymap.webp',
+    blurb: 'A personal finance app with split bills, debts, savings jars and subscriptions.',
+    long: 'A MERN finance tracker built around how people actually share money: split a bill between several payers, track who owes whom, set budgets, fill savings jars toward goals, watch recurring subscriptions, and read analytics and reports.',
+    stack: ['React', 'Node.js', 'Express', 'MongoDB', 'Tailwind'], url: 'https://personal-finance-tracker-one-lime.vercel.app', repo: GH + 'personal-finance-tracker',
+  },
+  {
+    id: 'tiny', title: 'TinyTies', tag: 'Storefront · handmade jewellery', year: '2026', hue: 300, image: '/img/tinyties.webp',
+    blurb: 'A soft, editorial storefront for handmade beaded jewellery.',
+    long: 'A storefront for a small handmade beaded-jewellery brand. Visitors browse the shop, open a quick view, check the size guide, fill a cart, read reviews and the FAQ, and place a custom order, in a pale rose and gold design.',
+    stack: ['React', 'Vite', 'CSS'], url: 'https://tinyties.vercel.app', repo: GH + 'tinyties',
+  },
+  {
+    id: 'jam', title: 'Study Jam', tag: 'React · leaderboard', year: '2025', hue: 45, image: '/img/studyjam.webp',
+    blurb: 'Course guidelines, solutions and a live leaderboard for a study jam.',
+    long: 'The website for a study jam: the courses and labs, the rules, worked solutions, the teams, and a leaderboard rebuilt from CSV exports so participants can see where they stand.',
+    stack: ['React', 'Vite', 'CSV data'], url: 'https://studyjam-website.vercel.app', repo: GH + 'studyjam-website',
+  },
+  {
+    id: 'imdb', title: 'Personal IMDb', tag: 'React · Firebase', year: '2025', hue: 340, image: '/img/imdb.webp',
+    blurb: 'My own movie library, organised into collections.',
+    long: 'A personal movie library in the style of a streaming app: posters in a grid, a sidebar of hand-made collections (a director, a franchise, a mood), search and sort, a detail page for each film, and a form to add new ones, backed by Firebase.',
+    stack: ['React', 'Firebase', 'Vite'], url: 'https://personal-imdb-eight.vercel.app', repo: GH + 'personal-imdb',
+  },
+  {
+    id: 'stock', title: 'Smart Stock', tag: 'React · inventory API', year: '2026', hue: 160, image: '/img/smartstock.webp',
+    blurb: 'A stock tracking dashboard with an audit trail.',
+    long: 'An inventory dashboard backed by a REST API for products, categories and stock transactions, with sign-in and an audit log that records every change.',
+    stack: ['React', 'Node.js', 'Express'], url: GH + 'smart-stock', repo: GH + 'smart-stock',
+  },
+  {
+    id: 'fire', title: 'Fire Evacuation', tag: 'DAIoT · ESP32 + MQTT', year: '2026', hue: 12, image: '/img/fireguard.webp',
+    blurb: 'A smart evacuation system that routes people away from the fire.',
+    long: 'An IoT project that senses danger and finds the safest way out. ESP32 sensors report over MQTT, a Python backend models the building as a graph and recomputes the shortest safe route with Dijkstra as conditions change, and a live dashboard shows the state over WebSockets.',
+    stack: ['Python', 'Flask', 'ESP32', 'MQTT', 'Dijkstra'], url: GH + 'fire-evacuation-system', repo: GH + 'fire-evacuation-system',
+  },
+  {
+    id: 'resume', title: 'Resume Analyzer', tag: 'Python · Streamlit', year: '2025', hue: 250, image: '/img/resume.webp',
+    blurb: 'Match a résumé against a job description and see the skill gap.',
+    long: 'A small Streamlit app that reads a résumé and a job description, pulls out the skills in each, scores the match, charts it, lists the skills that match and the ones missing, and exports the result as a PDF report.',
+    stack: ['Python', 'Streamlit', 'Matplotlib', 'FPDF'], url: GH + 'Resume_Analyzer', repo: GH + 'Resume_Analyzer',
+  },
+  {
+    id: 'tcs', title: 'TCS Notes', tag: 'HTML + CSS · study notes', year: '2026', hue: 60, image: '/img/tcsnotes.webp',
+    blurb: 'Theory of Computation notes, chapter by chapter, with past papers.',
+    long: 'A static notes site for Theory of Computer Science: six chapters, a worked DFA example, diagrams, and four sets of previous-year question papers, written so a whole class could revise from a link.',
+    stack: ['HTML', 'CSS', 'JavaScript'], url: 'https://tcs-notes.vercel.app',
+  },
 ]
 
+/** Every project, in the order the case-study window pages through them. */
+export const allProjects: Project[] = [...featured, ...reef]
+
+/** The depth label shown beside a project (featured go −38 to −115 m, the reef continues below). */
+export const depthOf = (id: string) => {
+  const f = featured.findIndex((p) => p.id === id)
+  if (f >= 0) return 38 + f * 11
+  return 130 + Math.max(0, reef.findIndex((p) => p.id === id)) * 4
+}
 
 export interface Writeup {
   problem: string
@@ -118,44 +205,248 @@ export interface Writeup {
   honest?: string
 }
 
-/** Longer writeups for the three flagship projects. Every figure comes from the project's own README or measured results. */
+/**
+ * Writeups for every project. Each figure is either from the project's own README / measured results,
+ * or a count taken straight from its code (models, routes, pages, components).
+ * `why` stays empty until it is filled in with the author's own words; the page only shows it when present.
+ */
 export const writeups: Record<string, Writeup> = {
   'coding-club': {
-    problem: 'A club that runs events, contests, CTFs and recruitment across two campuses and three departments (DSA, Web and Cybersecurity) needed one home for all of it, and a front door that actually felt like the club.',
+    problem: "A club that runs events, contests, CTFs and recruitment across two campuses and three departments (DSA, Web and Cybersecurity) needed one home for all of it, and a front door that actually felt like the club.",
     built: [
-      'Two worlds in one site: a scroll-driven 3D landing, then a warm newspaper-style editorial site for every inner page, linked by a cinematic wipe.',
-      'A code judge in the browser: Monaco editor wired to Judge0, run against samples, submit against hidden tests, with verdicts, time and memory.',
-      'Live leaderboards (global and per department) pushed over Socket.IO, plus CTF challenges, events with QR tickets and PDF certificates.',
-      'Google sign-in, a role-guarded admin panel, and recruitment that posts straight into a Google Form.',
-      'A monorepo with a Vite and React 19 web app, an Express and MongoDB API, and a shared package of Zod schemas so both sides agree on the data.',
+      "Two worlds in one site: a scroll-driven 3D landing, then a warm newspaper-style editorial site for every inner page, linked by a cinematic wipe.",
+      "A code judge in the browser: Monaco editor wired to Judge0, run against samples, submit against hidden tests, with verdicts, time and memory.",
+      "Live leaderboards (global and per department) pushed over Socket.IO, plus CTF challenges, events with QR tickets and PDF certificates.",
+      "Google sign-in, a role-guarded admin panel, and recruitment that posts straight into a Google Form.",
+      "A monorepo with a Vite and React 19 web app, an Express and MongoDB API, and a shared package of Zod schemas so both sides agree on the data.",
     ],
-    numbers: [['3', 'departments'], ['14', 'data models'], ['9', 'API route groups'], ['3', 'real events archived']],
-    why: '',
-    honest: 'The 3D layer downgrades itself on touch, low-core and reduced-motion devices, so the club site stays usable on a phone.',
+    numbers: [["3", "departments"], ["14", "data models"], ["9", "API route groups"], ["3", "real events archived"]],
+    why: "",
+    honest: "The 3D layer downgrades itself on touch, low-core and reduced-motion devices, so the club site stays usable on a phone.",
   },
   kupakosh: {
-    problem: 'Oil wells are drilled 2 to 4 km deep through rock layers called formations, and the same problems keep coming back in the same layers across nearby wells: mud losses, kicks, stuck pipe, overpressure. What happened in older wells is written down, but buried in thousands of daily drilling reports, while the live rig system shows only the well being drilled now, with no memory of the ones before it.',
+    problem: "Oil wells are drilled 2 to 4 km deep through rock layers called formations, and the same problems keep coming back in the same layers across nearby wells: mud losses, kicks, stuck pipe, overpressure. What happened in older wells is written down, but buried in thousands of daily drilling reports, while the live rig system shows only the well being drilled now, with no memory of the ones before it.",
     built: [
-      'A Well Wiki compiled once from the reports: pages per well, formation and hazard, with a citation on every sentence. Uncited sentences and unsupported numbers are rejected by the compiler, and an engineer approves each page.',
-      'A problem, action, outcome ledger that follows each problem through the next days of real reports to see which fix actually worked, and how often.',
-      'An honest hazard model with an 80% range and the evidence count behind it, a look-ahead alert before the bit reaches a risky layer, and a shift-handover note in English and Hindi.',
-      'A Hindsight test that replays real history blind: for each well the model only sees other wells, then we check whether it flagged the layer where trouble really happened.',
+      "A Well Wiki compiled once from the reports: pages per well, formation and hazard, with a citation on every sentence. Uncited sentences and unsupported numbers are rejected by the compiler, and an engineer approves each page.",
+      "A problem, action, outcome ledger that follows each problem through the next days of real reports to see which fix actually worked, and how often.",
+      "An honest hazard model with an 80% range and the evidence count behind it, a look-ahead alert before the bit reaches a risky layer, and a shift-handover note in English and Hindi.",
+      "A Hindsight test that replays real history blind: for each well the model only sees other wells, then we check whether it flagged the layer where trouble really happened.",
     ],
-    numbers: [['431', 'wells replayed blind'], ['0.87', 'ranking accuracy (AUC)'], ['54%', 'of problems had happened before'], ['391 m', 'median warning before the bit']],
-    why: '',
-    honest: 'Every well comes from public records in eight countries, standing in for Oil India’s own reports; no Oil India data is used or claimed. It is decision support only: the engineer decides. The hazard model alone shows no measured skill (its Brier score equals the base rate), which is why the interface shows ranges and says "insufficient evidence" instead of guessing, and only about 1 in 10 alerts matches a recorded event.',
+    numbers: [["431", "wells replayed blind"], ["0.87", "ranking accuracy (AUC)"], ["54%", "of problems had happened before"], ["391 m", "median warning before the bit"]],
+    why: "",
+    honest: "Every well comes from public records in eight countries, standing in for Oil India’s own reports; no Oil India data is used or claimed. It is decision support only: the engineer decides. The hazard model alone shows no measured skill (its Brier score equals the base rate), which is why the interface shows ranges and says insufficient evidence instead of guessing, and only about 1 in 10 alerts matches a recorded event.",
   },
   niyamkosh: {
-    problem: 'Tenders name the Indian Standard the product must meet, and many cite the wrong one. Measured on the collected corpus: 562 of 1,580 real government tenders cite a standard BIS has already withdrawn, 59 of 116 tenders for products under a Quality Control Order never ask for the ISI mark, and 209 of 512 Ministry of Defence tenders cite a withdrawn standard today. A wrong standard means the wrong product is supplied, rejected at inspection, and argued over.',
+    problem: "Tenders name the Indian Standard the product must meet, and many cite the wrong one. Measured on the collected corpus: 562 of 1,580 real government tenders cite a standard BIS has already withdrawn, 59 of 116 tenders for products under a Quality Control Order never ask for the ISI mark, and 209 of 512 Ministry of Defence tenders cite a withdrawn standard today. A wrong standard means the wrong product is supplied, rejected at inspection, and argued over.",
     built: [
-      'A finder that takes plain words (English or an Indian language) and returns the governing standard, a confidence band, the mandatory certification, and the standards real tenders buy alongside it.',
-      'A tender checker for PDF and Word files, scans included: every IS number is checked against the register and flagged as withdrawn, superseded, not in the register, or missing certification.',
-      'A corrected tender handed back in the same file with the same letterhead: withdrawn citations replaced with the BIS successor, the Standard Mark clause inserted where the law demands it, and the corrected file audited again from scratch.',
-      'The whole console in 11 Indian languages through Bhashini, and a browser extension for GeM, CPPP and nProcure that keeps the tender text on the officer’s machine.',
+      "A finder that takes plain words (English or an Indian language) and returns the governing standard, a confidence band, the mandatory certification, and the standards real tenders buy alongside it.",
+      "A tender checker for PDF and Word files, scans included: every IS number is checked against the register and flagged as withdrawn, superseded, not in the register, or missing certification.",
+      "A corrected tender handed back in the same file with the same letterhead: withdrawn citations replaced with the BIS successor, the Standard Mark clause inserted where the law demands it, and the corrected file audited again from scratch.",
+      "The whole console in 11 Indian languages through Bhashini, and a browser extension for GeM, CPPP and nProcure that keeps the tender text on the officer’s machine.",
     ],
-    numbers: [['27,687', 'standards in the register'], ['492 / 621', 'correct standard ranked first'], ['608 / 621', 'correct in the top 10'], ['0', 'answers outside the register']],
-    why: '',
-    honest: 'A model may phrase the output but never decides the standard. When evidence is weak it says so and shows the shortlist (it declined 38 of 621 test queries rather than guess). Adding co-citation neighbours to retrieval made recall worse (608 to 591), so it was measured, rejected and kept out of the product.',
+    numbers: [["27,687", "standards in the register"], ["492 / 621", "correct standard ranked first"], ["608 / 621", "correct in the top 10"], ["0", "answers outside the register"]],
+    why: "",
+    honest: "A model may phrase the output but never decides the standard. When evidence is weak it says so and shows the shortlist (it declined 38 of 621 test queries rather than guess). Adding co-citation neighbours to retrieval made recall worse (608 to 591), so it was measured, rejected and kept out of the product.",
+  },
+  'or-studio': {
+    problem: "Most Operations Research solvers hand you an answer. Students need the working: each tableau, each ratio test, each reason a variable enters or leaves. TORA, the old standard, does not explain itself and does not run on a modern machine.",
+    built: [
+      "Thirteen solvers in the browser, from simplex, transportation and assignment to queuing, inventory, Markov chains and simulation, all using exact fractions rather than floating point.",
+      "A step player with a plain-language reason for every move, and a tutor mode that pauses so you choose the entering variable or the next node and explains a wrong answer.",
+      "A diff mode: type your own working and it finds the first step where it diverged and infers why.",
+      "Private by design: no account, no server, no network calls. It installs as an offline app, and exports to PDF, LaTeX, PNG, CSV, JSON and HTML.",
+    ],
+    numbers: [["13", "solvers"], ["174", "tests passing"], ["60+", "worked textbook problems, re-solved by the test suite"], ["6", "export formats"]],
+    why: "",
+    honest: "Unbounded, infeasible, degenerate and cycling problems are detected and explained instead of hidden, and Big-M uses a symbolic M, never a big number.",
+  },
+  studysync: {
+    problem: "The college’s SAP portal is clunky, attendance data is hard to interpret, and there was no infrastructure at all for mentors to follow their students. Students found out they were short on attendance too late to do anything about it.",
+    built: [
+      "A live attendance dashboard fed by automated SAP scraping with Playwright, on a manual button and a nightly sync, plus a class-count engine that projects how many lectures and labs each professor still owes.",
+      "A marks hub with interactive charts and a what-if goal calculator, and AI study tools on Google Gemini: notes, quizzes, an adaptive planner and a chatbot that knows your own attendance and grades.",
+      "A mentor system: share a MNT-XXXXX code and students enrol themselves, mentors see only their own mentees, and applications (sick leave, test absence with a medical certificate) are approved or rejected with remarks.",
+    ],
+    numbers: [["2", "roles: student and mentor"], ["8", "data models"], ["10", "API route groups"], ["Nightly", "automatic SAP sync"]],
+    why: "",
+    honest: "Mentors never see SAP credentials or a student’s personal notes: strict data boundaries are enforced on the server, not just hidden in the interface.",
+  },
+  w8: {
+    problem: "A gym has three kinds of people who all need something different from the same data: members following a plan, trainers managing their clients, and an owner running memberships. A single generic app serves none of them well.",
+    built: [
+      "Three separate portals, client, trainer and admin, behind one sign-in with role-based access.",
+      "For members: a dashboard, a workout architect, a nutrition tracker called Fuel, protocols, progress reports, and an AI assistant called Oracle.",
+      "For trainers and the owner: client management, weekly plans, trainer and membership administration, and notifications.",
+      "A TypeScript React front end on a Node and MongoDB back end, with a bundled exercise library and images.",
+    ],
+    numbers: [["3", "portals"], ["17", "screens"], ["7", "data models"], ["6", "API route groups"]],
+    why: "",
+  },
+  skyflix: {
+    problem: "A streaming-style catalogue gets messy fast: duplicate entries, inconsistent names, scattered requests, and a homepage someone has to curate by hand. The viewer sees a polished library only if the admin has good tools behind it.",
+    built: [
+      "A fast React and Vite front end with a hero banner, content rows, movies, series, categories, search, a detail modal and a player page, designed to feel the same on a phone as on a desktop.",
+      "A real admin panel: a post editor, a homepage manager, a duplicate finder, a bulk rename tool and a requests inbox.",
+      "A Node, Express and MongoDB API that pulls metadata from TMDB and keeps the library in sync.",
+    ],
+    numbers: [["15", "pages"], ["6", "admin tools"], ["5", "API controllers"]],
+    why: "",
+  },
+  ambiora: {
+    problem: "A techfest needs registration, team formation, ticketing and a schedule that all work at once when hundreds of people open the site at the same time, run by a student who is also one of the organisers.",
+    built: [
+      "The official Ambiora Techfest site: events and event details, a checkout, sign-up and login, a my-events page, my-teams and team-member pages, a timeline, faculty, about and contact pages.",
+      "An admin page and an Express and MongoDB back end for users, teams, event registrations and the newsletter.",
+      "As technical lead I ran all the technical operations around it across the festival’s events.",
+    ],
+    numbers: [["500+", "visitors in two days"], ["0", "downtime"], ["8+", "events run technically"], ["15", "pages"]],
+    why: "",
+  },
+  base: {
+    problem: "A tuition brand needs to look credible to parents and still give students, parents and the owner each a place to see what matters to them, without a separate app for every role.",
+    built: [
+      "A cinematic landing page with a background video, and Firebase sign-in that sends each person to the right dashboard.",
+      "Three dashboards: students see their own work, parents see their child’s progress, and the admin manages everyone.",
+      "A written admin guide for the owner, so the platform can be run without me.",
+    ],
+    numbers: [["3", "role dashboards"], ["5", "pages"], ["1", "admin guide written for the owner"]],
+    why: "",
+  },
+  choksi: {
+    problem: "A tuition centre in Navsari ran tests, fees, homework and parent updates by hand. The teacher needed one place to manage students, parents needed to see how their child was doing, and students needed somewhere to ask doubts and get material.",
+    built: [
+      "A private dashboard for three roles, the teacher, students and parents, with test creation and auto-grading, study material backed by Google Drive, homework submission and grading, and fee management with overdue tracking.",
+      "Real-time doubt threads over Socket.IO, push notifications for every key event, and branded progress-report PDFs.",
+      "A public landing page for the institute with animated effects, reviews, courses, a Google Maps embed and a floating WhatsApp enquiry button.",
+    ],
+    numbers: [["3", "user roles"], ["12", "data models"], ["10", "API route groups"], ["Real-time", "doubts and push notifications"]],
+    why: "",
+  },
+  firstpr: {
+    problem: "The hardest part of open source is the first pull request. A workshop on it needed a place where every attendee’s first merged PR is immediately visible, without anyone running a server or a database.",
+    built: [
+      "A live roster where each card is a real merged pull request: add a file, it merges, Vercel rebuilds, your Spider-ID card appears.",
+      "A security model that lets strangers contribute HTML safely: each hand-built card renders in a sandboxed iframe with scripts disabled, so their JavaScript never runs and their CSS cannot leak out.",
+      "A validator that rejects scripts, inline handlers, iframes, unfilled placeholders and oversized files, and strips them again at build time as defence in depth.",
+      "Also a cheatsheet page and a small game for the workshop itself.",
+    ],
+    numbers: [["100+", "merged Spider-ID cards"], ["23", "components"], ["0", "databases, only JSON files and Git"], ["30 KB", "limit per hand-built card"]],
+    why: "",
+    honest: "Everything contributors submit is treated as untrusted. The worst a student can do is break their own card.",
+  },
+  nash: {
+    problem: "A cyber-security event needs an entrance that sets the mood and a challenge that cannot be cheated by reading the page source.",
+    built: [
+      "The event site: a falling-code matrix background drawn on a canvas and a terminal-style login in plain HTML, CSS and JavaScript.",
+      "A companion Streamlit app for the challenge itself. Credentials, the security answer and up to ten flags are loaded from secrets and environment variables, so none of them live in the code.",
+    ],
+    numbers: [["2", "apps: the site and the challenge"], ["10", "flag slots loaded from secrets"], ["0", "front-end dependencies"]],
+    why: "",
+  },
+  treasure: {
+    problem: "A treasure hunt at a techfest needs teams, questions, scoring and an organiser view that all work live while hundreds of people play.",
+    built: [
+      "A participant and admin login, with explorers signing in by name and a secret passcode.",
+      "A Node and Express back end with question, team and user routes, a seeded question set, a server-side points calculator and image uploads through Cloudinary.",
+      "A Docker image for the back end and a cheerful map-style interface for the players.",
+    ],
+    numbers: [["2", "roles: participant and admin"], ["3", "API route groups"], ["1", "Docker image for the back end"]],
+    why: "",
+  },
+  flavium: {
+    problem: "A sports festival wants a live feel: scores that update, a medal tally everyone argues about, and one official place for rules and results.",
+    built: [
+      "A site styled as a live broadcast, with a hero, match cards and a dashboard that shows the year-wise medal tally.",
+      "A branch-versus-branch scoreboard, results, rules and contact pages, and an admin page to publish scores.",
+      "As technical lead I handled the site and the technical setup for the festival’s sports events.",
+    ],
+    numbers: [["5", "pages"], ["7", "components"], ["5+", "sports events set up technically"]],
+    why: "",
+  },
+  money: {
+    problem: "Most budgeting apps are built for one person. Real money is shared: dinners split between friends, debts that go back and forth, subscriptions nobody remembers.",
+    built: [
+      "Split-bill support across several payers and a debt tracker that shows who owes whom.",
+      "Budgets, savings jars toward goals, a wishlist, recurring subscriptions and a wallet view.",
+      "Analytics, reports and insights over your transactions, on a MERN stack with JWT login.",
+    ],
+    numbers: [["6", "data models"], ["8", "API route groups"], ["15", "components"]],
+    why: "",
+  },
+  tiny: {
+    problem: "A small handmade jewellery brand needs a storefront that feels as soft and personal as the product, and an easy way to take custom orders, without a heavy e-commerce platform.",
+    built: [
+      "A pale rose and gold storefront with a hero, a shop, a quick-view, a size guide and a cart.",
+      "Sections for how to order, custom orders, reviews, social proof, an FAQ and an Instagram feed.",
+      "A static React front end that loads fast on a phone, where most of the visitors are.",
+    ],
+    numbers: [["15", "components"], ["0", "servers: a static storefront"]],
+    why: "",
+  },
+  jam: {
+    problem: "A study jam has many teams doing many labs at once. Participants want the rules, the solutions and a leaderboard they can trust, in one place.",
+    built: [
+      "Pages for the courses and labs, the rules, worked solutions, the teams and a leaderboard.",
+      "A leaderboard rebuilt from CSV exports, so the organisers update a file rather than a database.",
+    ],
+    numbers: [["9", "components"], ["6", "CSV files driving the leaderboard"]],
+    why: "",
+  },
+  imdb: {
+    problem: "Rating sites tell you what everyone else thinks. I wanted my own library, organised my way: by director, by franchise, by mood.",
+    built: [
+      "A poster grid in the style of a streaming app, with a sidebar of hand-made collections, search and sort by year.",
+      "A detail page for each film, an add-movie form, and a one-off migration script that moved the library into Firebase.",
+    ],
+    numbers: [["3", "views: library, detail and add"], ["1", "Firebase backend"]],
+    why: "",
+  },
+  stock: {
+    problem: "A small shop knows what it stocked and what it sold only if someone writes every change down, and nobody can say who changed what.",
+    built: [
+      "A REST API for products, categories and stock transactions, with sign-in.",
+      "An audit route that records every change, and a React dashboard on top.",
+    ],
+    numbers: [["5", "API route groups"], ["1", "audit trail for every change"]],
+    why: "",
+  },
+  fire: {
+    problem: "In a fire, people need to be told which way to go, and the safe way changes as the fire spreads. A static exit sign cannot do that.",
+    built: [
+      "ESP32 sensors that report over MQTT, with Blynk and ThingSpeak as extra data channels.",
+      "A Python backend that models the building as a graph and recomputes the shortest safe route with Dijkstra as sensor readings change.",
+      "A real-time dashboard over WebSockets, and two simulators so the whole system can be tested without hardware.",
+    ],
+    numbers: [["7", "backend modules"], ["3", "data channels: MQTT, Blynk, ThingSpeak"], ["2", "simulators for hardware-free testing"]],
+    why: "",
+  },
+  resume: {
+    problem: "Job descriptions and résumés rarely use the same words, so it is hard to see at a glance which skills you already show and which you are missing.",
+    built: [
+      "A Streamlit app that reads a résumé and a job description and extracts the skills in each with pattern matching.",
+      "A match score, a chart, a list of matching skills and a list of missing skills, exported as a PDF report.",
+    ],
+    numbers: [["1", "Streamlit app in a single file"], ["3", "outputs: score, matched skills, missing skills"]],
+    why: "",
+  },
+  tcs: {
+    problem: "Theory of Computation is easy to lose track of: automata, grammars and proofs spread across lecture slides and notebooks, with no single place to revise.",
+    built: [
+      "Six chapters of notes as plain pages, with diagrams and a worked DFA example.",
+      "Four sets of previous-year question papers, so a revision session can start from a real paper.",
+    ],
+    numbers: [["14", "pages"], ["6", "chapters"], ["4", "previous-year papers"]],
+    why: "",
+  },
+  holo: {
+    problem: "A portfolio is the first thing a stranger sees, and a list of links is forgettable. I wanted one you navigate like a place.",
+    built: [
+      "A glowing rotating core for home, hexagonal data nodes for about, a 3D carousel of projects, a floating cloud of skills and interactive icons for contact.",
+      "Bloom and vignette post-processing for the holographic look, with smooth camera damping between scenes.",
+      "Separate camera rigs and layouts for phones and desktops, so the 3D scene works on both.",
+    ],
+    numbers: [["6", "sections to fly through"], ["2", "post-processing effects"], ["2", "layouts: phone and desktop"]],
+    why: "",
   },
 }
 

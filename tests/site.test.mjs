@@ -3,13 +3,13 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { existsSync, readFileSync, readdirSync } from 'node:fs'
-import { featured, shallows, sections, profile, logbook, skillGroups, writeups } from '../src/data.ts'
+import { featured, reef, allProjects, sections, profile, logbook, skillGroups, writeups } from '../src/data.ts'
 
 const root = new URL('../', import.meta.url)
 const publicPath = (p) => new URL('public' + p, root)
 
 test('project ids are unique', () => {
-  const ids = [...featured.map((p) => p.id), ...shallows.map((p) => p.id)]
+  const ids = [...featured.map((p) => p.id), ...reef.map((p) => p.id)]
   assert.equal(new Set(ids).size, ids.length, `duplicate ids: ${ids.filter((x, i) => ids.indexOf(x) !== i)}`)
 })
 
@@ -21,22 +21,25 @@ test('every featured project has copy, a stack, and somewhere to go', () => {
   }
 })
 
-test('every reef project has a link and a description', () => {
-  for (const p of shallows) assert.ok(p.title && p.desc && p.url && p.stack.length, `${p.id}: incomplete`)
+test('every reef project has the same content as a featured one', () => {
+  for (const p of reef) {
+    assert.ok(p.title && p.tag && p.blurb && p.long && p.stack.length, `${p.id}: incomplete`)
+    assert.ok(p.url || p.repo, `${p.id}: needs a url or repo`)
+  }
 })
 
 test('every referenced screenshot exists in /public', () => {
-  for (const p of [...featured, ...shallows]) if (p.image) assert.ok(existsSync(publicPath(p.image)), `${p.id}: missing ${p.image}`)
+  for (const p of allProjects) if (p.image) assert.ok(existsSync(publicPath(p.image)), `${p.id}: missing ${p.image}`)
 })
 
 test('no orphaned screenshots in /public/img', () => {
-  const used = new Set([...featured, ...shallows].map((p) => p.image?.split('/').pop()).filter(Boolean))
+  const used = new Set(allProjects.map((p) => p.image?.split('/').pop()).filter(Boolean))
   const extra = readdirSync(publicPath('/img')).filter((f) => !used.has(f))
   assert.deepEqual(extra, [], `unused images: ${extra}`)
 })
 
 test('all links are well-formed https URLs', () => {
-  const urls = [profile.site, profile.github, profile.linkedin, profile.resume, ...[...featured, ...shallows].flatMap((p) => [p.url, p.repo]).filter(Boolean)]
+  const urls = [profile.site, profile.github, profile.linkedin, profile.resume, ...allProjects.flatMap((p) => [p.url, p.repo]).filter(Boolean)]
   for (const u of urls) assert.equal(new URL(u).protocol, 'https:', `not https: ${u}`)
 })
 
@@ -63,13 +66,14 @@ test('about content is filled in', () => {
   assert.ok(skillGroups.every((g) => g.items.length > 0))
 })
 
-test('flagship writeups are complete and point at real projects', () => {
-  const ids = new Set(featured.map((p) => p.id))
-  for (const k of ['coding-club', 'kupakosh', 'niyamkosh']) assert.ok(writeups[k], `missing writeup for ${k}`)
+test('every single project has a complete writeup', () => {
+  const ids = new Set(allProjects.map((p) => p.id))
+  for (const p of allProjects) assert.ok(writeups[p.id], `missing writeup for ${p.id}`)
   for (const [k, w] of Object.entries(writeups)) {
-    assert.ok(ids.has(k), `writeup "${k}" has no matching featured project`)
-    assert.ok(w.problem.length > 80, `${k}: problem is too thin`)
-    assert.ok(w.built.length >= 3, `${k}: needs at least 3 "what I built" points`)
-    assert.equal(w.numbers.length, 4, `${k}: expects exactly 4 headline numbers`)
+    assert.ok(ids.has(k), `writeup "${k}" has no matching project`)
+    assert.ok(w.problem.length > 60, `${k}: problem is too thin`)
+    assert.ok(w.built.length >= 2, `${k}: needs at least 2 "what I built" points`)
+    assert.ok(w.numbers.length >= 2 && w.numbers.length <= 4, `${k}: needs 2 to 4 headline numbers`)
+    assert.ok(w.numbers.every(([n, l]) => n && l), `${k}: every number needs a label`)
   }
 })
