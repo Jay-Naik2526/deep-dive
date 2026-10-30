@@ -492,6 +492,7 @@ export interface Certificate {
   title: string
   issuer: string
   kind: 'Specialization' | 'Course' | 'Workshop'
+  group: 'AI' | 'Python and data' | 'Cloud and tools'
   /** as printed on the certificate; empty when it does not print one */
   date: string
   /** only what the certificate itself says */
@@ -505,10 +506,17 @@ export interface Certificate {
 
 const CV = 'https://coursera.org/verify/'
 
-/** Newest first. Each image is the certificate PDF rendered as-is. */
+/** Shown in these piles, in this order. */
+export const certGroups: { name: Certificate['group']; line: string }[] = [
+  { name: 'AI', line: 'Google’s AI Essentials programme: using AI tools well and responsibly.' },
+  { name: 'Python and data', line: 'Where the Python came from, basics to databases, plus a first look at data science.' },
+  { name: 'Cloud and tools', line: 'Cloud identity, Git and GitHub, and programming fundamentals.' },
+]
+
+/** Newest first within each pile. Each image is the certificate PDF rendered as-is. */
 export const certificates: Certificate[] = [
   {
-    id: 'google-ai-essentials', title: 'Google AI Essentials', issuer: 'Google · Coursera', kind: 'Specialization', date: 'Jun 29, 2026',
+    id: 'google-ai-essentials', group: 'AI', title: 'Google AI Essentials', issuer: 'Google · Coursera', kind: 'Specialization', date: 'Jun 29, 2026',
     line: 'Five Google courses on building AI skills, using AI tools responsibly and improving productivity across a workflow.',
     image: '/certs/google-ai-essentials.webp', verify: CV + 'specialization/T59YYJDHA8U9',
     courses: [
@@ -520,12 +528,12 @@ export const certificates: Certificate[] = [
     ],
   },
   {
-    id: 'ibm-data-science', title: 'What is Data Science?', issuer: 'IBM · Coursera', kind: 'Course', date: 'Jun 17, 2021',
+    id: 'ibm-data-science', group: 'Python and data', title: 'What is Data Science?', issuer: 'IBM · Coursera', kind: 'Course', date: 'Jun 17, 2021',
     line: 'An online non-credit course authorized by IBM and offered through Coursera.',
     image: '/certs/ibm-what-is-data-science.webp', verify: CV + 'J7DDC8ULXYYL',
   },
   {
-    id: 'python-for-everybody', title: 'Python for Everybody', issuer: 'University of Michigan · Coursera', kind: 'Specialization', date: 'Jun 12, 2021',
+    id: 'python-for-everybody', group: 'Python and data', title: 'Python for Everybody', issuer: 'University of Michigan · Coursera', kind: 'Specialization', date: 'Jun 12, 2021',
     line: 'Five courses: programming fundamentals, data structures, networked APIs and databases in Python, ending in a capstone that retrieves, processes and visualises data.',
     image: '/certs/python-for-everybody.webp',
     courses: [
@@ -537,26 +545,26 @@ export const certificates: Certificate[] = [
     ],
   },
   {
-    id: 'google-python', title: 'Crash Course on Python', issuer: 'Google · Coursera', kind: 'Course', date: 'May 31, 2021',
+    id: 'google-python', group: 'Python and data', title: 'Crash Course on Python', issuer: 'Google · Coursera', kind: 'Course', date: 'May 31, 2021',
     line: 'An online non-credit course authorized by Google and offered through Coursera.',
     image: '/certs/google-crash-course-python.webp',
   },
   {
-    id: 'linkedin-programming', title: 'Programming Foundations: Fundamentals', issuer: 'LinkedIn Learning', kind: 'Course', date: 'May 22, 2021',
+    id: 'linkedin-programming', group: 'Cloud and tools', title: 'Programming Foundations: Fundamentals', issuer: 'LinkedIn Learning', kind: 'Course', date: 'May 22, 2021',
     line: 'A two-hour LinkedIn Learning course, completed on May 22, 2021.',
   },
   {
-    id: 'learnbay-data-science', title: '5-day workshop on Data Science', issuer: 'Learnbay', kind: 'Workshop', date: 'May 17 to 21, 2021',
+    id: 'learnbay-data-science', group: 'Python and data', title: '5-day workshop on Data Science', issuer: 'Learnbay', kind: 'Workshop', date: 'May 17 to 21, 2021',
     line: 'A certificate of participation for a five-day Data Science workshop held by Learnbay.',
     image: '/certs/learnbay-data-science-workshop.webp',
   },
   {
-    id: 'google-cloud-identity', title: 'Introduction to Cloud Identity', issuer: 'Google Cloud · Coursera', kind: 'Course', date: 'May 13, 2021',
+    id: 'google-cloud-identity', group: 'Cloud and tools', title: 'Introduction to Cloud Identity', issuer: 'Google Cloud · Coursera', kind: 'Course', date: 'May 13, 2021',
     line: 'An online non-credit course authorized by Google Cloud and offered through Coursera.',
     image: '/certs/google-cloud-identity.webp',
   },
   {
-    id: 'microsoft-learn-git', title: 'Introduction to Open-Source Development using Git and GitHub', issuer: 'Microsoft Learn Student Ambassadors', kind: 'Workshop', date: '',
+    id: 'microsoft-learn-git', group: 'Cloud and tools', title: 'Introduction to Open-Source Development using Git and GitHub', issuer: 'Microsoft Learn Student Ambassadors', kind: 'Workshop', date: '',
     line: 'Recognition of attendance and completion of the Microsoft Student Ambassador workshop on open-source development with Git and GitHub.',
     image: '/certs/microsoft-learn-git-github.webp',
   },

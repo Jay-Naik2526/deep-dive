@@ -103,13 +103,17 @@ test('the "now" list is filled in, dated, and its proof points at real projects'
 })
 
 test('certificates are complete and their images exist', async () => {
-  const { certificates } = await import('../src/data.ts')
+  const { certificates, certGroups } = await import('../src/data.ts')
+  for (const c of certificates) assert.ok(certGroups.some((g) => g.name === c.group), `${c.id}: unknown group`)
   const { existsSync } = await import('node:fs')
   assert.ok(certificates.length >= 8)
   assert.equal(new Set(certificates.map((c) => c.id)).size, certificates.length)
   for (const c of certificates) {
     assert.ok(c.title && c.issuer && c.line, `${c.id} is incomplete`)
-    if (c.image) assert.ok(existsSync(new URL('../public' + c.image, import.meta.url)), `${c.id}: missing ${c.image}`)
+    if (c.image) {
+      assert.ok(existsSync(new URL('../public' + c.image, import.meta.url)), `${c.id}: missing ${c.image}`)
+      assert.ok(existsSync(new URL('../public' + c.image.replace('/certs/', '/certs/thumb/'), import.meta.url)), `${c.id}: missing thumbnail`)
+    }
     if (c.verify) assert.match(c.verify, /^https:\/\/coursera\.org\/verify\/(specialization\/)?[A-Z0-9]{10,14}$/, `${c.id}: odd verify link`)
     for (const k of c.courses ?? []) if (k.verify) assert.match(k.verify, /^https:\/\/coursera\.org\/verify\/[A-Z0-9]{10,14}$/)
   }
