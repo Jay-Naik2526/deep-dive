@@ -1,0 +1,13 @@
+node_modules
+dist
+.DS_Store
+*.log
+.env
+.env.*
+!.env.example
+
+# local tooling
+.claude
+
+# the GitHub profile README lives in its own repo (Jay-Naik2526/Jay-Naik2526)
+profile-readme

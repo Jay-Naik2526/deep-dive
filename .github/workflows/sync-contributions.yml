@@ -1,0 +1,29 @@
+name: Refresh contributions
+
+# Keeps src/data/contributions.json fresh so the "Plankton count" section never goes stale.
+on:
+  schedule:
+    - cron: '0 3 * * 1' # Mondays, 03:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Pull the latest contribution calendar
+        run: node scripts/sync-contributions.mjs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Commit if it changed
+        run: |
+          git config user.name "contributions-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add src/data/contributions.json
+          git diff --cached --quiet || (git commit -m "chore: refresh contributions" && git push)
