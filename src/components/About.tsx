@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { motion, useInView } from 'motion/react'
 import { BendText } from './BendText'
 import { logbook, numbers } from '../data'
@@ -7,20 +7,20 @@ import { Now } from './Now'
 function Counter({ n, plus, pre }: { n: number; plus: boolean; pre?: string }) {
   const ref = useRef<HTMLSpanElement>(null)
   const inView = useInView(ref, { once: true, margin: '-10% 0px' })
-  const [v, setV] = useState(0)
+  // the number is written straight into the element: no React re-render on every animation frame
   useEffect(() => {
     if (!inView) return
     let raf = 0
     const s = performance.now()
     const f = (now: number) => {
       const p = Math.min(1, (now - s) / 1600)
-      setV(Math.round((1 - Math.pow(1 - p, 4)) * n))
+      if (ref.current) ref.current.textContent = `${pre ?? ''}${Math.round((1 - Math.pow(1 - p, 4)) * n)}${plus ? '+' : ''}`
       if (p < 1) raf = requestAnimationFrame(f)
     }
     raf = requestAnimationFrame(f)
     return () => cancelAnimationFrame(raf)
-  }, [inView, n])
-  return <span ref={ref}>{pre}{v}{plus && '+'}</span>
+  }, [inView, n, plus, pre])
+  return <span ref={ref}>{pre}0{plus && '+'}</span>
 }
 
 const rise = { hidden: { opacity: 0, y: 40 }, show: { opacity: 1, y: 0 } }

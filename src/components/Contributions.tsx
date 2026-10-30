@@ -69,22 +69,21 @@ function stats(days: Day[]) {
 function Count({ n }: { n: number }) {
   const ref = useRef<HTMLSpanElement>(null)
   const inView = useInView(ref, { once: true, margin: '-5% 0px' })
-  const [v, setV] = useState(0)
+  // written straight into the element so the count-up never re-renders React
   useEffect(() => {
     if (!inView) return
     let raf = 0
     const s = performance.now()
     const f = (now: number) => {
       const p = Math.min(1, (now - s) / 1100)
-      setV(Math.round(n * (1 - Math.pow(1 - p, 4))))
+      if (ref.current) ref.current.textContent = Math.round(n * (1 - Math.pow(1 - p, 4))).toLocaleString()
       if (p < 1) raf = requestAnimationFrame(f)
     }
     raf = requestAnimationFrame(f)
     return () => cancelAnimationFrame(raf)
   }, [inView, n])
-  return <span ref={ref}>{(inView ? v : 0).toLocaleString()}</span>
+  return <span ref={ref}>0</span>
 }
-
 
 /** Newest public activity from the GitHub events API: a push, a pull request or a new repo. Refreshes itself every 5 minutes. */
 interface Latest { kind: string; repo: string; msg: string; when: string }
