@@ -28,7 +28,7 @@ export function Contact({ copy }: { copy: () => void }) {
 
       <p className="mono open-line"><i /> Open to internships · part-time · freelance</p>
 
-      <Marquee reverse words={['Coding Club President', 'Full-stack', 'IoT', '3D web', 'Hackathon lead', 'Ships real things']} />
+      <Marquee reverse words={['Coding Club President', 'Ambiora 2027 VP', 'Full-stack', 'IoT', '3D web', 'Hackathon lead', 'Ships real things']} />
       <div className="foot mono"><span>© 2026 {profile.name}</span><span>React · TypeScript · Three.js · Motion · built on a spring, not a timeline</span></div>
     </section>
   )
