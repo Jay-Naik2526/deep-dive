@@ -11,7 +11,7 @@ export const profile = {
   hologram: 'https://jaynaik.tech',
 }
 
-export const roles = ['Coding Club President', 'Full-stack developer', 'IoT builder', '3D web', 'Hackathon team lead']
+export const roles = ['Coding Club President', 'Full-stack developer', '3D web']
 
 export interface Project {
   id: string
@@ -40,26 +40,26 @@ export const featured: Project[] = [
     url: 'https://coding-club-nmims.vercel.app',
   },
   {
-    id: 'kupakosh', title: 'Kupakosh', alt: 'कूपकोश', tag: 'Smart India Hackathon 2026', year: '2026', hue: 28,
+    id: 'kupakosh', title: 'Kupakosh', alt: 'कूपकोश', tag: 'Smart India Hackathon 2026', year: '2026', hue: 28, image: '/img/kupakosh.webp',
     blurb: 'Others search your PDFs. Kupakosh remembers.',
     long: "A well-memory system for Oil India Limited. Every well is drawn as its recorded formation column, so engineers can see what went wrong in the same rock layers before. Built on public stand-in data, as decision support only: the engineer decides. I led Team The RAGnarok on this one.",
     stack: ['Python', 'Next.js', 'RAG', 'Team lead'], stats: [['PS', '26121'], ['Client', 'Oil India']],
-    repo: GH + 'kupakosh',
+    url: 'https://kupakosh.duckdns.org/', repo: GH + 'kupakosh',
   },
   {
-    id: 'niyamkosh', title: 'NiyamKosh', alt: 'नियमकोश', tag: 'Smart India Hackathon 2026', year: '2026', hue: 190,
+    id: 'niyamkosh', title: 'NiyamKosh', alt: 'नियमकोश', tag: 'Smart India Hackathon 2026', year: '2026', hue: 190, image: '/img/niyamkosh.webp',
     blurb: 'Describe what you are buying. Get the right Indian Standard.',
     long: 'An AI recommendation engine for BIS: describe a procurement need and get the applicable Indian Standard, plus your tender back, corrected. Hybrid retrieval (MiniLM and BM25 into a cross-encoder) that never invents a standard, in eleven Indian languages through Bhashini.',
     stack: ['FastAPI', 'MiniLM + BM25', 'Cross-encoder', 'Bhashini'],
     stats: [['27,687', 'standards indexed'], ['4,917', 'real tenders read'], ['70,366', 'co-citation links'], ['0', 'standards invented']],
-    repo: GH + 'niyamkosh',
+    url: 'https://niyamkosh.indiasouthcentral.cloudapp.azure.com/#draft', repo: GH + 'niyamkosh',
   },
   {
-    id: 'or-studio', title: 'OR/Studio', tag: 'Open source · works offline', year: '2026', hue: 78,
+    id: 'or-studio', title: 'OR/Studio', tag: 'Open source · works offline', year: '2026', hue: 78, image: '/img/or-studio.webp',
     blurb: 'Every pivot, explained.',
     long: 'A free, in-browser Operations Research workbench and a modern replacement for TORA. Exact rational arithmetic, every tableau and ratio test shown and explained, with a step player and a tutor mode. Built to learn, check homework and present a solution to a class.',
     stack: ['React 19', 'TypeScript', 'Vite 6', 'Tailwind 4'], stats: [['174', 'tests passing'], ['Exact', 'fractions']],
-    repo: GH + 'or-studio',
+    url: 'https://or-studio.antideploy.app/#/', repo: GH + 'or-studio',
   },
   {
     id: 'studysync', title: 'StudySync', tag: 'Live · used by real students', year: '2025', hue: 18, image: '/img/studysync.webp',
