@@ -1,4 +1,4 @@
-import { allProjects, writeups, logbook, skillGroups, profile, offers, nowItems, featured, reef } from '../data.ts'
+import { allProjects, writeups, logbook, skillGroups, profile, offers, nowItems, featured, reef, certificates } from '../data.ts'
 
 /** One citable piece of my own writing. The diver can only ever say things that appear in these. */
 export interface Passage {
@@ -46,6 +46,21 @@ export function buildCorpus(): Passage[] {
   for (const n of nowItems) {
     out.push({ id: `now:${n.title}`, label: `Right now · ${n.title}`, text: `${n.title}. ${n.line}`, keys: `now current currently focus working on this month` })
   }
+
+  for (const c of certificates) {
+    out.push({
+      id: `cert:${c.id}`,
+      label: `Certificates · ${c.title}`,
+      text: `${c.title}, ${c.issuer} (${c.kind.toLowerCase()}${c.date ? `, ${c.date}` : ''}). ${c.line}${c.courses ? ` Courses: ${c.courses.map((k) => k.title).join('; ')}.` : ''}`,
+      keys: `certificate certificates certification credentials courses completed learning coursera ${c.title} ${c.issuer}`,
+    })
+  }
+  out.push({
+    id: 'cert:all',
+    label: 'Certificates',
+    text: `I have ${certificates.length} certificates and workshop completions: ${certificates.map((c) => `${c.title} (${c.issuer}${c.date ? `, ${c.date}` : ''})`).join('; ')}. They are listed with the originals in the Credentials section.`,
+    keys: 'certificates certifications credentials courses completed learning coursera google ibm python',
+  })
 
   out.push(
     { id: 'me:about', label: 'About me', text: 'I’m Jay Naik, a B.Tech CSE student (2024–2028, CGPA 8.5) at NMIMS MPSTME Shirpur, from Navsari, Gujarat. I’m the President of the Coding Club and the Vice President of Ambiora 2027, the NMIMS inter-campus techfest, and I was the Web Dev Lead at GDG on Campus. I build full-stack web, IoT and 3D web.', keys: 'who about me jay naik introduce yourself education college university student cgpa location navsari' },

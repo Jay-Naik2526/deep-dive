@@ -473,3 +473,31 @@ kbd{font-family:var(--mono);font-size:11px;padding:2px 6px;border-radius:5px;bor
 .guest-who a{text-decoration:none;color:var(--ink)}
 .guest-who span{color:var(--ink-soft);margin-left:auto;font-size:10px}
 .guest-empty{color:var(--ink-soft);font-size:17px}
+
+/* ---------- credentials ---------- */
+.certs{padding-top:12vh;padding-bottom:10vh}
+.cert-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(14px,2vw,26px);margin-top:clamp(20px,3vw,40px)}
+.cert-card{border:1px solid var(--line);border-radius:26px;padding:clamp(20px,2.4vw,32px);background:linear-gradient(160deg,color-mix(in srgb,#fff 6%,transparent),transparent);display:flex;flex-direction:column;gap:10px;transition:transform .5s var(--ease),border-color .4s}
+.cert-card:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--glow) 50%,transparent)}
+.cert-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.cert-date{color:var(--ink-soft)}
+.cert-card h3{font-size:clamp(22px,2.3vw,34px);font-weight:300;letter-spacing:-.03em;line-height:1.05}
+.cert-issuer{color:var(--glow)}
+.cert-card p{font-size:clamp(14px,1.15vw,17px);line-height:1.5;font-weight:350;color:var(--ink-soft);max-width:56ch}
+.cert-card details{font-size:14px}
+.cert-card summary{cursor:pointer;color:var(--ink-soft);list-style:none;padding:4px 0}
+.cert-card summary::-webkit-details-marker{display:none}
+.cert-card summary::before{content:'+ ';color:var(--glow)}
+.cert-card details[open] summary::before{content:'– '}
+.cert-card ul{list-style:none;display:grid;gap:6px;padding:6px 0 2px;font-weight:350}
+.cert-card li{display:flex;gap:8px;justify-content:space-between;border-top:1px solid var(--line);padding-top:6px}
+.cert-card li a{color:var(--glow);text-decoration:none}
+.cert-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:6px;align-items:center}
+.cert-card .chip,.cert-view .chip{font-family:inherit;color:inherit;cursor:pointer;text-decoration:none}
+.cert-view{position:fixed;inset:0;z-index:180;background:rgba(2,12,26,.86);display:grid;place-items:center;padding:clamp(12px,3vw,40px);overscroll-behavior:contain;overflow:auto;color:#e2f8fc;--line:rgba(226,248,252,.2);--glow:#6fe7f7;--ink-soft:rgba(226,248,252,.7)}
+.cert-view figure{margin:0;max-width:min(1100px,100%);display:flex;flex-direction:column;gap:14px}
+.cert-view img{width:100%;height:auto;max-height:78svh;object-fit:contain;border-radius:14px;background:#fff;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.cert-view figcaption{display:flex;justify-content:space-between;gap:14px;align-items:center;flex-wrap:wrap;font-size:16px}
+.cert-view figcaption b{display:block;font-weight:500}
+.cert-view figcaption .mono{color:var(--ink-soft)}
+@media(max-width:900px){.cert-grid{grid-template-columns:1fr}}

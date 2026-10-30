@@ -10,6 +10,7 @@ import { Dives } from './components/Dives'
 import { Reef } from './components/Reef'
 import { Contact } from './components/Contact'
 import { Offer } from './components/Offer'
+import { Certificates } from './components/Certificates'
 import { Atmosphere } from './components/Atmosphere'
 import { allProjects, profile } from './data'
 import { ripple, world } from './world'
@@ -133,6 +134,7 @@ export default function App() {
         <Reef onOpen={(id) => setOpenId(id)} />
         <Suspense fallback={<Hold id="sonar" cls="sonar" h="120vh" />}><Sonar /></Suspense>
         <Suspense fallback={<Hold id="signal" cls="signal" h="100vh" />}><Contributions /></Suspense>
+        <Certificates />
         <Offer onOpen={(id) => setOpenId(id)} />
         <Contact copy={copy} />
       </main>

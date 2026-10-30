@@ -153,6 +153,7 @@ const INTENTS: { re: RegExp; ids: string[] }[] = [
   { re: /contact|e-?mail|reach (you|out)|get in touch|linkedin|github|r[eé]sum[eé]|\bcv\b/, ids: ['me:contact'] },
   { re: /open to (work|internship)|are you available|hire you|hiring you|freelance|internship/, ids: ['me:availability'] },
   { re: /what (is |are )?(your )?(tech )?(stack|technologies|tools|languages|skills)|tech stack|what do you (use|know)|your skills|which languages/, ids: ['skills:*'] },
+  { re: /certific|credential|coursera|what (courses|have you (studied|learned|completed))|courses? (have|did) you|workshops? (have|did) you/, ids: ['cert:all'] },
   { re: /right now|currently|these days|this month|working on|your focus|what are you (doing|up to)/, ids: ['now:*'] },
   { re: /what (can|do|would|could) you (build|make|offer|do)|build for (me|us)|work with (you|me|us)|how can you help|your services|what do you offer/, ids: ['offer:*'] },
 ]

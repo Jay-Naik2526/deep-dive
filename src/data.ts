@@ -486,6 +486,81 @@ export interface Testimonial { quote: string; name: string; role: string }
 export const testimonials: Testimonial[] = []
 
 
+export interface Certificate {
+  id: string
+  title: string
+  issuer: string
+  kind: 'Specialization' | 'Course' | 'Workshop'
+  /** as printed on the certificate; empty when it does not print one */
+  date: string
+  /** only what the certificate itself says */
+  line: string
+  /** certificate image in /public/certs; absent when the PDF could not be shown whole */
+  image?: string
+  /** official verification link, only where it was read straight from the PDF or its file name */
+  verify?: string
+  courses?: { title: string; verify?: string }[]
+}
+
+const CV = 'https://coursera.org/verify/'
+
+/** Newest first. Each image is the certificate PDF rendered as-is. */
+export const certificates: Certificate[] = [
+  {
+    id: 'google-ai-essentials', title: 'Google AI Essentials', issuer: 'Google · Coursera', kind: 'Specialization', date: 'Jun 29, 2026',
+    line: 'Five Google courses on building AI skills, using AI tools responsibly and improving productivity across a workflow.',
+    image: '/certs/google-ai-essentials.webp', verify: CV + 'specialization/T59YYJDHA8U9',
+    courses: [
+      { title: 'Introduction to AI', verify: CV + '27YSYF7KDPXZ' },
+      { title: 'Maximize Productivity With AI Tools', verify: CV + 'UJJBIAJ52C7V' },
+      { title: 'Discover the Art of Prompting', verify: CV + 'H9V3XEJMVF10' },
+      { title: 'Use AI Responsibly', verify: CV + 'GKYHA0SXR6MU' },
+      { title: 'Stay Ahead of the AI Curve', verify: CV + 'EZC8G3PVBV5F' },
+    ],
+  },
+  {
+    id: 'ibm-data-science', title: 'What is Data Science?', issuer: 'IBM · Coursera', kind: 'Course', date: 'Jun 17, 2021',
+    line: 'An online non-credit course authorized by IBM and offered through Coursera.',
+    image: '/certs/ibm-what-is-data-science.webp', verify: CV + 'J7DDC8ULXYYL',
+  },
+  {
+    id: 'python-for-everybody', title: 'Python for Everybody', issuer: 'University of Michigan · Coursera', kind: 'Specialization', date: 'Jun 12, 2021',
+    line: 'Five courses: programming fundamentals, data structures, networked APIs and databases in Python, ending in a capstone that retrieves, processes and visualises data.',
+    image: '/certs/python-for-everybody.webp',
+    courses: [
+      { title: 'Programming for Everybody (Getting Started with Python)' },
+      { title: 'Python Data Structures' },
+      { title: 'Using Python to Access Web Data' },
+      { title: 'Using Databases with Python' },
+      { title: 'Capstone: Retrieving, Processing, and Visualizing Data with Python' },
+    ],
+  },
+  {
+    id: 'google-python', title: 'Crash Course on Python', issuer: 'Google · Coursera', kind: 'Course', date: 'May 31, 2021',
+    line: 'An online non-credit course authorized by Google and offered through Coursera.',
+    image: '/certs/google-crash-course-python.webp',
+  },
+  {
+    id: 'linkedin-programming', title: 'Programming Foundations: Fundamentals', issuer: 'LinkedIn Learning', kind: 'Course', date: 'May 22, 2021',
+    line: 'A two-hour LinkedIn Learning course, completed on May 22, 2021.',
+  },
+  {
+    id: 'learnbay-data-science', title: '5-day workshop on Data Science', issuer: 'Learnbay', kind: 'Workshop', date: 'May 17 to 21, 2021',
+    line: 'A certificate of participation for a five-day Data Science workshop held by Learnbay.',
+    image: '/certs/learnbay-data-science-workshop.webp',
+  },
+  {
+    id: 'google-cloud-identity', title: 'Introduction to Cloud Identity', issuer: 'Google Cloud · Coursera', kind: 'Course', date: 'May 13, 2021',
+    line: 'An online non-credit course authorized by Google Cloud and offered through Coursera.',
+    image: '/certs/google-cloud-identity.webp',
+  },
+  {
+    id: 'microsoft-learn-git', title: 'Introduction to Open-Source Development using Git and GitHub', issuer: 'Microsoft Learn Student Ambassadors', kind: 'Workshop', date: '',
+    line: 'Recognition of attendance and completion of the Microsoft Student Ambassador workshop on open-source development with Git and GitHub.',
+    image: '/certs/microsoft-learn-git-github.webp',
+  },
+]
+
 export interface NowItem { title: string; line: string; proof?: string[] }
 
 /**
