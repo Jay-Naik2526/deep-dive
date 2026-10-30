@@ -387,3 +387,21 @@ kbd{font-family:var(--mono);font-size:11px;padding:2px 6px;border-radius:5px;bor
 
 .reef-depth{color:var(--ink-soft);font-size:10px}
 .reef-card{cursor:pointer}
+
+/* ---------- what I'd build for you ---------- */
+.offer{padding-top:12vh;padding-bottom:10vh}
+.offer-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(14px,2vw,26px)}
+.offer-card{border:1px solid var(--line);border-radius:26px;padding:clamp(22px,2.6vw,36px);background:linear-gradient(160deg,color-mix(in srgb,#fff 6%,transparent),transparent);display:flex;flex-direction:column;gap:16px;transition:transform .6s var(--ease),border-color .3s}
+.offer-card:hover{transform:translateY(-5px);border-color:color-mix(in srgb,var(--glow) 55%,transparent)}
+.offer-n{color:var(--glow)}
+.offer-card h3{font-size:clamp(26px,3vw,44px);font-weight:300;letter-spacing:-.035em;line-height:1}
+.offer-card p{font-size:clamp(15px,1.25vw,19px);line-height:1.5;font-weight:350;max-width:52ch;color:var(--ink-soft)}
+.offer-proof{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:auto;padding-top:6px}
+.offer-proof > .mono{color:var(--ink-soft);margin-right:4px}
+.proof-chip{cursor:pointer;transition:background .3s,border-color .3s,transform .4s var(--ease)}
+.proof-chip:hover{border-color:var(--glow);background:color-mix(in srgb,var(--glow) 16%,transparent);transform:translateY(-2px)}
+.quotes{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(20px,3vw,40px);margin-top:clamp(44px,8vh,90px)}
+.quote{border-left:2px solid var(--glow);padding-left:clamp(18px,2vw,28px)}
+.quote blockquote{font-size:clamp(24px,2.6vw,40px);line-height:1.15;color:var(--ink)}
+.quote figcaption{margin-top:16px;color:var(--ink-soft)}
+@media(max-width:900px){.offer-grid{grid-template-columns:1fr}}

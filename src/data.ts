@@ -450,6 +450,41 @@ export const writeups: Record<string, Writeup> = {
   },
 }
 
+
+export interface Offer { title: string; line: string; proof: string[] }
+
+/** What I'd build for you. Every claim points at projects that already exist, so each one is checkable. */
+export const offers: Offer[] = [
+  {
+    title: 'Products people actually use',
+    line: 'Full-stack web apps from the schema to the deploy, built for real users: attendance for a whole college, a tuition portal for parents and teachers, a techfest site that stayed up for 500+ visitors.',
+    proof: ['studysync', 'choksi', 'ambiora'],
+  },
+  {
+    title: 'Software that reads the fine print',
+    line: 'Retrieval systems that cite their sources and say insufficient evidence instead of guessing, measured blind on real data before anyone is asked to trust them.',
+    proof: ['kupakosh', 'niyamkosh'],
+  },
+  {
+    title: 'Hardware that talks back',
+    line: 'ESP32 sensors, MQTT and live dashboards that turn something physical happening into a decision on a screen, with simulators so it can be tested without the hardware.',
+    proof: ['fire'],
+  },
+  {
+    title: 'Interfaces that feel alive',
+    line: 'Motion, 3D and typography that stay fast on a phone and degrade gracefully when they cannot keep up. You are looking at one.',
+    proof: ['coding-club', 'holo'],
+  },
+]
+
+export interface Testimonial { quote: string; name: string; role: string }
+
+/**
+ * Real words from real people only. The section stays hidden while this list is empty.
+ * Add entries like: { quote: 'What they said, exactly.', name: 'Their name', role: 'Their role, organisation' }
+ */
+export const testimonials: Testimonial[] = []
+
 export const logbook = [
   { role: 'Coding Club President', org: 'Coding Club · NMIMS MPSTME Shirpur', when: 'Now', now: true, points: ['Leading the club: events, workshops and the people who build them.'] },
   { role: 'Web Development Lead', org: 'GDG on Campus · NMIMS MPSTME Shirpur', when: '2025', points: ['Led a team of 10 across web dev workshops and campus tech events.', 'Top 10 at the GDG On Campus Hackathon out of 30+ teams.', 'Ran 3+ developer workshops for 100+ students.'] },

@@ -3,7 +3,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { existsSync, readFileSync, readdirSync } from 'node:fs'
-import { featured, reef, allProjects, sections, profile, logbook, skillGroups, writeups } from '../src/data.ts'
+import { featured, reef, allProjects, sections, profile, logbook, skillGroups, writeups, offers, testimonials } from '../src/data.ts'
 
 const root = new URL('../', import.meta.url)
 const publicPath = (p) => new URL('public' + p, root)
@@ -76,4 +76,18 @@ test('every single project has a complete writeup', () => {
     assert.ok(w.numbers.length >= 2 && w.numbers.length <= 4, `${k}: needs 2 to 4 headline numbers`)
     assert.ok(w.numbers.every(([n, l]) => n && l), `${k}: every number needs a label`)
   }
+})
+
+test('every "what I\'d build for you" claim points at a real project', () => {
+  const ids = new Set(allProjects.map((p) => p.id))
+  assert.ok(offers.length >= 3)
+  for (const o of offers) {
+    assert.ok(o.title && o.line.length > 60, `${o.title}: needs a real description`)
+    assert.ok(o.proof.length >= 1, `${o.title}: needs at least one project as proof`)
+    for (const id of o.proof) assert.ok(ids.has(id), `${o.title}: proof "${id}" is not a project`)
+  }
+})
+
+test('testimonials, when present, are complete (the section stays hidden while empty)', () => {
+  for (const q of testimonials) assert.ok(q.quote && q.name && q.role, 'a testimonial needs a quote, a name and a role')
 })
