@@ -73,3 +73,19 @@ test('GROUNDED: every answer is copied verbatim from my own writing', () => {
     if (a.kind === 'none') assert.equal(a.text, NONE)
   }
 })
+
+test('stack question about a project returns that project, not generic skills', () => {
+  const a = ask('tech stack of niyamkosh')
+  assert.match(a.text, /^NiyamKosh is built with/)
+  assert.equal(a.sources[0].projectId, 'niyamkosh')
+})
+
+test('"production grade" is not invented: answers with live-link count', () => {
+  const a = ask('how many production grade projects jay has?')
+  assert.notEqual(a.text, NONE)
+  assert.match(a.text, /live, deployed link/)
+})
+
+test('overview does not repeat the year', () => {
+  assert.doesNotMatch(ask('what is niyamkosh').text, /2026, 2026/)
+})

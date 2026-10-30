@@ -120,6 +120,15 @@ function listIntent(question: string): Answer | null {
   if (/how many (projects|things|apps)|number of projects|count of projects/.test(n)) {
     return { kind: 'fact', text: `There are ${counts.total} projects on this site: ${counts.featured} featured in the dive log and ${counts.reef} more in the reef.`, more: [], sources: [{ label: 'The projects on this site' }] }
   }
+  if (/(how many|which|what|list|any).*(production|deployed|live|shipped|real users)|(production|deployed|live|shipped).*(how many|which|projects)/.test(n) && /project|app|site|thing|have|has|built/.test(n)) {
+    const live = allProjects.filter((p) => p.url)
+    return {
+      kind: 'fact',
+      text: `I don’t grade my projects as “production-grade”, so I won’t claim a number for that. What my records do show: ${live.length} of ${counts.total} projects have a live, deployed link: ${live.map((p) => p.title).join(', ')}.`,
+      more: [],
+      sources: live.map((p) => ({ label: p.title, projectId: p.id })),
+    }
+  }
   if (!/\b(which|what|list|show|any|name)\b.*\b(project|app|site|website|platform|tool|thing)s?\b|\bprojects?\b.*\b(use|using|with|in|built|made|written)\b|\b(built|made|worked|done|used)\b.*\b(with|using|in)\b/.test(n)) return null
   const asked = [...new Set(norm(question).split(/\s+/).filter((t) => vocab().has(t) && !GENERIC_TECH.has(t)))]
   const expand = n.split(/\s+/).flatMap((t) => (['iot', 'hardware'].includes(t) ? ['esp32', 'mqtt'] : []))
@@ -163,6 +172,7 @@ function fromPassages(ps: Passage[]): Answer {
 
 /** Questions about one of my projects: pick the section of its writeup that the question is really asking for. */
 const SECTIONS: { re: RegExp; ids: (id: string) => string[] }[] = [
+  { re: /\b(stack|tech|technolog\w*|framework|librar\w*|language|built (with|using)|made (with|using)|(use|uses|used|using) )/, ids: (id) => [`${id}:stack`] },
   { re: /accura|number|metric|result|stat|how (well|good|fast)|perform|measure|evaluat|test(s|ed)?\b|how many/, ids: (id) => [`${id}:numbers`] },
   { re: /limit|claim|weak|caveat|honest|not do|doesn.?t|can.?t|cannot|downside|flaw/, ids: (id) => [`${id}:honest`] },
   { re: /problem|why (did|was|is)|why .*(build|built|made)|solve|need(ed)?\b/, ids: (id) => [`${id}:problem`, `${id}:why`] },
@@ -207,15 +217,15 @@ export function ask(question: string): Answer {
   const listed = listIntent(q)
   if (listed) return listed
 
+  const overview = projectIntent(q)
+  if (overview) return overview
+
   for (const it of INTENTS) {
     if (it.re.test(low)) {
       const ps = passagesFor(it.ids)
       if (ps.length) return fromPassages(ps)
     }
   }
-
-  const overview = projectIntent(q)
-  if (overview) return overview
 
   if (unknownRatio(q) >= 0.5) return { kind: 'none', text: NONE, more: [], sources: [] }
 

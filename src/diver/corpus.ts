@@ -17,7 +17,8 @@ export function buildCorpus(): Passage[] {
   for (const p of allProjects) {
     const w = writeups[p.id]
     const base = `${p.title} ${p.alt ?? ''} ${p.tag} ${p.stack.join(' ')}`
-    out.push({ id: `${p.id}:about`, label: `${p.title} · overview`, text: `${p.title} (${p.tag}, ${p.year}). ${p.long}`, keys: base, projectId: p.id })
+    out.push({ id: `${p.id}:about`, label: `${p.title} · overview`, text: `${p.title} (${p.tag.includes(p.year) ? p.tag : `${p.tag}, ${p.year}`}). ${p.long}`, keys: base, projectId: p.id })
+    out.push({ id: `${p.id}:stack`, label: `${p.title} · tech stack`, text: `${p.title} is built with ${p.stack.join(', ')}.`, keys: `${base} stack tech technologies tools built with`, projectId: p.id })
     if (!w) continue
     out.push({ id: `${p.id}:problem`, label: `${p.title} · the problem`, text: w.problem, keys: `${base} problem why need`, projectId: p.id })
     w.built.forEach((b, i) => out.push({ id: `${p.id}:built${i}`, label: `${p.title} · what I built`, text: b, keys: `${base} built build feature`, projectId: p.id }))
