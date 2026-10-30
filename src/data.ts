@@ -107,6 +107,58 @@ export const shallows: Shallow[] = [
   { id: 'tcs', title: 'TCS Notes', desc: 'Theory of computer science notes portal', url: 'https://tcs-notes.vercel.app', image: '/img/tcsnotes.webp', hue: 60, stack: ['HTML', 'CSS'] },
 ]
 
+
+export interface Writeup {
+  problem: string
+  built: string[]
+  numbers: [string, string][]
+  /** In my own words: why I built it. Left empty until filled in; the page shows it only when present. */
+  why?: string
+  /** What the project does NOT claim. Shown when present. */
+  honest?: string
+}
+
+/** Longer writeups for the three flagship projects. Every figure comes from the project's own README or measured results. */
+export const writeups: Record<string, Writeup> = {
+  'coding-club': {
+    problem: 'A club that runs events, contests, CTFs and recruitment across two campuses and three departments (DSA, Web and Cybersecurity) needed one home for all of it, and a front door that actually felt like the club.',
+    built: [
+      'Two worlds in one site: a scroll-driven 3D landing, then a warm newspaper-style editorial site for every inner page, linked by a cinematic wipe.',
+      'A code judge in the browser: Monaco editor wired to Judge0, run against samples, submit against hidden tests, with verdicts, time and memory.',
+      'Live leaderboards (global and per department) pushed over Socket.IO, plus CTF challenges, events with QR tickets and PDF certificates.',
+      'Google sign-in, a role-guarded admin panel, and recruitment that posts straight into a Google Form.',
+      'A monorepo with a Vite and React 19 web app, an Express and MongoDB API, and a shared package of Zod schemas so both sides agree on the data.',
+    ],
+    numbers: [['3', 'departments'], ['14', 'data models'], ['9', 'API route groups'], ['3', 'real events archived']],
+    why: '',
+    honest: 'The 3D layer downgrades itself on touch, low-core and reduced-motion devices, so the club site stays usable on a phone.',
+  },
+  kupakosh: {
+    problem: 'Oil wells are drilled 2 to 4 km deep through rock layers called formations, and the same problems keep coming back in the same layers across nearby wells: mud losses, kicks, stuck pipe, overpressure. What happened in older wells is written down, but buried in thousands of daily drilling reports, while the live rig system shows only the well being drilled now, with no memory of the ones before it.',
+    built: [
+      'A Well Wiki compiled once from the reports: pages per well, formation and hazard, with a citation on every sentence. Uncited sentences and unsupported numbers are rejected by the compiler, and an engineer approves each page.',
+      'A problem, action, outcome ledger that follows each problem through the next days of real reports to see which fix actually worked, and how often.',
+      'An honest hazard model with an 80% range and the evidence count behind it, a look-ahead alert before the bit reaches a risky layer, and a shift-handover note in English and Hindi.',
+      'A Hindsight test that replays real history blind: for each well the model only sees other wells, then we check whether it flagged the layer where trouble really happened.',
+    ],
+    numbers: [['431', 'wells replayed blind'], ['0.87', 'ranking accuracy (AUC)'], ['54%', 'of problems had happened before'], ['391 m', 'median warning before the bit']],
+    why: '',
+    honest: 'Every well comes from public records in eight countries, standing in for Oil India’s own reports; no Oil India data is used or claimed. It is decision support only: the engineer decides. The hazard model alone shows no measured skill (its Brier score equals the base rate), which is why the interface shows ranges and says "insufficient evidence" instead of guessing, and only about 1 in 10 alerts matches a recorded event.',
+  },
+  niyamkosh: {
+    problem: 'Tenders name the Indian Standard the product must meet, and many cite the wrong one. Measured on the collected corpus: 562 of 1,580 real government tenders cite a standard BIS has already withdrawn, 59 of 116 tenders for products under a Quality Control Order never ask for the ISI mark, and 209 of 512 Ministry of Defence tenders cite a withdrawn standard today. A wrong standard means the wrong product is supplied, rejected at inspection, and argued over.',
+    built: [
+      'A finder that takes plain words (English or an Indian language) and returns the governing standard, a confidence band, the mandatory certification, and the standards real tenders buy alongside it.',
+      'A tender checker for PDF and Word files, scans included: every IS number is checked against the register and flagged as withdrawn, superseded, not in the register, or missing certification.',
+      'A corrected tender handed back in the same file with the same letterhead: withdrawn citations replaced with the BIS successor, the Standard Mark clause inserted where the law demands it, and the corrected file audited again from scratch.',
+      'The whole console in 11 Indian languages through Bhashini, and a browser extension for GeM, CPPP and nProcure that keeps the tender text on the officer’s machine.',
+    ],
+    numbers: [['27,687', 'standards in the register'], ['492 / 621', 'correct standard ranked first'], ['608 / 621', 'correct in the top 10'], ['0', 'answers outside the register']],
+    why: '',
+    honest: 'A model may phrase the output but never decides the standard. When evidence is weak it says so and shows the shortlist (it declined 38 of 621 test queries rather than guess). Adding co-citation neighbours to retrieval made recall worse (608 to 591), so it was measured, rejected and kept out of the product.',
+  },
+}
+
 export const logbook = [
   { role: 'Coding Club President', org: 'Coding Club · NMIMS MPSTME Shirpur', when: 'Now', now: true, points: ['Leading the club: events, workshops and the people who build them.'] },
   { role: 'Web Development Lead', org: 'GDG on Campus · NMIMS MPSTME Shirpur', when: '2025', points: ['Led a team of 10 across web dev workshops and campus tech events.', 'Top 10 at the GDG On Campus Hackathon out of 30+ teams.', 'Ran 3+ developer workshops for 100+ students.'] },

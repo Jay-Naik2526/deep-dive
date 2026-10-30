@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom'
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from 'motion/react'
 import { BendText } from './BendText'
 import { HoloPreview } from './Holo'
-import { featured, type Project } from '../data'
+import { featured, writeups, type Project } from '../data'
 import { lockScroll, onFrame, ripple, world } from '../world'
 import { sound } from '../audio'
 import { quality } from '../quality'
@@ -156,6 +156,31 @@ function CaseStudy({ index, origin, from, onClose, onNav }: { index: number; ori
         </motion.div>
         </div>
       </div>
+
+      {writeups[p.id] && (
+        <motion.section className="case-write" aria-label={`${p.title} writeup`} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-8%' }} transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}>
+          <div className="cw-head mono">The writeup</div>
+          <div className="cw-grid">
+            <div>
+              <h3 className="mono">The problem</h3>
+              <p>{writeups[p.id].problem}</p>
+            </div>
+            <div>
+              <h3 className="mono">What I built</h3>
+              <ul>{writeups[p.id].built.map((b) => <li key={b}>{b}</li>)}</ul>
+            </div>
+          </div>
+          <div className="cw-numbers">
+            {writeups[p.id].numbers.map(([n, l]) => <div key={l}><b>{n}</b><span className="mono">{l}</span></div>)}
+          </div>
+          {writeups[p.id].why && (
+            <div className="cw-why"><h3 className="mono">Why I built it</h3><p className="serif">{writeups[p.id].why}</p></div>
+          )}
+          {writeups[p.id].honest && (
+            <div className="cw-honest"><h3 className="mono">What it doesn&apos;t claim</h3><p>{writeups[p.id].honest}</p></div>
+          )}
+        </motion.section>
+      )}
 
       <div className="case-nav">
         <button onClick={() => onNav(-1)} data-cursor="Prev" aria-label="Previous project">← <span className="mono">{featured[(index + featured.length - 1) % featured.length].title}</span></button>

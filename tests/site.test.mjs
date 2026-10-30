@@ -3,7 +3,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { existsSync, readFileSync, readdirSync } from 'node:fs'
-import { featured, shallows, sections, profile, logbook, skillGroups } from '../src/data.ts'
+import { featured, shallows, sections, profile, logbook, skillGroups, writeups } from '../src/data.ts'
 
 const root = new URL('../', import.meta.url)
 const publicPath = (p) => new URL('public' + p, root)
@@ -61,4 +61,15 @@ test('about content is filled in', () => {
   assert.ok(logbook.length >= 3)
   assert.ok(logbook[0].now, 'first logbook entry should be the current role')
   assert.ok(skillGroups.every((g) => g.items.length > 0))
+})
+
+test('flagship writeups are complete and point at real projects', () => {
+  const ids = new Set(featured.map((p) => p.id))
+  for (const k of ['coding-club', 'kupakosh', 'niyamkosh']) assert.ok(writeups[k], `missing writeup for ${k}`)
+  for (const [k, w] of Object.entries(writeups)) {
+    assert.ok(ids.has(k), `writeup "${k}" has no matching featured project`)
+    assert.ok(w.problem.length > 80, `${k}: problem is too thin`)
+    assert.ok(w.built.length >= 3, `${k}: needs at least 3 "what I built" points`)
+    assert.equal(w.numbers.length, 4, `${k}: expects exactly 4 headline numbers`)
+  }
 })
