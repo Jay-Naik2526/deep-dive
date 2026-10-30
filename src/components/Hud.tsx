@@ -8,7 +8,7 @@ import { quality } from '../quality'
 const MAXD = 200
 const zones: [number, string][] = [[0, 'Sunlight zone'], [0.2, 'Twilight zone'], [0.58, 'Midnight zone'], [0.88, 'The seabed']]
 
-export function Hud({ onPalette }: { onPalette: () => void }) {
+export function Hud({ onPalette, onAsk }: { onPalette: () => void; onAsk: () => void }) {
   const pin = useRef<HTMLDivElement>(null)
   const gauge = useRef<HTMLDivElement>(null)
   const depth = useRef<HTMLElement>(null)
@@ -82,6 +82,10 @@ export function Hud({ onPalette }: { onPalette: () => void }) {
           ))}
         </nav>
         <div className="hud-tools">
+          <button onClick={onAsk} aria-label="Ask the diver" data-cursor="Ask">
+            <span aria-hidden="true">✦</span>
+            <span className="tool-label">Ask</span>
+          </button>
           <button onClick={toggleNight} aria-pressed={night} aria-label={night ? 'Switch to daylight water' : 'Switch to moonlit water'} data-cursor={night ? 'Day' : 'Night'}>
             <span aria-hidden="true">{night ? '☀' : '☾'}</span>
             <span className="tool-label">{night ? 'Day' : 'Night'}</span>

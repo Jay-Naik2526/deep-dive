@@ -19,6 +19,7 @@ import { SceneGate } from './components/SceneGate'
 // below-the-fold and on-demand pieces load in their own chunks, then get prefetched when the browser is idle
 const Sonar = lazy(() => import('./components/Sonar').then((m) => ({ default: m.Sonar })))
 const Contributions = lazy(() => import('./components/Contributions').then((m) => ({ default: m.Contributions })))
+const Diver = lazy(() => import('./components/Diver'))
 const Palette = lazy(() => import('./components/Palette').then((m) => ({ default: m.Palette })))
 const Hold = ({ id, cls, h }: { id: string; cls: string; h: string }) => <section id={id} className={cls} style={{ minHeight: h }} aria-hidden="true" />
 
@@ -34,6 +35,9 @@ export default function App() {
   const setPalette = useCallback((v: boolean) => { if (v) setPalMounted(true); setPaletteState(v) }, [])
   const [openId, setOpenIdState] = useState<string | null>(idFromHash)
   const [toast, setToast] = useState('')
+  const [diverOpen, setDiverOpen] = useState(false)
+  const [diverMounted, setDiverMounted] = useState(false)
+  const openDiver = useCallback(() => { setDiverMounted(true); setDiverOpen(true) }, [])
 
   const setOpenId = useCallback((id: string | null) => {
     setOpenIdState(id)
@@ -116,7 +120,7 @@ export default function App() {
       <Cursor />
       <Loader onDone={() => { world.loaded = true; setGo(true) }} />
       <Atmosphere />
-      <Hud onPalette={() => setPalette(true)} />
+      <Hud onPalette={() => setPalette(true)} onAsk={openDiver} />
 
       <main data-go={go}>
         <Hero go={go} />
@@ -130,7 +134,9 @@ export default function App() {
         <Contact copy={copy} />
       </main>
 
-      {palMounted && <Suspense fallback={null}><Palette open={palette} setOpen={setPalette} openCase={(id) => setOpenId(id)} copy={copy} toggleSound={toggleSound} /></Suspense>}
+      {palMounted && <Suspense fallback={null}><Palette open={palette} setOpen={setPalette} openCase={(id) => setOpenId(id)} copy={copy} toggleSound={toggleSound} ask={openDiver} /></Suspense>}
+
+      {diverMounted && <Suspense fallback={null}><Diver open={diverOpen} onClose={() => setDiverOpen(false)} onOpenCase={(id) => setOpenId(id)} /></Suspense>}
 
       <AnimatePresence>
         {toast && (

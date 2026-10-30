@@ -428,3 +428,34 @@ kbd{font-family:var(--mono);font-size:11px;padding:2px 6px;border-radius:5px;bor
 .now-live em{font-style:normal;color:var(--ink-soft);font-size:10.5px}
 .now-wait{color:var(--ink-soft)}
 @media(max-width:900px){.now-grid{grid-template-columns:1fr}}
+
+/* ---------- ask the diver ---------- */
+.diver{position:fixed;right:clamp(12px,2vw,28px);bottom:clamp(12px,2vw,28px);z-index:160;width:min(430px,calc(100vw - 24px));height:min(640px,calc(100svh - 110px));display:flex;flex-direction:column;border-radius:26px;overflow:hidden;
+  background:linear-gradient(170deg,rgba(7,34,60,.97),rgba(2,14,28,.98));border:1px solid rgba(124,243,255,.28);box-shadow:0 40px 100px rgba(0,0,0,.6);color:#e2f8fc}
+.dv-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid rgba(226,248,252,.12)}
+.dv-head strong{display:block;font-size:20px;font-weight:400;letter-spacing:-.02em}
+.dv-head .mono{display:block;margin-top:3px;font-size:10px;color:rgba(226,248,252,.6)}
+.dv-head button{width:34px;height:34px;border-radius:50%;border:1px solid rgba(226,248,252,.2);color:#e2f8fc;display:grid;place-items:center}
+.dv-scroll{flex:1;overflow-y:auto;padding:16px 16px 6px;display:flex;flex-direction:column;gap:14px;overscroll-behavior:contain}
+.dv-msg{max-width:92%;display:flex;flex-direction:column;gap:8px;animation:dvIn .5s cubic-bezier(.22,1,.36,1) both}
+@keyframes dvIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.dv-msg[data-role=me]{align-self:flex-end}
+.dv-msg[data-role=me] p{background:var(--glow);color:#02101f;border-radius:18px 18px 4px 18px;padding:10px 14px;font-size:15px}
+.dv-msg[data-role=diver] p{background:rgba(255,255,255,.06);border:1px solid rgba(226,248,252,.14);border-radius:18px 18px 18px 4px;padding:12px 15px;font-size:15px;line-height:1.5;font-weight:350}
+.dv-msg p[data-none=true]{color:rgba(226,248,252,.78);border-style:dashed}
+.dv-msg blockquote{margin:0;padding:10px 14px;border-left:2px solid var(--glow);font-size:13.5px;line-height:1.45;color:rgba(226,248,252,.82)}
+.dv-msg cite{display:block;margin-top:6px;font-style:normal;font-size:9.5px;color:rgba(226,248,252,.55)}
+.dv-src{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.dv-src > .mono{font-size:9.5px;color:rgba(226,248,252,.55);margin-right:2px}
+.dv .chip,.diver .chip{font-size:11.5px;padding:5px 10px;color:#e2f8fc;border-color:rgba(226,248,252,.22)}
+.dv-sugg{display:flex;flex-wrap:wrap;gap:8px;padding-top:2px}
+.dv-dots{display:flex;gap:5px;padding:14px 16px!important}
+.dv-dots i{width:7px;height:7px;border-radius:50%;background:var(--glow);animation:dvDot 1s ease-in-out infinite}
+.dv-dots i:nth-child(2){animation-delay:.15s}.dv-dots i:nth-child(3){animation-delay:.3s}
+@keyframes dvDot{50%{transform:translateY(-5px);opacity:.4}}
+.dv-form{display:flex;gap:8px;padding:12px;border-top:1px solid rgba(226,248,252,.12)}
+.dv-form input{flex:1;min-width:0;background:rgba(255,255,255,.06);border:1px solid rgba(226,248,252,.18);border-radius:99px;padding:12px 16px;color:#e2f8fc;font:400 15px var(--sans);outline:none}
+.dv-form input:focus{border-color:var(--glow)}
+.dv-form button{width:44px;height:44px;border-radius:50%;background:var(--glow);color:#02101f;font-size:18px;font-weight:600}
+.dv-form button:disabled{opacity:.35}
+@media(max-width:700px){.diver{right:8px;left:8px;bottom:8px;width:auto;height:min(78svh,640px)}}
