@@ -53,7 +53,7 @@ export default function Diver({ open, onClose, onOpenCase }: { open: boolean; on
     }
     if (ASK_URL) {
       // AI-phrased answer grounded in my passages; if it fails for any reason the offline engine answers instead
-      askAI(t).then((a) => reply(a ?? ask(t)))
+      askAI(t).then((a) => reply(a && a.kind !== 'none' ? a : ask(t))) // a refusal from the model still gets the offline engine's chance
       return
     }
     // a short beat so it feels like it is reading its notes

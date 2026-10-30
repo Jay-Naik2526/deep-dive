@@ -1,8 +1,9 @@
 import { ask, retrieve, type Answer, type Source } from './search.ts'
 import type { Passage } from './corpus.ts'
 
-/** Set VITE_ASK_URL to the deployed worker (see worker/README.md). Unset = the offline engine only. */
-export const ASK_URL: string = (import.meta as unknown as { env?: Record<string, string> }).env?.VITE_ASK_URL ?? ''
+/** The Vercel function that holds the Groq key (diver-ask-vercel). VITE_ASK_URL overrides it; set it to an empty string to force the offline engine. */
+const DEFAULT_ASK_URL = 'https://diver-ask-vercel.vercel.app/api/ask'
+export const ASK_URL: string = (import.meta as unknown as { env?: Record<string, string> }).env?.VITE_ASK_URL ?? DEFAULT_ASK_URL
 export const NOT_IN_NOTES = 'NOT_IN_NOTES'
 const NONE = 'No evidence found in my records. I can only answer from my own project notes, so try asking about a project, a skill, a role, or how to reach me.'
 
