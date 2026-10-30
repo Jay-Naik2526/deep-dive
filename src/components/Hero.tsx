@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { BendText } from './BendText'
 import { goTo } from '../world'
+import { quality } from '../quality'
 import { profile, roles } from '../data'
 
 export function Hero({ go }: { go: boolean }) {
@@ -54,7 +55,7 @@ export function Hero({ go }: { go: boolean }) {
         </div>
         <div className="cue reveal-up" style={{ '--d': '1.1s' } as React.CSSProperties}>
           <span className="open mono"><i /> Open to internships · freelance</span>
-          <span className="mono">Move your cursor · scroll to descend</span>
+          <span className="mono">{quality.touch ? 'Scroll to descend' : 'Move your cursor · scroll to descend'}</span>
           <span className="arrow" />
         </div>
       </div>

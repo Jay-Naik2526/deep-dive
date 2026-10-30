@@ -350,3 +350,19 @@ kbd{font-family:var(--mono);font-size:11px;padding:2px 6px;border-radius:5px;bor
 
 .case-fly{will-change:transform;position:relative}
 .case-fly .case-visual{width:100%}
+
+/* ---------- touch devices: skip effects that cost more than they show ---------- */
+@media (pointer:coarse){
+  .hero[data-go=true] .name .ch{animation-name:riseTouch}
+  @keyframes riseTouch{from{transform:translateY(108%);opacity:0}to{transform:none;opacity:1}}
+  .reef-card,.btn{transition-duration:.25s}
+}
+
+/* ---------- small screens ---------- */
+.hold-short{display:none}
+@media(max-width:700px){
+  .hold-long{display:none}.hold-short{display:inline}
+  .readout{gap:0;padding:8px 12px}
+  .readout > span:nth-child(2),.trench-badge{display:none}
+  .hud-top{padding-top:12px}
+}

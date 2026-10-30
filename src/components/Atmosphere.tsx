@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { onFrame, ripple, setHold, world } from '../world'
 import { sound } from '../audio'
+import { quality } from '../quality'
 import { profile } from '../data'
 
 /** Glowing cursor trail (bioluminescence in the deep, bubbles near the surface). */
@@ -9,7 +10,7 @@ function Trail() {
   const cv = useRef<HTMLCanvasElement>(null)
   useEffect(() => {
     const c = cv.current
-    if (!c || world.reduced) return
+    if (!c || world.reduced || quality.touch) return
     const ctx = c.getContext('2d')!
     const fit = () => { c.width = innerWidth; c.height = innerHeight }
     fit()
@@ -174,7 +175,7 @@ function Pressure() {
         data-cursor="Hold"
         aria-label="Hold to free-dive down the page"
       >
-        <kbd>Space</kbd> Hold to free-dive
+        <kbd>Space</kbd> <span className="hold-long">Hold to free-dive</span><span className="hold-short">Hold to dive</span>
       </button>
     </>
   )

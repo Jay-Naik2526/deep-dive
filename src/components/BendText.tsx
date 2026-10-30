@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useRef, type CSSProperties } from 'react'
 import { onFrame, world } from '../world'
+import { quality } from '../quality'
 
 /**
  * Every letter is a spring on two variable-font axes (weight + width).
@@ -43,7 +44,7 @@ if (typeof window !== 'undefined') {
     const refresh = frame % 12 === 0
     const hostRects = new Map<Element, DOMRect>()
     const R = Math.min(420, innerWidth * 0.34)
-    const kickAmt = world.reduced ? 0 : Math.min(1, Math.abs(world.vel) / 1800)
+    const kickAmt = world.reduced || quality.touch ? 0 : Math.min(1, Math.abs(world.vel) / 1800)
     registry.forEach((l) => {
       if (!visible.get(l.host)) return
       // one layout read per heading per frame; letter offsets are cached and refreshed ~5x/sec

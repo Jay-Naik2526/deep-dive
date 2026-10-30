@@ -1,8 +1,9 @@
-import { useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
-import { NR, world } from '../world'
+import { NR, onFrame, world } from '../world'
 import { sound } from '../audio'
+import { quality } from '../quality'
 
 /* ------------------------------------------------------------------ *
  * WATER: full-screen fragment shader. Caustics, god rays, ripples from
@@ -11,10 +12,15 @@ import { sound } from '../audio'
 const waterVert = /* glsl */ `void main(){ gl_Position = vec4(position.xy, 0.0, 1.0); }`
 const waterFrag = /* glsl */ `
 precision highp float;
+#ifdef LITE
+#define OCT 2
+#else
+#define OCT 3
+#endif
 uniform vec2 uRes; uniform float uT, uD, uVel, uOn, uNight; uniform vec3 uRip[${NR}]; uniform float uStr[${NR}]; uniform vec2 uM;
 float h21(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+45.32);return fract(p.x*p.y);}
 float vn(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(h21(i),h21(i+vec2(1,0)),f.x),mix(h21(i+vec2(0,1)),h21(i+1.),f.x),f.y);}
-float fbm(vec2 p){float a=.5,s=0.;for(int i=0;i<3;i++){s+=a*vn(p);p=p*2.03+7.1;a*=.5;}return s;}
+float fbm(vec2 p){float a=.5,s=0.;for(int i=0;i<OCT;i++){s+=a*vn(p);p=p*2.03+7.1;a*=.5;}return s;}
 // ripple height + analytic gradient in a single pass (was 3 full passes)
 vec3 ripples(vec2 uv, vec2 asp){
   float h=0.; vec2 g=vec2(0.);
@@ -62,14 +68,21 @@ void main(){
   col*=1.-.22*smoothstep(.2,1.,uv.y)*(.4+d);
   // caustics + god rays only exist in the lit part of the water
   if(d<.66){
+#ifdef LITE
+    // phones get a cheap interference pattern instead of the iterated caustic solver
+    float cs=pow(abs(sin(duv.x*asp.x*9.+uT*.5+sin(duv.y*7.+uT*.4)*1.5)*sin(duv.y*8.-uT*.35+sin(duv.x*6.)*1.2)),5.)*.9;
+#else
     vec2 cp=mod((duv*asp+vec2(0.,uD*1.5))*6.2831*1.3,6.2831)-250.;
     float cs=clamp(caustic(cp,uT*.55+23.),0.,1.);
+#endif
     float cmask=(1.-smoothstep(.0,.62,d))*(.2+.8*smoothstep(1.,.0,uv.y));
     col+=vec3(.75,1.,1.)*cs*.38*cmask*(1.-.6*uNight);
+#ifndef LITE
     if(d<.5){
       float ray=pow(max(0.,sin(duv.x*asp.x*7.+uT*.15+flow*3.)),6.)*(1.-uv.y)*(1.-smoothstep(0.,.5,d));
       col+=mix(vec3(.9,1.,.95),vec3(.45,.6,1.),uNight)*ray*.12*(1.-.5*uNight);
     }
+#endif
     // a soft moon halo near the top-right of the surface at night
     vec2 mp=(uv-vec2(.8,.1))*asp;
     col+=vec3(.55,.65,1.)*exp(-dot(mp,mp)*28.)*.32*uNight*(1.-smoothstep(0.,.4,d));
@@ -136,7 +149,7 @@ function Water() {
   return (
     <mesh frustumCulled={false} renderOrder={-10}>
       <planeGeometry args={[2, 2]} />
-      <shaderMaterial ref={mat} vertexShader={waterVert} fragmentShader={waterFrag} uniforms={uniforms} depthTest={false} depthWrite={false} />
+      <shaderMaterial ref={mat} vertexShader={waterVert} fragmentShader={waterFrag} uniforms={uniforms} defines={quality.lite ? { LITE: '' } : {}} depthTest={false} depthWrite={false} />
     </mesh>
   )
 }
@@ -190,8 +203,8 @@ const tentFrag = /* glsl */ `
 uniform vec3 uColor; uniform float uVis; varying float vS;
 void main(){ float a = (1.0 - vS) * 0.55 * uVis; gl_FragColor = vec4(uColor*a, a); }`
 
-const bellGeo = new THREE.SphereGeometry(1, 32, 18, 0, Math.PI * 2, 0, Math.PI * 0.56)
-function makeTentacles(T = 14, S = 16) {
+const bellGeo = quality.lite ? new THREE.SphereGeometry(1, 20, 10, 0, Math.PI * 2, 0, Math.PI * 0.56) : new THREE.SphereGeometry(1, 32, 18, 0, Math.PI * 2, 0, Math.PI * 0.56)
+function makeTentacles(T = quality.lite ? 8 : 14, S = quality.lite ? 10 : 16) {
   const pos: number[] = [], a: number[] = [], s: number[] = []
   for (let t = 0; t < T; t++) {
     const ang = (t / T) * Math.PI * 2 + Math.sin(t * 12.9) * 0.1
@@ -280,7 +293,7 @@ function Jelly({ spec }: { spec: JellySpec }) {
 function Jellies() {
   const specs = useMemo<JellySpec[]>(() => {
     const m = typeof window !== 'undefined' && window.innerWidth < 760
-    const n = m ? 5 : 9
+    const n = quality.lite ? 4 : m ? 5 : 9
     return Array.from({ length: n }, (_, i) => ({
       x: (i * 0.618 + 0.13) % 1,
       y: (i * 0.37 + 0.08) % 1,
@@ -419,7 +432,7 @@ void main(){ float d = length(gl_PointCoord-0.5); if (d > 0.5) discard; float a 
 
 function Snow() {
   const { geo, uni, mat } = useMemo(() => {
-    const N = 750
+    const N = quality.lite ? 260 : 750
     const pos = new Float32Array(N * 3), seed = new Float32Array(N)
     for (let i = 0; i < N; i++) {
       pos[i * 3] = (Math.random() - 0.5) * 22
@@ -443,20 +456,45 @@ function Snow() {
   return <points geometry={geo} material={mat} frustumCulled={false} />
 }
 
-/** Watches frame time and trades resolution for smoothness. The water is soft, so this is nearly invisible. */
-function Adaptive({ max }: { max: number }) {
+/**
+ * Watches frame time and trades resolution for smoothness. The water is soft, so this is nearly invisible.
+ *  - ignores the first ~2.5s (shader compile, fonts and layout make load frames unrepresentative)
+ *  - drops quickly when frames are slow, recovers slowly when they're comfortably fast
+ *  - never climbs back to a level that already failed, so it can't flip-flop
+ */
+function Adaptive({ start, max }: { start: number; max: number }) {
   const setDpr = useThree((st) => st.setDpr)
-  const acc = useRef({ t: 0, n: 0, dpr: max, calm: 0 })
+  // lite renders at ~30fps on purpose, so a healthy frame there is ~33ms
+  const slow = quality.lite ? 0.041 : 0.021
+  const fast = quality.lite ? 0.036 : 0.0185
+  const floor = quality.lite ? 0.5 : 0.45
+  const a = useRef({ t: 0, n: 0, dpr: start, calm: 0, warm: 0, cap: max })
   useFrame((_s, delta) => {
-    const a = acc.current
-    a.t += Math.min(delta, 0.25); a.n++
-    if (a.n < 40) return
-    const avg = a.t / a.n
-    a.t = 0; a.n = 0
-    if (avg > 0.021 && a.dpr > 0.45) { a.dpr = Math.max(0.45, a.dpr * 0.82); a.calm = 0; setDpr(a.dpr) }
-    else if (avg < 0.0125 && a.dpr < max) { if (++a.calm > 4) { a.dpr = Math.min(max, a.dpr * 1.12); a.calm = 0; setDpr(a.dpr) } }
-    else a.calm = 0
+    const st = a.current
+    if (st.warm < 150) { st.warm++; return }
+    st.t += Math.min(delta, 0.25); st.n++
+    if (st.n < 40) return
+    const avg = st.t / st.n
+    st.t = 0; st.n = 0
+    if (avg > slow && st.dpr > floor) {
+      st.cap = Math.min(st.cap, st.dpr * 0.97)
+      st.dpr = Math.max(floor, st.dpr * 0.88)
+      st.calm = 0
+      setDpr(st.dpr)
+    } else if (avg < fast && st.dpr < st.cap) {
+      if (++st.calm > 4) { st.dpr = Math.min(st.cap, st.dpr * 1.1); st.calm = 0; setDpr(st.dpr) }
+    } else st.calm = 0
   })
+  return null
+}
+
+/** On lite devices the WebGL scene renders every other frame (30fps) while the page itself keeps scrolling at full rate. */
+function Driver() {
+  const advance = useThree((st) => st.advance)
+  useEffect(() => {
+    let n = 0
+    return onFrame(() => { if ((n++ & 1) === 0) advance(performance.now() / 1000) })
+  }, [advance])
   return null
 }
 
@@ -464,16 +502,18 @@ export default function Scene() {
   return (
     <Canvas
       className="scene"
-      dpr={0.85}
+      dpr={quality.lite ? 0.95 : 0.85}
+      frameloop={quality.lite ? 'never' : 'always'}
       gl={{ antialias: false, powerPreference: 'high-performance', alpha: false }}
       camera={{ position: [0, 0, 8], fov: 45, near: 0.1, far: 60 }}
       aria-hidden="true"
     >
-      <Adaptive max={1} />
+      <Adaptive start={quality.lite ? 0.95 : 0.85} max={quality.lite ? 1.1 : 1} />
+      {quality.lite && <Driver />}
       <Water />
       <Snow />
       <Whale phase={0.6} z={-5} size={1.45} y0={0.12} from={0.24} to={0.5} />
-      <Whale phase={4.2} z={-11} size={1.1} y0={-0.2} from={0.56} to={0.8} />
+      {!quality.lite && <Whale phase={4.2} z={-11} size={1.1} y0={-0.2} from={0.56} to={0.8} />}
       <Jellies />
     </Canvas>
   )

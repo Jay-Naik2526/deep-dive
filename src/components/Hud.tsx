@@ -3,6 +3,7 @@ import { motion } from 'motion/react'
 import { goTo, onFrame, toggleNight, world } from '../world'
 import { sound } from '../audio'
 import { sections } from '../data'
+import { quality } from '../quality'
 
 const MAXD = 200
 const zones: [number, string][] = [[0, 'Sunlight zone'], [0.2, 'Twilight zone'], [0.58, 'Midnight zone'], [0.88, 'The seabed']]
@@ -85,7 +86,7 @@ export function Hud({ onPalette }: { onPalette: () => void }) {
             <span aria-hidden="true">{night ? '☀' : '☾'}</span>
             <span className="tool-label">{night ? 'Day' : 'Night'}</span>
           </button>
-          <button onClick={onPalette} aria-label="Open command palette"><kbd>⌘</kbd><kbd>K</kbd></button>
+          {!quality.touch && <button onClick={onPalette} aria-label="Open command palette"><kbd>⌘</kbd><kbd>K</kbd></button>}
           <button
             aria-pressed={snd}
             aria-label={snd ? 'Mute ambient sound' : 'Enable ambient sound'}

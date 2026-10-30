@@ -6,6 +6,7 @@ import { HoloPreview } from './Holo'
 import { featured, type Project } from '../data'
 import { lockScroll, onFrame, ripple, world } from '../world'
 import { sound } from '../audio'
+import { quality } from '../quality'
 
 export function Poster({ p, big = false }: { p: { title: string; alt?: string; hue: number; image?: string; live?: 'holo' }; big?: boolean }) {
   if (p.live === 'holo') return <HoloPreview />
@@ -29,7 +30,7 @@ function Preview({ project }: { project: Project | null }) {
   const srot = useSpring(rot, { stiffness: 120, damping: 14 })
   useEffect(
     () =>
-      onFrame(() => {
+      quality.touch ? undefined : onFrame(() => {
         x.set(world.px + 28)
         y.set(world.py - 110)
         rot.set(Math.max(-9, Math.min(9, world.vel * 0.004)))
@@ -200,7 +201,7 @@ export function Dives({ openId, setOpenId }: { openId: string | null; setOpenId:
     <section className="log" id="dives">
       <div className="zone mono">40 – 130 m · Twilight zone</div>
       <h2 className="h2" aria-label="Dive log"><span className="serif">Dive</span> <BendText text="log" preset="h2" /></h2>
-      <p className="mono hint">Hover to peek · click to descend into the case study</p>
+      <p className="mono hint">{quality.touch ? 'Tap a project to descend into its case study' : 'Hover to peek · click to descend into the case study'}</p>
 
       <div className="dive-list" onPointerLeave={() => setHover(null)}>
         {featured.map((p, i) => (

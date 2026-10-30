@@ -3,6 +3,7 @@ import { BendText } from './BendText'
 import { skillGroups } from '../data'
 import { onFrame, ripple } from '../world'
 import { sound } from '../audio'
+import { quality } from '../quality'
 
 interface Blip { label: string; g: number; a: number; r: number; b: number; pinged: boolean }
 const TAU = Math.PI * 2
@@ -52,7 +53,7 @@ export function Sonar() {
     const ctx = c.getContext('2d')!
     let size = 600, dpr = 1
     const fit = () => {
-      dpr = Math.min(devicePixelRatio || 1, 1.5)
+      dpr = Math.min(devicePixelRatio || 1, quality.lite ? 1 : 1.5)
       size = Math.min(w.clientWidth, 720)
       c.width = size * dpr; c.height = size * dpr
       c.style.width = size + 'px'; c.style.height = size + 'px'
@@ -78,11 +79,13 @@ export function Sonar() {
     }
     const leave = () => { hov.current = -1; setLabel('') }
     c.addEventListener('pointermove', move)
+    c.addEventListener('pointerdown', move)
     c.addEventListener('pointerleave', leave)
 
     let skip = 0
     const off = onFrame((t) => {
-      if ((skip ^= 1) === 1) return // radar redraws at 30fps; the sweep is slow enough that you can't tell
+      // radar redraws at 30fps (20 on lite); the sweep is slow enough that you can't tell
+      if (quality.lite ? ++skip % 3 !== 0 : (skip ^= 1) === 1) return
       const rect = c.getBoundingClientRect()
       if (rect.bottom < 0 || rect.top > innerHeight) return
       const R = size / 2 - 24
@@ -132,7 +135,7 @@ export function Sonar() {
       ctx.beginPath(); ctx.arc(0, 0, 3, 0, TAU); ctx.fill()
       ctx.setTransform(1, 0, 0, 1, 0, 0)
     })
-    return () => { off(); ro.disconnect(); c.removeEventListener('pointermove', move); c.removeEventListener('pointerleave', leave) }
+    return () => { off(); ro.disconnect(); c.removeEventListener('pointermove', move); c.removeEventListener('pointerdown', move); c.removeEventListener('pointerleave', leave) }
   }, [blips])
 
   return (
@@ -142,7 +145,7 @@ export function Sonar() {
       <div className="sonar-grid">
         <div className="radar" ref={wrap} data-cursor="Ping">
           <canvas ref={cv} aria-hidden="true" />
-          <div className="radar-label mono" aria-live="polite">{label || 'Hover a signal'}</div>
+          <div className="radar-label mono" aria-live="polite">{label || (quality.touch ? 'Tap a signal' : 'Hover a signal')}</div>
         </div>
         <div className="legend">
           {skillGroups.map((g, i) => (

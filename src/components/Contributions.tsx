@@ -5,6 +5,7 @@ import snapshot from '../data/contributions.json'
 import { profile } from '../data'
 import { onFrame, ripple, world } from '../world'
 import { sound } from '../audio'
+import { quality } from '../quality'
 
 interface Day { date: string; count: number; level: number }
 interface Range { total: number; days: Day[] }
@@ -161,6 +162,7 @@ const Grid = memo(function Grid({ cells, weeks, months, active, rangeKey, onTip 
     }
     const leave = () => { s.hover = -1; s.dirty = true; onTip(null, 0, 0) }
     c.addEventListener('pointermove', move)
+    c.addEventListener('pointerdown', move) // a tap shows the day on touch screens
     c.addEventListener('pointerleave', leave)
 
     const draw = (now: number) => {
@@ -211,7 +213,7 @@ const Grid = memo(function Grid({ cells, weeks, months, active, rangeKey, onTip 
       draw(performance.now())
     })
     s.dirty = true
-    return () => { off(); ro.disconnect(); c.removeEventListener('pointermove', move); c.removeEventListener('pointerleave', leave) }
+    return () => { off(); ro.disconnect(); c.removeEventListener('pointermove', move); c.removeEventListener('pointerdown', move); c.removeEventListener('pointerleave', leave) }
   }, [cells, weeks, months, glows, onTip])
 
   // restart the wave whenever the grid scrolls into view or the range changes
@@ -293,7 +295,7 @@ export function Contributions() {
     <section className="signal" id="signal">
       <div className="zone mono">190 m · Open signal</div>
       <h2 className="h2" aria-label="Plankton count"><span className="serif">Plankton</span> <BendText text="count" preset="h2" /></h2>
-      <p className="mono hint">Every glowing cell is a day I shipped something · hover to read it</p>
+      <p className="mono hint">Every glowing cell is a day I shipped something · {quality.touch ? 'tap' : 'hover'} to read it</p>
 
       <motion.div ref={card} className="sig-card" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-8%' }} transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}>
         <div className="sig-head">

@@ -1,5 +1,6 @@
 import Lenis from 'lenis'
 import { sound } from './audio'
+import { quality } from './quality'
 
 /**
  * Mutable per-frame state shared by the DOM and the WebGL scene.
@@ -70,7 +71,8 @@ export const onFrame = (fn: Listener) => {
 }
 
 /* ---------- smooth scroll (Lenis) ---------- */
-export const lenis = world.reduced ? null : new Lenis({ lerp: 0.085, wheelMultiplier: 0.95, touchMultiplier: 1.4 })
+// touch devices already have good native momentum scrolling; smoothing it in JS only adds latency and cost
+export const lenis = world.reduced || quality.touch ? null : new Lenis({ lerp: 0.085, wheelMultiplier: 0.95, touchMultiplier: 1.4 })
 
 export function goTo(target: string | number | HTMLElement, offset = 0) {
   sound.whoosh(1, 0.9)
