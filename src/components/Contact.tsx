@@ -1,6 +1,7 @@
 import { motion } from 'motion/react'
 import { BendText } from './BendText'
 import { Marquee } from './Marquee'
+import { Guestbook } from './Guestbook'
 import { profile } from '../data'
 import { ripple } from '../world'
 
@@ -23,6 +24,8 @@ export function Contact({ copy }: { copy: () => void }) {
         <a href={profile.hologram} target="_blank" rel="noopener" data-cursor="3D">Holographic portfolio <span aria-hidden="true">↗</span></a>
         <a href={profile.resume} target="_blank" rel="noopener" data-cursor="Open">Résumé <span aria-hidden="true">↗</span></a>
       </div>
+      <Guestbook />
+
       <p className="mono open-line"><i /> Open to internships · part-time · freelance</p>
 
       <Marquee reverse words={['Coding Club President', 'Full-stack', 'IoT', '3D web', 'Hackathon lead', 'Ships real things']} />

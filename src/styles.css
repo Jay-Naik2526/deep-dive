@@ -459,3 +459,17 @@ kbd{font-family:var(--mono);font-size:11px;padding:2px 6px;border-radius:5px;bor
 .dv-form button{width:44px;height:44px;border-radius:50%;background:var(--glow);color:#02101f;font-size:18px;font-weight:600}
 .dv-form button:disabled{opacity:.35}
 @media(max-width:700px){.diver{right:8px;left:8px;bottom:8px;width:auto;height:min(78svh,640px)}}
+
+/* ---------- guestbook ---------- */
+.guest{margin-top:clamp(50px,9vh,100px)}
+.guest-head{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.guest-head h3{font-size:clamp(34px,4.6vw,68px);font-weight:400;letter-spacing:-.03em;line-height:.95;color:var(--glow);text-shadow:0 0 22px color-mix(in srgb,var(--glow) 35%,transparent)}
+.guest-note{color:var(--ink-soft);margin:14px 0 24px}
+.guest-grid{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
+.guest-grid li{border:1px solid var(--line);border-radius:20px;padding:20px 22px;background:linear-gradient(160deg,color-mix(in srgb,#fff 6%,transparent),transparent);display:flex;flex-direction:column;gap:16px;justify-content:space-between}
+.guest-grid li p{font-size:clamp(19px,1.7vw,25px);line-height:1.25}
+.guest-who{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.guest-who img{border-radius:50%;border:1px solid var(--line)}
+.guest-who a{text-decoration:none;color:var(--ink)}
+.guest-who span{color:var(--ink-soft);margin-left:auto;font-size:10px}
+.guest-empty{color:var(--ink-soft);font-size:17px}

@@ -1,0 +1,30 @@
+name: Sign the guestbook
+description: Leave a line on the portfolio's guestbook. It appears on the site once Jay approves it.
+title: "Guestbook: "
+labels: ["guestbook-pending"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for stopping by. Your line is **public**, and it shows up on the site after it has been approved.
+        Keep it kind and short (280 characters at most). Links are removed.
+  - type: input
+    id: name
+    attributes:
+      label: Name
+      description: Optional. Leave blank to use your GitHub username.
+      placeholder: Your name
+  - type: textarea
+    id: line
+    attributes:
+      label: Your line
+      description: A sentence or two. What did you like, or what would you like to say?
+    validations:
+      required: true
+  - type: checkboxes
+    id: ok
+    attributes:
+      label: Public
+      options:
+        - label: I understand this will be shown publicly on the site.
+          required: true
