@@ -76,6 +76,7 @@ function Print({ c, i, onOpen }: { c: Certificate; i: number; onOpen: (c: Certif
           </ul>
         )}
         {c.verify && <a className="plaque-verify" href={c.verify} target="_blank" rel="noopener noreferrer" data-cursor="Open">Verify ↗</a>}
+        {!c.verify && c.certId && <span className="mono plaque-id">Certificate ID · {c.certId}</span>}
       </figcaption>
     </motion.figure>
   )

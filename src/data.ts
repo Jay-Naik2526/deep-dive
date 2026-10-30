@@ -501,6 +501,8 @@ export interface Certificate {
   image?: string
   /** official verification link, only where it was read straight from the PDF or its file name */
   verify?: string
+  /** printed on the certificate when there is no public verification page */
+  certId?: string
   courses?: { title: string; verify?: string }[]
 }
 
@@ -535,24 +537,24 @@ export const certificates: Certificate[] = [
   {
     id: 'python-for-everybody', group: 'Python and data', title: 'Python for Everybody', issuer: 'University of Michigan · Coursera', kind: 'Specialization', date: 'Jun 12, 2021',
     line: 'Five courses: programming fundamentals, data structures, networked APIs and databases in Python, ending in a capstone that retrieves, processes and visualises data.',
-    image: '/certs/python-for-everybody.webp',
+    image: '/certs/python-for-everybody.webp', verify: CV + 'specialization/SJ6WCPTJHBS6',
     courses: [
-      { title: 'Programming for Everybody (Getting Started with Python)' },
-      { title: 'Python Data Structures' },
-      { title: 'Using Python to Access Web Data' },
-      { title: 'Using Databases with Python' },
-      { title: 'Capstone: Retrieving, Processing, and Visualizing Data with Python' },
+      { title: 'Programming for Everybody (Getting Started with Python)', verify: CV + 'KBEKRRY3W2M7' },
+      { title: 'Python Data Structures', verify: CV + 'XZZEFPMW5V3T' },
+      { title: 'Using Python to Access Web Data', verify: CV + 'PC6VGQEX58HZ' },
+      { title: 'Using Databases with Python', verify: CV + 'Z28TRFKDDJV2' },
+      { title: 'Capstone: Retrieving, Processing, and Visualizing Data with Python', verify: CV + 'D68NUV2S54N5' },
     ],
   },
   {
     id: 'google-python', group: 'Python and data', title: 'Crash Course on Python', issuer: 'Google · Coursera', kind: 'Course', date: 'May 31, 2021',
     line: 'An online non-credit course authorized by Google and offered through Coursera.',
-    image: '/certs/google-crash-course-python.webp',
+    image: '/certs/google-crash-course-python.webp', verify: CV + 'LDMBPRYJ2SUR',
   },
   {
     id: 'linkedin-programming', group: 'Cloud and tools', title: 'Programming Foundations: Fundamentals', issuer: 'LinkedIn Learning', kind: 'Course', date: 'May 22, 2021',
     line: 'A LinkedIn Learning course of 2 hours 10 minutes, completed on May 22, 2021.',
-    image: '/certs/linkedin-programming-foundations.webp',
+    image: '/certs/linkedin-programming-foundations.webp', certId: 'AR8MY8oCldiyT7Il6hOLdJELG7-y',
   },
   {
     id: 'learnbay-data-science', group: 'Python and data', title: '5-day workshop on Data Science', issuer: 'Learnbay', kind: 'Workshop', date: 'May 17 to 21, 2021',
@@ -562,7 +564,7 @@ export const certificates: Certificate[] = [
   {
     id: 'google-cloud-identity', group: 'Cloud and tools', title: 'Introduction to Cloud Identity', issuer: 'Google Cloud · Coursera', kind: 'Course', date: 'May 13, 2021',
     line: 'An online non-credit course authorized by Google Cloud and offered through Coursera.',
-    image: '/certs/google-cloud-identity.webp',
+    image: '/certs/google-cloud-identity.webp', verify: CV + 'N7L6KS2XKBUK',
   },
   {
     id: 'microsoft-learn-git', group: 'Cloud and tools', title: 'Introduction to Open-Source Development using Git and GitHub', issuer: 'Microsoft Learn Student Ambassadors', kind: 'Workshop', date: '',

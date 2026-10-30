@@ -125,3 +125,12 @@ test('the dive gets deeper section by section, and each project depth sits insid
   assert.ok(Math.min(...dive) >= m('dives') && Math.max(...dive) <= m('reef'))
   assert.ok(Math.min(...reefD) >= m('reef') && Math.max(...reefD) <= m('sonar'))
 })
+
+test('every Coursera certificate has a verification link, and the others are honest about it', async () => {
+  const { certificates } = await import('../src/data.ts')
+  for (const c of certificates) {
+    if (/Coursera/.test(c.issuer)) assert.ok(c.verify, `${c.id} is a Coursera certificate without a verify link`)
+    for (const k of c.courses ?? []) if (/Coursera/.test(c.issuer)) assert.ok(k.verify, `${c.id}: course "${k.title}" has no verify link`)
+    if (!c.verify) assert.ok(c.certId || /Learnbay|Microsoft/.test(c.issuer), `${c.id}: no verify link and no certificate id`)
+  }
+})
