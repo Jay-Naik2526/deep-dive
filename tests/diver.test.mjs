@@ -95,3 +95,8 @@ test('"problem statement" and "motivation" reach the problem section, not the nu
     assert.equal(ask(q).sources[0].label, 'NiyamKosh · the problem')
   }
 })
+
+test('every suggested question gets a real answer', async () => {
+  const { SUGGESTIONS } = await import('../src/diver/search.ts')
+  for (const q of SUGGESTIONS) assert.notEqual(ask(q).kind, 'none', `"${q}" is refused`)
+})

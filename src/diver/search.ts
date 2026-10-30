@@ -253,10 +253,10 @@ export function retrieve(question: string, n: number): Passage[] {
 export const SUGGESTIONS = [
   'How accurate is Kupakosh?',
   'Which projects use React?',
+  'What certificates do you have?',
+  'What is Ambiora 2027?',
   'What did you do at GDG on Campus?',
-  'Have you built anything with IoT?',
   'Are you open to internships?',
-  'How can I contact you?',
 ]
 
 /** For tests and tuning: the top matches and their raw scores. */

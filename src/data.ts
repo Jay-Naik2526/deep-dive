@@ -139,7 +139,7 @@ export const reef: Project[] = [
     id: 'money', title: 'Finance Tracker', tag: 'MERN · money tools', year: '2026', hue: 140, image: '/img/moneymap.webp',
     blurb: 'A personal finance app with split bills, debts, savings jars and subscriptions.',
     long: 'A MERN finance tracker built around how people actually share money: split a bill between several payers, track who owes whom, set budgets, fill savings jars toward goals, watch recurring subscriptions, and read analytics and reports.',
-    stack: ['React', 'Node.js', 'Express', 'MongoDB', 'Tailwind'], url: 'https://personal-finance-tracker-one-lime.vercel.app', repo: GH + 'personal-finance-tracker',
+    stack: ['React', 'Node.js', 'Express', 'MongoDB', 'Tailwind'], repo: GH + 'personal-finance-tracker',
   },
   {
     id: 'tiny', title: 'TinyTies', tag: 'Storefront · handmade jewellery', year: '2026', hue: 300, image: '/img/tinyties.webp',

@@ -102,8 +102,8 @@ kbd{font-family:var(--mono);font-size:11px;padding:2px 6px;border-radius:5px;bor
 .loader-foot{position:relative;opacity:.7;text-align:center}
 
 /* ---------- hero ---------- */
-.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding-top:96px;padding-bottom:140px}
-.name{font-size:min(23vw,33vh);line-height:.8;letter-spacing:-.045em;font-weight:300;display:flex;flex-direction:column;gap:.02em;margin-left:-.04em}
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding-top:96px;padding-bottom:150px}
+.name{font-size:min(23vw,26vh);line-height:.8;letter-spacing:-.045em;font-weight:300;display:flex;flex-direction:column;gap:.02em;margin-left:-.04em}
 .rowmask{display:block;overflow:hidden;padding:.04em .1em .1em 0;margin:-.04em 0 -.1em}
 .row{display:flex;white-space:nowrap}
 .hero .rowmask:nth-child(2) .row{padding-left:min(9vw,10vh)}
@@ -113,8 +113,8 @@ kbd{font-family:var(--mono);font-size:11px;padding:2px 6px;border-radius:5px;bor
 .reveal-up{opacity:0}
 .hero[data-go=true] .reveal-up{animation:up 1.2s var(--ease) both;animation-delay:var(--d,0s)}
 @keyframes up{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:none}}
-.intro{display:grid;grid-template-columns:1.25fr 1fr;gap:var(--gutter);align-items:end;margin-top:clamp(26px,5vh,56px)}
-.intro p{font-size:clamp(17px,1.75vw,24px);line-height:1.32;font-weight:350;letter-spacing:-.01em;max-width:38ch}
+.intro{display:grid;grid-template-columns:1.25fr 1fr;gap:var(--gutter);align-items:end;margin-top:clamp(18px,3.6vh,56px)}
+.intro p{font-size:clamp(17px,1.75vw,24px);line-height:1.32;font-weight:350;letter-spacing:-.01em;max-width:46ch}
 .intro p em{font-family:var(--serif);font-size:1.18em}
 .role-line{display:flex;align-items:center;gap:16px;margin-bottom:18px;color:var(--ink-soft)}
 .role-swap{display:inline-block;overflow:hidden;height:1.2em;font-size:clamp(26px,3.2vw,46px);line-height:1.1;color:var(--ink);padding-right:.2em}
@@ -516,3 +516,18 @@ kbd{font-family:var(--mono);font-size:11px;padding:2px 6px;border-radius:5px;bor
 .cert-view figcaption b{display:block;font-weight:500}
 .cert-view figcaption .mono{color:var(--ink-soft)}
 .cert-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+
+/* ---------- 404 ---------- */
+.lost{position:fixed;inset:0;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:18px;padding:0 var(--gutter);overflow:hidden;color:#e2f8fc;background:radial-gradient(90% 70% at 70% 15%,#0d3b66 0,#02101f 72%);--ink:#e2f8fc;--ink-inv:#02101f}
+.lost h1{font-size:min(20vw,26vh);line-height:.85;font-weight:300;letter-spacing:-.045em}
+.lost h1 .serif{font-style:italic}
+.lost p.mono{color:rgba(226,248,252,.7);letter-spacing:.2em;text-transform:uppercase;font-size:12px}
+.lost-line{font-size:clamp(17px,1.6vw,22px);font-weight:350;max-width:40ch;color:rgba(226,248,252,.85)}
+.lost-b{position:absolute;bottom:-30px;width:14px;height:14px;border-radius:50%;border:1px solid rgba(226,248,252,.45);background:rgba(226,248,252,.08);animation:lostRise 9s ease-in infinite}
+@keyframes lostRise{to{transform:translateY(-110vh) translateX(26px);opacity:0}}
+@media(prefers-reduced-motion:reduce){.lost-b{animation:none}}
+
+/* short screens: the hero has to fit above the depth readout */
+@media(min-width:861px) and (max-height:820px){.intro p{font-size:clamp(15px,2.35vh,20px);line-height:1.28}.role-line{margin-bottom:10px}.hero{padding-top:84px}}
+.readout{transition:opacity .5s}
+.readout[data-top=true]{opacity:0}

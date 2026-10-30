@@ -21,6 +21,7 @@ export function Hud({ onPalette, onAsk }: { onPalette: () => void; onAsk: () => 
   const pin = useRef<HTMLDivElement>(null)
   const gauge = useRef<HTMLDivElement>(null)
   const depth = useRef<HTMLElement>(null)
+  const readout = useRef<HTMLDivElement>(null)
   const zone = useRef<HTMLSpanElement>(null)
   const bar = useRef<HTMLDivElement>(null)
   const [snd, setSnd] = useState(false)
@@ -66,6 +67,7 @@ export function Hud({ onPalette, onAsk }: { onPalette: () => void; onAsk: () => 
         }
         const t = tops.current
         const metres = t.length === sections.length ? metresAt(scrollY, t, root.scrollHeight - innerHeight) : d * MAX_DEPTH
+        if (readout.current) readout.current.dataset.top = String(scrollY < 80)
         if (depth.current) depth.current.textContent = Math.round(metres) + ' m'
         let z = zones[0][1]
         zones.forEach((zz) => metres >= zz[0] && (z = zz[1]))
@@ -130,7 +132,7 @@ export function Hud({ onPalette, onAsk }: { onPalette: () => void; onAsk: () => 
         <div className="pin" ref={pin}><i /></div>
       </div>
 
-      <div className="hud readout mono" aria-hidden="true">
+      <div className="hud readout mono" aria-hidden="true" ref={readout}>
         <span>Depth <b ref={depth}>0 m</b></span>
         <span ref={zone}>Sunlight zone</span>
         {trench && <span className="trench-badge" title="Secret found: the trench">◆ Trench</span>}
