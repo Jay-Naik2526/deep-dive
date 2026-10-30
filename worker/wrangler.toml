@@ -5,5 +5,5 @@ compatibility_date = "2025-01-01"
 [vars]
 # comma-separated list of the exact origins allowed to call this worker (localhost is always allowed)
 ALLOWED_ORIGINS = "https://jaynaik.antideploy.app,https://jaynaik.tech"
-GROQ_MODEL = "llama-3.3-70b-versatile"
+GROQ_MODEL = "openai/gpt-oss-120b"
 # the key is NOT here. Set it with: npx wrangler secret put GROQ_API_KEY

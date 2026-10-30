@@ -67,9 +67,10 @@ export async function handle(request, env, fetchImpl = fetch, now = Date.now()) 
     method: 'POST',
     headers: { 'content-type': 'application/json', authorization: `Bearer ${env.GROQ_API_KEY}` },
     body: JSON.stringify({
-      model: env.GROQ_MODEL || 'llama-3.3-70b-versatile',
+      model: env.GROQ_MODEL || 'openai/gpt-oss-120b',
       temperature: 0.2,
-      max_tokens: 350,
+      max_completion_tokens: 900,
+      reasoning_effort: 'low',
       response_format: { type: 'json_object' },
       messages: [
         { role: 'system', content: SYSTEM },
