@@ -11,7 +11,7 @@ export const profile = {
   hologram: 'https://jaynaik.tech',
 }
 
-export const roles = ['Coding Club President', 'Ambiora 2027 Vice President', 'Full-stack developer', '3D web']
+export const roles = ['Coding Club President', 'Ambiora 2027 Vice President', 'Google Student Ambassador', 'Full-stack developer', '3D web']
 
 export interface Project {
   id: string
@@ -590,6 +590,7 @@ export const nowItems: NowItem[] = [
 
 export const logbook = [
   { role: 'Vice President', org: 'Ambiora 2027 · NMIMS inter-campus techfest', when: 'Now', now: true, points: ['Co-leading the 2027 edition of the techfest, planned as an inter-campus event for around 1,000 participants.'] },
+  { role: 'Google Student Ambassador', org: 'Google · NMIMS MPSTME Shirpur campus', when: 'May 2026 →', now: true, points: ['Representing Google on the Shirpur campus since May 2026. The role is still active.'] },
   { role: 'Coding Club President', org: 'Coding Club · NMIMS MPSTME Shirpur', when: 'Now', now: true, points: ['Leading the club: events, workshops and the people who build them.'] },
   { role: 'Web Development Lead', org: 'GDG on Campus · NMIMS MPSTME Shirpur', when: '2025', points: ['Led a team of 10 across web dev workshops and campus tech events.', 'Top 10 at the GDG On Campus Hackathon out of 30+ teams.', 'Ran 3+ developer workshops for 100+ students.'] },
   { role: 'Technical Lead', org: 'Ambiora Techfest', when: '2024 →', points: ['Site served 500+ visitors over a live two-day event with zero downtime.', 'Owned technical operations across 8+ events.'] },
