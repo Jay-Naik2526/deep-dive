@@ -55,7 +55,10 @@ test('contribution snapshot is consistent', () => {
     const dates = r.days.map((d) => d.date)
     assert.deepEqual([...dates].sort(), dates, `${k}: days not sorted`)
     assert.equal(new Set(dates).size, dates.length, `${k}: duplicate days`)
-    assert.equal(r.days.reduce((a, d) => a + d.count, 0), r.total, `${k}: total does not match the days`)
+    const sum = r.days.reduce((a, d) => a + d.count, 0)
+    // GitHub's "last year" calendar starts on the Sunday before the window, so those few extra days can add to the sum
+    if (k === 'last') assert.ok(sum >= r.total && sum - r.total <= 7 * 66, `${k}: days (${sum}) do not cover the total (${r.total})`)
+    else assert.equal(sum, r.total, `${k}: total does not match the days`)
     assert.ok(r.days.every((d) => d.level >= 0 && d.level <= 4), `${k}: level out of range`)
   }
 })
