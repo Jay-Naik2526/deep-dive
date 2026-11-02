@@ -18,7 +18,7 @@ export function Palette({ open, setOpen, openCase, copy, toggleSound, ask, quick
     { id: 'l2', label: 'LinkedIn', hint: 'Link ↗', run: () => window.open(profile.linkedin, '_blank', 'noopener') },
     { id: 'l3', label: 'Holographic 3D portfolio', hint: 'jaynaik.tech ↗', run: () => window.open(profile.hologram, '_blank', 'noopener') },
     { id: 'l4', label: 'Résumé', hint: 'PDF ↗', run: () => window.open(profile.resume, '_blank', 'noopener') },
-    { id: 'a9', label: 'Quick view', hint: 'The 30-second summary', run: quick },
+    { id: 'a9', label: 'Quick view', hint: 'Short version, for recruiters', run: quick },
     { id: 'a0', label: 'Ask the diver', hint: 'Chat about my work', run: ask },
     { id: 'a1', label: 'Copy email', hint: profile.email, run: copy },
     { id: 'a2', label: 'Toggle ambient sound', hint: 'Action', run: toggleSound },

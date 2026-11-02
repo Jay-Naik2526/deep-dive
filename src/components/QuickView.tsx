@@ -5,7 +5,7 @@ import { lockScroll } from '../world'
 
 const TOP = ['coding-club', 'kupakosh', 'niyamkosh']
 
-/** One plain screen for someone with thirty seconds: who, what, proof, how to reach me. No scene, no motion. */
+/** One plain screen for a reader in a hurry: who, what, proof, how to reach me. No scene, no motion. */
 export default function QuickView({ onClose }: { onClose: () => void }) {
   const box = useRef<HTMLDivElement>(null)
   const current = logbook.filter((l) => l.now)
@@ -23,7 +23,7 @@ export default function QuickView({ onClose }: { onClose: () => void }) {
     <div className="quick" role="dialog" aria-modal="true" aria-label="Quick view" ref={box} tabIndex={-1} data-lenis-prevent>
       <div className="quick-in">
         <header>
-          <span className="mono">Quick view · thirty seconds</span>
+          <span className="mono">Quick view · for recruiters</span>
           <button onClick={onClose} className="quick-x" aria-label="Close quick view">Close ✕</button>
         </header>
 
