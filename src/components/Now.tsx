@@ -5,6 +5,8 @@ import { ago, fetchRecentRepos, type RecentRepo } from '../github'
 import { caseFx } from '../caseFx'
 
 const login = profile.github.split('/').pop() ?? 'Jay-Naik2526'
+/** Months since the list was last edited by hand. */
+const ageInMonths = (ym: string) => { const [y, m] = ym.split('-').map(Number); const n = new Date(); return (n.getFullYear() - y) * 12 + (n.getMonth() + 1 - m) }
 const monthLabel = (ym: string) => new Date(`${ym}-01T00:00:00`).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
 
 /** "Right now": a short hand-edited focus list, plus a live list of what was pushed most recently. */
@@ -25,7 +27,7 @@ export function Now({ onOpen }: { onOpen: (id: string) => void }) {
     <div className="now" id="now">
       <div className="now-head">
         <h3 className="serif">Right <span style={{ fontFamily: 'var(--sans)', fontStyle: 'normal', fontWeight: 200 }}>now</span></h3>
-        <span className="mono">Updated {monthLabel(nowUpdated)}</span>
+        <span className="mono">Updated {monthLabel(nowUpdated)}{ageInMonths(nowUpdated) >= 3 && ' · may be out of date'}</span>
       </div>
 
       <div className="now-grid">

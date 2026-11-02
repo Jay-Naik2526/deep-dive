@@ -137,3 +137,21 @@ test('every Coursera certificate has a verification link, and the others are hon
     if (!c.verify) assert.ok(c.certId || /Learnbay|Microsoft/.test(c.issuer), `${c.id}: no verify link and no certificate id`)
   }
 })
+
+test('the structured data for search engines parses and matches the profile', () => {
+  const html = readFileSync(new URL('index.html', root), 'utf8')
+  const m = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)
+  assert.ok(m, 'no JSON-LD block')
+  const j = JSON.parse(m[1])
+  assert.equal(j['@type'], 'Person')
+  assert.equal(j.name, profile.name)
+  assert.ok(j.sameAs.includes(profile.github) && j.sameAs.includes(profile.linkedin), 'sameAs must list GitHub and LinkedIn')
+})
+
+test('the quick view only shows projects that exist and have something to link to', () => {
+  for (const id of ['coding-club', 'kupakosh', 'niyamkosh']) {
+    const p = featured.find((x) => x.id === id)
+    assert.ok(p, `${id} missing`)
+    assert.ok(p.url || p.repo, `${id} has no link`)
+  }
+})

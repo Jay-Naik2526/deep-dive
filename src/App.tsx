@@ -22,6 +22,7 @@ import { SceneGate } from './components/SceneGate'
 const Sonar = lazy(() => import('./components/Sonar').then((m) => ({ default: m.Sonar })))
 const Contributions = lazy(() => import('./components/Contributions').then((m) => ({ default: m.Contributions })))
 const Diver = lazy(() => import('./components/Diver'))
+const QuickView = lazy(() => import('./components/QuickView'))
 const Palette = lazy(() => import('./components/Palette').then((m) => ({ default: m.Palette })))
 const Hold = ({ id, cls, h }: { id: string; cls: string; h: string }) => <section id={id} className={cls} style={{ minHeight: h }} aria-hidden="true" />
 
@@ -40,6 +41,18 @@ export default function App() {
   const [diverOpen, setDiverOpen] = useState(false)
   const [diverMounted, setDiverMounted] = useState(false)
   const openDiver = useCallback(() => { setDiverMounted(true); setDiverOpen(true) }, [])
+  // the quick view has its own address (#/quick), so it can be linked from a résumé or a message
+  const [quick, setQuickState] = useState(() => location.hash === '#/quick')
+  const setQuick = useCallback((v: boolean) => {
+    setQuickState(v)
+    if (v) track('quick-view')
+    history.replaceState(null, '', v ? '#/quick' : location.pathname)
+  }, [])
+  useEffect(() => {
+    const onHash = () => setQuickState(location.hash === '#/quick')
+    addEventListener('hashchange', onHash)
+    return () => removeEventListener('hashchange', onHash)
+  }, [])
 
   const setOpenId = useCallback((id: string | null) => {
     setOpenIdState(id)
@@ -127,7 +140,7 @@ export default function App() {
       <Hud onPalette={() => setPalette(true)} onAsk={openDiver} />
 
       <main data-go={go}>
-        <Hero go={go} />
+        <Hero go={go} onQuick={() => setQuick(true)} />
         <Marquee words={['Coding Club President', 'Full-stack', 'IoT', '3D web', 'Hackathon lead', 'Ships real things']} />
         <About onOpen={(id) => setOpenId(id)} />
         <Dives openId={openId} setOpenId={setOpenId} />
@@ -139,9 +152,11 @@ export default function App() {
         <Contact copy={copy} />
       </main>
 
-      {palMounted && <Suspense fallback={null}><Palette open={palette} setOpen={setPalette} openCase={(id) => setOpenId(id)} copy={copy} toggleSound={toggleSound} ask={openDiver} /></Suspense>}
+      {palMounted && <Suspense fallback={null}><Palette open={palette} setOpen={setPalette} openCase={(id) => setOpenId(id)} copy={copy} toggleSound={toggleSound} ask={openDiver} quick={() => setQuick(true)} /></Suspense>}
 
       {diverMounted && <Suspense fallback={null}><Diver open={diverOpen} onClose={() => setDiverOpen(false)} onOpenCase={(id) => setOpenId(id)} /></Suspense>}
+
+      {quick && <Suspense fallback={null}><QuickView onClose={() => setQuick(false)} /></Suspense>}
 
       <AnimatePresence>
         {toast && (

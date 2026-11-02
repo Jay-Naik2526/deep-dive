@@ -5,7 +5,7 @@ import { goTo } from '../world'
 import { quality } from '../quality'
 import { profile, roles } from '../data'
 
-export function Hero({ go }: { go: boolean }) {
+export function Hero({ go, onQuick }: { go: boolean; onQuick: () => void }) {
   const [i, setI] = useState(0)
   useEffect(() => {
     const id = setInterval(() => setI((v) => (v + 1) % roles.length), 2200)
@@ -49,6 +49,7 @@ export function Hero({ go }: { go: boolean }) {
             <button className="btn primary" data-cursor="Dive" onClick={() => goTo('#dives')}>
               Start the dive <span aria-hidden="true">↓</span>
             </button>
+            <button className="btn" data-cursor="Open" onClick={onQuick}>Quick view</button>
             <a className="btn" href={profile.resume} target="_blank" rel="noopener" data-cursor="Open">Résumé ↗</a>
             <a className="btn ghost" href={profile.hologram} target="_blank" rel="noopener" data-cursor="3D">Holographic version ↗</a>
           </div>

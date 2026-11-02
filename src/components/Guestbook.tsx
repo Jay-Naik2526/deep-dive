@@ -29,6 +29,16 @@ export function Guestbook() {
     return () => { alive = false; ctl.abort() }
   }, [])
 
+  // until someone has signed, a full wall of nothing would look abandoned: show one quiet line instead
+  if (!entries || entries.length === 0) {
+    return (
+      <div className="guest guest-compact" id="guestbook">
+        <span className="mono">Guestbook · no lines yet</span>
+        <a href={SIGN_URL} target="_blank" rel="noopener" data-cursor="Sign">Be the first to sign it on GitHub ↗</a>
+      </div>
+    )
+  }
+
   return (
     <div className="guest" id="guestbook">
       <div className="guest-head">
@@ -37,7 +47,7 @@ export function Guestbook() {
       </div>
       <p className="mono guest-note">Sign in with GitHub, leave a line. It appears here once I approve it.</p>
 
-      {entries && entries.length > 0 ? (
+      {
         <ul className="guest-grid">
           {entries.map((e, i) => (
             <motion.li key={e.id} initial={{ opacity: 0, y: 26 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: (i % 3) * 0.06, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}>
@@ -50,9 +60,7 @@ export function Guestbook() {
             </motion.li>
           ))}
         </ul>
-      ) : entries ? (
-        <p className="guest-empty">No lines yet. Be the first to leave one.</p>
-      ) : null}
+      }
     </div>
   )
 }

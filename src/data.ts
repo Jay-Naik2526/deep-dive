@@ -579,7 +579,7 @@ export interface NowItem { title: string; line: string; proof?: string[] }
  * What I'm focused on right now. Edit this list once a month and bump `nowUpdated`, so a stale list is visible.
  * Everything here is something that is actually true today.
  */
-export const nowUpdated = '2026-10'
+export const nowUpdated = '2026-11'
 export const nowItems: NowItem[] = [
   { title: 'Leading the Coding Club', line: 'Running events, contests and the club platform at NMIMS Shirpur as President.', proof: ['coding-club'] },
   { title: 'Ambiora 2027', line: 'Vice President of Ambiora, the NMIMS inter-campus techfest, planned for around 1,000 participants.', proof: ['ambiora'] },

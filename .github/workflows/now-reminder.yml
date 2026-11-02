@@ -1,0 +1,35 @@
+name: Monthly "Right now" reminder
+
+# The "Right now" list on the site is edited by hand. This opens an issue on the 1st of each month so it never goes stale.
+on:
+  schedule:
+    - cron: '0 4 1 * *' # 04:00 UTC on the 1st
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Open the reminder if there is not one already
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          month="$(date -u +'%B %Y')"
+          if gh issue list --state open --search 'in:title "Update the Right now list"' --json number --jq 'length' | grep -qv '^0$'; then
+            echo "A reminder is already open."
+            exit 0
+          fi
+          gh issue create \
+            --title "Update the Right now list ($month)" \
+            --body "$(printf '%s\n' \
+              'Monthly check so the portfolio does not go stale.' \
+              '' \
+              '- [ ] `nowItems` in `src/data.ts`: still true? Add what is new, drop what is finished.' \
+              '- [ ] Bump `nowUpdated` (format `YYYY-MM`).' \
+              '- [ ] Roles in `logbook`: anything started or ended this month?' \
+              '- [ ] New certificates, projects or numbers worth adding (attendance at the Gemini sessions, club size, Ambiora)?' \
+              '- [ ] Open the live site and click through it once.')"

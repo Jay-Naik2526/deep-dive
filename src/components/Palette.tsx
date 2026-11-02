@@ -6,7 +6,7 @@ import { goTo, lockScroll } from '../world'
 interface Item { id: string; label: string; hint: string; run: () => void }
 
 /** ⌘K / Ctrl+K command palette: jump to anything. */
-export function Palette({ open, setOpen, openCase, copy, toggleSound, ask }: { open: boolean; setOpen: (v: boolean) => void; openCase: (id: string) => void; copy: () => void; toggleSound: () => void; ask: () => void }) {
+export function Palette({ open, setOpen, openCase, copy, toggleSound, ask, quick }: { open: boolean; setOpen: (v: boolean) => void; openCase: (id: string) => void; copy: () => void; toggleSound: () => void; ask: () => void; quick: () => void }) {
   const [q, setQ] = useState('')
   const [sel, setSel] = useState(0)
   const input = useRef<HTMLInputElement>(null)
@@ -18,10 +18,11 @@ export function Palette({ open, setOpen, openCase, copy, toggleSound, ask }: { o
     { id: 'l2', label: 'LinkedIn', hint: 'Link ↗', run: () => window.open(profile.linkedin, '_blank', 'noopener') },
     { id: 'l3', label: 'Holographic 3D portfolio', hint: 'jaynaik.tech ↗', run: () => window.open(profile.hologram, '_blank', 'noopener') },
     { id: 'l4', label: 'Résumé', hint: 'PDF ↗', run: () => window.open(profile.resume, '_blank', 'noopener') },
+    { id: 'a9', label: 'Quick view', hint: 'The 30-second summary', run: quick },
     { id: 'a0', label: 'Ask the diver', hint: 'Chat about my work', run: ask },
     { id: 'a1', label: 'Copy email', hint: profile.email, run: copy },
     { id: 'a2', label: 'Toggle ambient sound', hint: 'Action', run: toggleSound },
-  ], [openCase, copy, toggleSound, ask])
+  ], [openCase, copy, toggleSound, ask, quick])
 
   const results = useMemo(() => {
     const s = q.trim().toLowerCase()
