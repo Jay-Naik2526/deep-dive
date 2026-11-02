@@ -100,3 +100,9 @@ test('every suggested question gets a real answer', async () => {
   const { SUGGESTIONS } = await import('../src/diver/search.ts')
   for (const q of SUGGESTIONS) assert.notEqual(ask(q).kind, 'none', `"${q}" is refused`)
 })
+
+test('"what do you do as X" asks about that role, not about my services', () => {
+  const a = ask('what do you do as google student ambassador')
+  assert.match(a.text, /Google Student Ambassador/)
+  assert.match(ask('what do you do?').text, /built for real users/)
+})

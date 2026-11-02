@@ -155,7 +155,7 @@ const INTENTS: { re: RegExp; ids: string[] }[] = [
   { re: /what (is |are )?(your )?(tech )?(stack|technologies|tools|languages|skills)|tech stack|what do you (use|know)|your skills|which languages/, ids: ['skills:*'] },
   { re: /certific|credential|coursera|what (courses|have you (studied|learned|completed))|courses? (have|did) you|workshops? (have|did) you/, ids: ['cert:all'] },
   { re: /right now|currently|these days|this month|working on|your focus|what are you (doing|up to)/, ids: ['now:*'] },
-  { re: /what (can|do|would|could) you (build|make|offer|do)|build for (me|us)|work with (you|me|us)|how can you help|your services|what do you offer/, ids: ['offer:*'] },
+  { re: /what (can|would|could) you (build|make|offer|do)|what do you (build|make|offer)|what do you do\??$|build for (me|us)|work with (you|me|us)|how can you help|your services|what do you offer/, ids: ['offer:*'] },
 ]
 
 const STRIP = new Set(['what', 'tell', 'project', 'about', 'overview', 'built', 'build', 'is', 'the', 'this', 'that', 'site', 'platform', 'app', 'thing'])
