@@ -8,11 +8,12 @@ import { quality } from '../quality'
  * and scrolling fast makes the whole line shiver.
  */
 type Preset = 'hero' | 'h2' | 'title' | 'mail'
-const PRESETS: Record<Preset, { w: number; wd: number; hi: number; hiwd: number; wave: number }> = {
-  hero: { w: 300, wd: 100, hi: 900, hiwd: 140, wave: 0.42 },
-  h2: { w: 260, wd: 90, hi: 820, hiwd: 135, wave: 0 },
-  title: { w: 200, wd: 80, hi: 760, hiwd: 125, wave: 0 },
-  mail: { w: 220, wd: 90, hi: 800, hiwd: 125, wave: 0 },
+const PRESETS: Record<Preset, { w: number; wd: number; hi: number; hiwd: number; wave: number; reach: number }> = {
+  hero: { w: 300, wd: 100, hi: 900, hiwd: 140, wave: 0.42, reach: 1 },
+  h2: { w: 260, wd: 90, hi: 820, hiwd: 135, wave: 0, reach: 1 },
+  // the dive log has seven huge titles stacked close together: a smaller reach keeps one row from waking its neighbours
+  title: { w: 200, wd: 80, hi: 760, hiwd: 125, wave: 0, reach: 0.6 },
+  mail: { w: 220, wd: 90, hi: 800, hiwd: 125, wave: 0, reach: 0.8 },
 }
 
 interface Rec {
@@ -31,35 +32,56 @@ interface Rec {
 }
 
 const registry = new Set<Rec>()
+let needsMeasure = true
 const visible = new WeakMap<Element, boolean>()
 const io =
   typeof IntersectionObserver !== 'undefined'
     ? new IntersectionObserver((es) => es.forEach((e) => visible.set(e.target, e.isIntersecting)), { rootMargin: '12% 0px' })
     : null
 
+/** Where a heading sat the last time it was measured. Scrolling moves it by a known amount, so no re-measuring is needed. */
+const hostPos = new WeakMap<Element, { left: number; top: number; sy: number }>()
+
 if (typeof window !== 'undefined') {
   let frame = 0
   onFrame((t, dt) => {
     frame++
     const refresh = frame % 12 === 0
-    const hostRects = new Map<Element, DOMRect>()
+    const sy = scrollY
     const R = Math.min(420, innerWidth * 0.34)
     const kickAmt = world.reduced || quality.touch ? 0 : Math.min(1, Math.abs(world.vel) / 1800)
+
+    // pass 1: every layout read, together, and only ~5 times a second (or when a letter is new).
+    // Reading layout after writing styles forces a full re-layout, so reads never share a loop with writes.
+    if (refresh || needsMeasure) {
+      needsMeasure = false
+      registry.forEach((l) => {
+        if (!visible.get(l.host)) return
+        if (refresh || l.ox === -1 || !hostPos.has(l.host)) {
+          let hp = hostPos.get(l.host)
+          if (!hp || refresh) {
+            const r = l.host.getBoundingClientRect()
+            hp = { left: r.left, top: r.top, sy }
+            hostPos.set(l.host, hp)
+          }
+          const r = l.el.getBoundingClientRect()
+          l.ox = r.left - hp.left + r.width / 2
+          l.oy = r.top - hp.top + r.height / 2
+        }
+      })
+    }
+
+    // pass 2: pure arithmetic and style writes
     registry.forEach((l) => {
       if (!visible.get(l.host)) return
-      // one layout read per heading per frame; letter offsets are cached and refreshed ~5x/sec
-      let hr = hostRects.get(l.host)
-      if (!hr) { hr = l.host.getBoundingClientRect(); hostRects.set(l.host, hr) }
-      if (refresh || l.ox === -1) {
-        const r = l.el.getBoundingClientRect()
-        l.ox = r.left - hr.left + r.width / 2
-        l.oy = r.top - hr.top + r.height / 2
-      }
+      const hp = hostPos.get(l.host)
+      if (!hp || l.ox === -1) { needsMeasure = true; return }
       let prox = 0
       if (world.active && !world.reduced) {
-        const dx = hr.left + l.ox - world.px
-        const dy = (hr.top + l.oy - world.py) * 1.4
-        prox = Math.exp(-(dx * dx + dy * dy) / (R * R * 0.35))
+        const dx = hp.left + l.ox - world.px
+        const dy = (hp.top - (sy - hp.sy) + l.oy - world.py) * 1.4
+        const rr = R * l.p.reach
+        prox = Math.exp(-(dx * dx + dy * dy) / (rr * rr * 0.35))
       }
       const wave = world.reduced ? 0 : (0.5 + 0.5 * Math.sin(t * 1.0 - l.i * 0.7)) * l.p.wave
       const kick = kickAmt * (0.5 + 0.5 * Math.sin(t * 6 - l.i * 0.9)) * 0.55
@@ -71,7 +93,8 @@ if (typeof window !== 'undefined') {
       l.w += l.vw * dt
       l.vwd += ((twd - l.wd) * 190 - l.vwd * 17) * dt
       l.wd += l.vwd * dt
-      if (Math.abs(l.w - l.ow) > 0.6 || Math.abs(l.wd - l.owd) > 0.6) {
+      // every write re-shapes the glyph and re-lays-out its line, so a change below ~2 units (invisible) is not worth one
+      if (Math.abs(l.w - l.ow) > 2.2 || Math.abs(l.wd - l.owd) > 1.6) {
         l.el.style.setProperty('--w', l.w.toFixed(1))
         l.el.style.setProperty('--wd', l.wd.toFixed(1))
         l.ow = l.w

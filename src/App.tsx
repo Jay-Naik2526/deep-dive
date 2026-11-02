@@ -102,14 +102,22 @@ export default function App() {
   useEffect(() => {
     if (!matchMedia('(hover: hover) and (pointer: fine)').matches || world.reduced) return
     let cur: HTMLElement | null = null
-    const reset = () => { if (cur) { cur.style.transform = ''; cur = null } }
+    let cx = 0, cy = 0, tx = 0, ty = 0, measured = 0
+    const reset = () => { if (cur) { cur.style.transform = ''; cur = null } tx = ty = 0 }
     const move = (e: PointerEvent) => {
       const el = (e.target instanceof Element ? e.target : null)?.closest<HTMLElement>('.btn,.brand,.hud-tools button,.copy') ?? null
-      if (el !== cur) { reset(); cur = el; if (el) sound.tick(1500) }
+      if (el !== cur) { reset(); cur = el; measured = 0; if (el) sound.tick(1500) }
       if (!el) return
-      const r = el.getBoundingClientRect()
-      const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2)
-      el.style.transform = `translate(${dx * 0.28}px, ${dy * 0.4}px)`
+      // the button's centre is measured when the pointer arrives and a few times a second after, not on every move
+      if (e.timeStamp - measured > 160) {
+        const r = el.getBoundingClientRect()
+        cx = r.left + r.width / 2 - tx
+        cy = r.top + r.height / 2 - ty
+        measured = e.timeStamp
+      }
+      tx = (e.clientX - cx) * 0.28
+      ty = (e.clientY - cy) * 0.4
+      el.style.transform = `translate(${tx}px, ${ty}px)`
     }
     addEventListener('pointermove', move, { passive: true })
     return () => { removeEventListener('pointermove', move); reset() }

@@ -29,9 +29,16 @@ export function Hud({ onPalette, onAsk }: { onPalette: () => void; onAsk: () => 
   const [trench, setTrench] = useState(() => { try { return localStorage.getItem('trench') === '1' } catch { return false } })
   const [active, setActive] = useState('top')
   const last = useRef('')
-  const inkKey = useRef('')
+  const inkStep = useRef(-1)
   const frame = useRef(0)
   const tops = useRef<number[]>([])
+  const pageEnd = useRef(1)
+  const gaugeH = useRef(0)
+  const dirty = useRef(true)
+  const curSection = useRef('top')
+  const wasTop = useRef<boolean | null>(null)
+  const lastM = useRef(-1)
+  const lastFrac = useRef(-1)
   const nav = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -42,6 +49,14 @@ export function Hud({ onPalette, onAsk }: { onPalette: () => void; onAsk: () => 
     window.addEventListener('night', syncNight)
     window.addEventListener('trench', onTrench)
     return () => { window.removeEventListener('snd', sync); window.removeEventListener('night', syncNight); window.removeEventListener('trench', onTrench) }
+  }, [])
+
+  useEffect(() => {
+    const mark = () => { dirty.current = true }
+    addEventListener('resize', mark)
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(mark) : null
+    ro?.observe(document.body)
+    return () => { removeEventListener('resize', mark); ro?.disconnect() }
   }, [])
 
   // on small screens the section list scrolls sideways: keep the current section in view
@@ -58,18 +73,43 @@ export function Hud({ onPalette, onAsk }: { onPalette: () => void; onAsk: () => 
         // ink flips from navy to white as the light fades
         const k = Math.min(1, Math.max(0, (d - 0.03) / 0.11)), e = Math.max(k * k * (3 - 2 * k), world.night)
         const a = [6, 34, 58], b = [226, 248, 252]
-        // custom props on :root restyle the whole page, so only touch them while the colour is actually changing
-        const ink = `rgb(${a.map((v, i) => Math.round(v + (b[i] - v) * e))})`
-        if (ink !== inkKey.current) {
-          inkKey.current = ink
-          root.style.setProperty('--ink', ink)
-          root.style.setProperty('--ink-inv', `rgb(${b.map((v, i) => Math.round(v + (a[i] - v) * e))})`)
+        // custom props on :root restyle the whole page, which is by far the most expensive thing this loop can do.
+        // So the ink colour moves in 24 steps instead of 60 per second: the eye cannot tell, the browser can.
+        const step = Math.round(e * 24)
+        if (step !== inkStep.current) {
+          inkStep.current = step
+          const f = step / 24
+          root.style.setProperty('--ink', `rgb(${a.map((v, i) => Math.round(v + (b[i] - v) * f))})`)
+          root.style.setProperty('--ink-inv', `rgb(${b.map((v, i) => Math.round(v + (a[i] - v) * f))})`)
+        }
+        // layout reads (section tops, page height, gauge height) happen a couple of times a second, never every frame:
+        // reading layout right after other code has written styles forces the browser to lay the page out again, mid-frame
+        if (frame.current++ % 45 === 0 || dirty.current) {
+          dirty.current = false
+          const next: number[] = []
+          for (const s of sections) {
+            const el = document.getElementById(s.id)
+            next.push(el ? el.getBoundingClientRect().top + scrollY : Infinity)
+          }
+          if (next.every(Number.isFinite)) tops.current = next
+          pageEnd.current = root.scrollHeight - innerHeight
+          gaugeH.current = gauge.current?.clientHeight ?? 0
         }
         const t = tops.current
-        const metres = t.length === sections.length ? metresAt(scrollY, t, root.scrollHeight - innerHeight) : d * MAX_DEPTH
-        if (readout.current) readout.current.dataset.top = String(scrollY < 80)
+        const sy = scrollY
+        const ready = t.length === sections.length
+        const metres = ready ? metresAt(sy, t, pageEnd.current) : d * MAX_DEPTH
+        if (ready) {
+          let cur = 'top'
+          for (let i = 0; i < sections.length; i++) if (t[i] - sy < innerHeight * 0.45) cur = sections[i].id
+          if (cur !== curSection.current) { curSection.current = cur; setActive(cur) }
+        }
         sound.setDepth(metres / MAX_DEPTH)
-        if (depth.current) depth.current.textContent = Math.round(metres) + ' m'
+        // only touch the DOM when a value actually changed
+        const atTop = sy < 80
+        if (atTop !== wasTop.current) { wasTop.current = atTop; if (readout.current) readout.current.dataset.top = String(atTop) }
+        const m = Math.round(metres)
+        if (m !== lastM.current) { lastM.current = m; if (depth.current) depth.current.textContent = m + ' m' }
         let z = zones[0][1]
         zones.forEach((zz) => metres >= zz[0] && (z = zz[1]))
         if (zone.current && z !== last.current) {
@@ -77,20 +117,11 @@ export function Hud({ onPalette, onAsk }: { onPalette: () => void; onAsk: () => 
           if (last.current) window.dispatchEvent(new CustomEvent('zone', { detail: z }))
           last.current = z
         }
-        if (pin.current && gauge.current) pin.current.style.transform = `translateY(${((metres / MAX_DEPTH) * gauge.current.clientHeight).toFixed(1)}px)`
-        if (bar.current) bar.current.style.transform = `scaleX(${metres / MAX_DEPTH})`
-        // active section: layout reads are throttled to ~10/sec
-        if (++frame.current % 6 === 0) {
-          let cur = 'top'
-          const next: number[] = []
-          for (const s of sections) {
-            const el = document.getElementById(s.id)
-            const top = el ? el.getBoundingClientRect().top : Infinity
-            next.push(el ? top + scrollY : Infinity)
-            if (el && top < innerHeight * 0.45) cur = s.id
-          }
-          if (next.every(Number.isFinite)) tops.current = next
-          setActive((p) => (p === cur ? p : cur))
+        const frac = Math.round((metres / MAX_DEPTH) * 1000) / 1000
+        if (frac !== lastFrac.current) {
+          lastFrac.current = frac
+          if (pin.current) pin.current.style.transform = `translateY(${(frac * gaugeH.current).toFixed(1)}px)`
+          if (bar.current) bar.current.style.transform = `scaleX(${frac})`
         }
       }),
     [],
