@@ -43,7 +43,7 @@ export function Hero({ go }: { go: boolean }) {
             </span>
           </div>
           <p>
-            President of the Coding Club and Vice President of Ambiora 2027 at NMIMS Shirpur, previously Web Dev Lead at GDG on Campus. I build <em>things that actually ship</em>: web, IoT, and 3D you can touch.
+            President of the Coding Club, Vice President of Ambiora 2027 and Google Student Ambassador at NMIMS Shirpur, previously Web Dev Lead at GDG on Campus. I build <em>things that actually ship</em>: web, IoT, and 3D you can touch.
           </p>
           <div className="cta">
             <button className="btn primary" data-cursor="Dive" onClick={() => goTo('#dives')}>

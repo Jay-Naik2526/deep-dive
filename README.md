@@ -152,7 +152,7 @@ To add a project: edit `src/data.ts` (including its writeup) and drop a screensh
 
 <div align="center">
 
-Built by **[Jay Naik](https://github.com/Jay-Naik2526)**. President of the Coding Club and Vice President of Ambiora 2027 at NMIMS Shirpur, previously Web Dev Lead at GDG on Campus.<br>
+Built by **[Jay Naik](https://github.com/Jay-Naik2526)**. President of the Coding Club, Vice President of Ambiora 2027 and Google Student Ambassador at NMIMS Shirpur, previously Web Dev Lead at GDG on Campus.<br>
 Open to internships, part-time work and freelance.
 
 </div>

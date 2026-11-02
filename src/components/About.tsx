@@ -33,7 +33,7 @@ export function About({ onOpen }: { onOpen: (id: string) => void }) {
 
       <div className="about-grid">
         <motion.p className="lede" variants={rise} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-12%' }} transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}>
-          I'm the <em>President of the Coding Club</em> at NMIMS Shirpur and the <em>Vice President of Ambiora 2027</em>, our inter-campus techfest. Before that I led web at <em>GDG on Campus</em>, where I ran a team of ten. I ship real products for real students, and I wire ESP32s to the internet when software gets too comfortable.
+          I'm the <em>President of the Coding Club</em> at NMIMS Shirpur, <em>Vice President of Ambiora 2027</em>, our inter-campus techfest, and a <em>Google Student Ambassador</em> running a monthly session on new Gemini features. Before that I led web at <em>GDG on Campus</em>, where I ran a team of ten. I ship real products for real students, and I wire ESP32s to the internet when software gets too comfortable.
         </motion.p>
 
         <div className="numbers">

@@ -63,7 +63,7 @@ export function buildCorpus(): Passage[] {
   })
 
   out.push(
-    { id: 'me:about', label: 'About me', text: 'I’m Jay Naik, a B.Tech CSE student (2024–2028, CGPA 8.5) at NMIMS MPSTME Shirpur, from Navsari, Gujarat. I’m the President of the Coding Club and the Vice President of Ambiora 2027, the NMIMS inter-campus techfest, and I was the Web Dev Lead at GDG on Campus. I build full-stack web, IoT and 3D web.', keys: 'who about me jay naik introduce yourself education college university student cgpa location navsari' },
+    { id: 'me:about', label: 'About me', text: 'I’m Jay Naik, a B.Tech CSE student (2024–2028, CGPA 8.5) at NMIMS MPSTME Shirpur, from Navsari, Gujarat. I’m the President of the Coding Club, the Vice President of Ambiora 2027, the NMIMS inter-campus techfest, and a Google Student Ambassador on this campus (since May 2026, with a monthly session on new Gemini features), and I was the Web Dev Lead at GDG on Campus. I build full-stack web, IoT and 3D web.', keys: 'who about me jay naik introduce yourself education college university student cgpa location navsari' },
     { id: 'me:contact', label: 'Contact', text: `You can email me at ${profile.email}, find me on LinkedIn and GitHub, or open my résumé from the contact section.`, keys: 'contact email reach hire message linkedin github resume cv' },
     { id: 'me:availability', label: 'Availability', text: 'I’m open to internships, part-time work and freelance projects.', keys: 'available availability hire internship freelance part-time job opportunity open to work' },
   )
