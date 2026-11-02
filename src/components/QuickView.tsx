@@ -24,7 +24,7 @@ export default function QuickView({ onClose }: { onClose: () => void }) {
       <div className="quick-in">
         <header>
           <span className="mono">Quick view · for recruiters</span>
-          <button onClick={onClose} className="quick-x" aria-label="Close quick view">Close ✕</button>
+          <button onClick={onClose} className="quick-x" aria-label="Close quick view" data-cursor="Close">Close ✕</button>
         </header>
 
         <section className="quick-id">
@@ -45,8 +45,8 @@ export default function QuickView({ onClose }: { onClose: () => void }) {
                 <p>{p.blurb}</p>
                 <span className="quick-stack">{p.stack.join(' · ')}</span>
                 <div className="quick-links">
-                  {p.url && <a href={p.url} target="_blank" rel="noopener noreferrer">Live ↗</a>}
-                  {p.repo && <a href={p.repo} target="_blank" rel="noopener noreferrer">GitHub ↗</a>}
+                  {p.url && <a href={p.url} target="_blank" rel="noopener noreferrer" data-cursor="Open">Live ↗</a>}
+                  {p.repo && <a href={p.repo} target="_blank" rel="noopener noreferrer" data-cursor="Open">GitHub ↗</a>}
                 </div>
               </article>
             ))}
@@ -65,16 +65,16 @@ export default function QuickView({ onClose }: { onClose: () => void }) {
             <p>{certificates.length} certificates, including Google AI Essentials (2026) and Python for Everybody from the University of Michigan. All are viewable in the full portfolio.</p>
             <h2>Reach me</h2>
             <p className="quick-reach">
-              <a href={`mailto:${profile.email}`}>{profile.email}</a>
-              <a href={profile.resume} target="_blank" rel="noopener noreferrer">Résumé ↗</a>
-              <a href={profile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
-              <a href={profile.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+              <a href={`mailto:${profile.email}`} data-cursor="Email">{profile.email}</a>
+              <a href={profile.resume} target="_blank" rel="noopener noreferrer" data-cursor="Open">Résumé ↗</a>
+              <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" data-cursor="Open">LinkedIn ↗</a>
+              <a href={profile.github} target="_blank" rel="noopener noreferrer" data-cursor="Open">GitHub ↗</a>
             </p>
           </div>
         </section>
 
         <footer>
-          <button onClick={onClose} className="quick-go">Explore the full dive ↓</button>
+          <button onClick={onClose} className="quick-go" data-cursor="Dive">Explore the full dive ↓</button>
         </footer>
       </div>
     </div>,
