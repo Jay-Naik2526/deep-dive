@@ -125,7 +125,6 @@ export function startWorld() {
     world.vel += (v - world.vel) * (1 - Math.exp(-raw * 8))
     const target = Math.min(1, Math.max(0, world.scrollY / world.scrollMax))
     world.depth += (target - world.depth) * (1 - Math.exp(-raw * 6))
-    sound.setDepth(world.depth)
     world.night += (world.nightTarget - world.night) * (1 - Math.exp(-raw * 2.5))
     // free-dive: holding eases speed up, releasing eases it back down
     world.hold += ((world.holding && !document.documentElement.classList.contains('locked') ? 1 : 0) - world.hold) * (1 - Math.exp(-raw * 2.6))

@@ -4,6 +4,9 @@ class Sound {
   private ctx: AudioContext | null = null
   private master!: GainNode
   private lp!: BiquadFilterNode
+  /** everything ambient passes through here, so depth can turn the whole sea down; UI sounds go straight to master */
+  private sea!: GainNode
+  private noiseGain!: GainNode
   private lastBubble = 0
   private pads: { g: GainNode; c: number; w: number; peak: number }[] = []
   private lastDepthAt = 0
@@ -18,7 +21,9 @@ class Sound {
     this.lp.type = 'lowpass'
     this.lp.frequency.value = 900
     this.lp.Q.value = 0.7
-    this.lp.connect(this.master).connect(ctx.destination)
+    this.sea = ctx.createGain()
+    this.sea.gain.value = 1
+    this.lp.connect(this.sea).connect(this.master).connect(ctx.destination)
 
     // brown-ish noise bed = water rumble
     const len = ctx.sampleRate * 4
@@ -35,6 +40,7 @@ class Sound {
     noise.loop = true
     const ng = ctx.createGain()
     ng.gain.value = 0.9
+    this.noiseGain = ng
     noise.connect(ng).connect(this.lp)
     noise.start()
 
@@ -57,10 +63,10 @@ class Sound {
 
     // four chord layers that crossfade with depth: bright and airy at the surface, dark and heavy at the bottom
     const layers: { notes: number[]; c: number; w: number; peak: number }[] = [
-      { notes: [392, 493.9, 587.3], c: 0.04, w: 0.3, peak: 0.018 },
+      { notes: [392, 493.9, 587.3], c: 0.04, w: 0.3, peak: 0.02 },
       { notes: [293.7, 370, 440], c: 0.34, w: 0.3, peak: 0.022 },
-      { notes: [220, 261.6, 329.6], c: 0.64, w: 0.3, peak: 0.026 },
-      { notes: [110, 130.8, 164.8], c: 0.96, w: 0.3, peak: 0.04 },
+      { notes: [220, 261.6, 329.6], c: 0.64, w: 0.18, peak: 0.016 },
+      { notes: [110, 130.8, 164.8], c: 0.97, w: 0.22, peak: 0.008 },
     ]
     this.pads = layers.map((l) => {
       const g = ctx.createGain()
@@ -68,7 +74,7 @@ class Sound {
       const pf = ctx.createBiquadFilter()
       pf.type = 'lowpass'
       pf.frequency.value = 1400
-      g.connect(pf).connect(this.master)
+      g.connect(pf).connect(this.sea)
       l.notes.forEach((f, i) => {
         const o = ctx.createOscillator()
         o.type = i === 1 ? 'triangle' : 'sine'
@@ -97,17 +103,25 @@ class Sound {
     this.master.gain.linearRampToValueAtTime(on ? 0.5 : 0, t + 0.8)
   }
 
-  /** deeper = darker; also crossfades the chord layers. Throttled: it's called every frame. */
+  /**
+   * Deeper = quieter and darker. Light and noise fade first, the chords thin out, and at the bottom there is
+   * only a faint low hum, because the deep sea is nearly silent. depth is 0 (surface) to 1 (seabed).
+   * Throttled: it is called every frame.
+   */
   setDepth(depth: number) {
     if (!this.ctx || !this.enabled) return
     const now = this.ctx.currentTime
     if (now - this.lastDepthAt < 0.12 || Math.abs(depth - this.lastD) < 0.004) return
     this.lastDepthAt = now
     this.lastD = depth
-    this.lp.frequency.setTargetAtTime(1100 - depth * 820, now, 0.4)
+    const d = Math.min(1, Math.max(0, depth))
+    const dim = d * d * (3 - 2 * d) // smoothstep: changes gently at the top and the bottom
+    this.sea.gain.setTargetAtTime(1 - 0.82 * dim, now, 0.7) // overall level: full at the surface, a fifth of it at the bottom
+    this.lp.frequency.setTargetAtTime(1400 - 1260 * dim, now, 0.5) // muffled: 1400 Hz at the surface, 140 Hz at the bottom
+    this.noiseGain.gain.setTargetAtTime(0.9 - 0.78 * dim, now, 0.8) // the water noise nearly disappears
     for (const p of this.pads) {
-      const w = Math.max(0, 1 - Math.abs(depth - p.c) / p.w)
-      p.g.gain.setTargetAtTime(p.peak * w * w, now, 0.6)
+      const w = Math.max(0, 1 - Math.abs(d - p.c) / p.w)
+      p.g.gain.setTargetAtTime(p.peak * w * w, now, 0.7)
     }
   }
 
@@ -171,7 +185,7 @@ class Sound {
     o.frequency.exponentialRampToValueAtTime(f * 2.1, now + 0.09)
     const g = ctx.createGain()
     g.gain.setValueAtTime(0.0001, now)
-    g.gain.exponentialRampToValueAtTime(0.13 * Math.min(1.4, strength), now + 0.012)
+    g.gain.exponentialRampToValueAtTime(0.13 * Math.min(1.4, strength) * (1 - 0.6 * Math.max(0, this.lastD)), now + 0.012)
     g.gain.exponentialRampToValueAtTime(0.0001, now + 0.16)
     o.connect(g).connect(this.master)
     o.start(now)
@@ -195,7 +209,7 @@ class Sound {
     bp.frequency.setValueAtTime(dir > 0 ? 300 : 2400, now)
     bp.frequency.exponentialRampToValueAtTime(dir > 0 ? 2400 : 300, now + dur)
     const g = ctx.createGain()
-    g.gain.value = 0.28
+    g.gain.value = 0.28 * (1 - 0.5 * Math.max(0, this.lastD))
     src.connect(bp).connect(g).connect(this.master)
     src.start(now)
   }

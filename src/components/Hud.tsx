@@ -68,6 +68,7 @@ export function Hud({ onPalette, onAsk }: { onPalette: () => void; onAsk: () => 
         const t = tops.current
         const metres = t.length === sections.length ? metresAt(scrollY, t, root.scrollHeight - innerHeight) : d * MAX_DEPTH
         if (readout.current) readout.current.dataset.top = String(scrollY < 80)
+        sound.setDepth(metres / MAX_DEPTH)
         if (depth.current) depth.current.textContent = Math.round(metres) + ' m'
         let z = zones[0][1]
         zones.forEach((zz) => metres >= zz[0] && (z = zz[1]))
