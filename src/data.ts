@@ -43,7 +43,7 @@ export const featured: Project[] = [
     id: 'kupakosh', title: 'Kupakosh', alt: 'कूपकोश', tag: 'Smart India Hackathon 2026', year: '2026', hue: 28, image: '/img/kupakosh.webp',
     blurb: 'Others search your PDFs. Kupakosh remembers.',
     long: "A well-memory system for Oil India Limited. Every well is drawn as its recorded formation column, so engineers can see what went wrong in the same rock layers before. Built on public stand-in data, as decision support only: the engineer decides. I led Team The RAGnarok on this one.",
-    stack: ['Python', 'Next.js', 'RAG', 'Team lead'], stats: [['PS', '26121'], ['Client', 'Oil India']],
+    stack: ['Python', 'Next.js', 'RAG'], stats: [['PS', '26121'], ['Client', 'Oil India']],
     url: 'https://kupakosh.duckdns.org/', repo: GH + 'kupakosh',
   },
   {
