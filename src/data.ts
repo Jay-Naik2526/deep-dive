@@ -7,7 +7,7 @@ export const profile = {
   site: 'https://jaynaik.tech',
   github: 'https://github.com/Jay-Naik2526',
   linkedin: 'https://www.linkedin.com/in/jay-naik-68a00231a',
-  resume: 'https://drive.google.com/file/d/13OciOYR9Az33goxw0QJZmFvYamSWxK_Z/view?usp=sharing',
+  resume: '/Jay_Naik_Resume.pdf',
   hologram: 'https://jaynaik.tech',
 }
 
@@ -75,9 +75,9 @@ export const featured: Project[] = [
     stack: ['React', 'Tailwind', 'Node.js', 'MongoDB'], url: 'https://skyflixer.fun', repo: GH + 'skyflix',
   },
   {
-    id: 'ambiora', title: 'Ambiora Techfest', tag: 'Technical lead · 500+ visitors', year: '2025', hue: 265, image: '/img/ambiora.webp',
+    id: 'ambiora', title: 'Ambiora Techfest', tag: 'Technical Convenor · 500+ visitors', year: '2025', hue: 265, image: '/img/ambiora.webp',
     blurb: 'The official techfest site, live for two days with zero downtime.',
-    long: 'Official website for Ambiora Techfest at NMIMS Shirpur. As technical lead I ran all technical operations across 8+ events, and the site handled 500+ student visitors over the live two-day event with zero downtime.',
+    long: 'Official website for Ambiora Techfest at NMIMS Shirpur. As technical convenor I ran all technical operations across 8+ events, and the site handled 500+ student visitors over the live two-day event with zero downtime.',
     stack: ['React', 'Tailwind', 'Vercel'], stats: [['500+', 'visitors'], ['0', 'downtime']], url: 'https://ambiora-techfest.vercel.app', repo: GH + 'ambiora-techfest',
   },
 ]
@@ -298,7 +298,7 @@ export const writeups: Record<string, Writeup> = {
     built: [
       "The official Ambiora Techfest site: events and event details, a checkout, sign-up and login, a my-events page, my-teams and team-member pages, a timeline, faculty, about and contact pages.",
       "An admin page and an Express and MongoDB back end for users, teams, event registrations and the newsletter.",
-      "As technical lead I ran all the technical operations around it across the festival’s events.",
+      "As technical convenor I ran all the technical operations around it across the festival’s events.",
     ],
     numbers: [["500+", "visitors in two days"], ["0", "downtime"], ["8+", "events run technically"], ["15", "pages"]],
     why: "",
@@ -593,8 +593,9 @@ export const logbook = [
   { role: 'Vice President', org: 'Ambiora 2027 · NMIMS inter-campus techfest', when: 'Now', now: true, points: ['Co-leading the 2027 edition of the techfest, planned as an inter-campus event for around 1,000 participants.'] },
   { role: 'Google Student Ambassador', org: 'Google · NMIMS MPSTME Shirpur campus', when: 'May 2026 →', now: true, points: ['Run one session a month since May 2026, introducing students to new Gemini features.', 'Complete the program’s other mandatory tasks, including the communication they require.'] },
   { role: 'Coding Club President', org: 'Coding Club · NMIMS MPSTME Shirpur', when: 'Now', now: true, points: ['Leading the club: events, workshops and the people who build them.'] },
+  { role: 'Web Developer Intern', org: 'Infotact Solutions · Remote', when: 'May to Jul 2026', points: ['Led a 4-developer team building a real-time B2B SaaS collaboration workspace with React 19, TypeScript, Vite and Socket.IO.', 'Built real-time messaging and presence with Socket.IO, Redis and MongoDB, containerized with Docker. Owned sprint planning and frontend code review.'] },
   { role: 'Web Development Lead', org: 'GDG on Campus · NMIMS MPSTME Shirpur', when: '2025', points: ['Led a team of 10 across web dev workshops and campus tech events.', 'Top 10 at the GDG On Campus Hackathon out of 30+ teams.', 'Ran 3+ developer workshops for 100+ students.'] },
-  { role: 'Technical Lead', org: 'Ambiora Techfest', when: '2024 →', points: ['Site served 500+ visitors over a live two-day event with zero downtime.', 'Owned technical operations across 8+ events.'] },
+  { role: 'Technical Convenor', org: 'Ambiora Techfest', when: 'Jan to Mar 2025', points: ['Site served 500+ visitors over a live two-day event with zero downtime.', 'Owned technical operations across 8+ events.'] },
   { role: 'Technical Lead', org: 'Flavium Sports Event', when: '2024 →', points: ['Built the official event site and ran technical setup for 5+ sports events.'] },
 ]
 

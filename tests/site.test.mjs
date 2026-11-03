@@ -39,8 +39,13 @@ test('no orphaned screenshots in /public/img', () => {
 })
 
 test('all links are well-formed https URLs', () => {
-  const urls = [profile.site, profile.github, profile.linkedin, profile.resume, ...allProjects.flatMap((p) => [p.url, p.repo]).filter(Boolean)]
+  const urls = [profile.site, profile.github, profile.linkedin, ...allProjects.flatMap((p) => [p.url, p.repo]).filter(Boolean)]
   for (const u of urls) assert.equal(new URL(u).protocol, 'https:', `not https: ${u}`)
+})
+
+test('the resume is shipped with the site and the page links to it', () => {
+  assert.equal(profile.resume, '/Jay_Naik_Resume.pdf')
+  assert.ok(existsSync(new URL('public' + profile.resume, root)), 'resume pdf missing from /public')
 })
 
 test('navigation sections exist in the page', () => {

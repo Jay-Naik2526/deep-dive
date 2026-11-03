@@ -25,6 +25,7 @@ test('Do Not Track and the opt-out switch always win', () => {
 test('link clicks become fixed event names, never urls', () => {
   assert.equal(eventForLink('mailto:naikjay208@gmail.com'), 'email-click')
   assert.equal(eventForLink('https://drive.google.com/file/d/abc/view'), 'resume-open')
+  assert.equal(eventForLink('/Jay_Naik_Resume.pdf'), 'resume-open')
   assert.equal(eventForLink('https://github.com/Jay-Naik2526/deep-dive/issues/new?template=guestbook.yml'), 'guestbook-sign')
   assert.equal(eventForLink('https://github.com/Jay-Naik2526'), 'link-github')
   assert.equal(eventForLink('https://www.linkedin.com/in/jay-naik-68a00231a'), 'link-linkedin')

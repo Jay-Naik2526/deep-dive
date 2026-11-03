@@ -29,7 +29,7 @@ export function eventForLink(href: string): string | null {
   try {
     const u = new URL(href, 'https://example.invalid')
     const h = u.hostname
-    if (h === 'drive.google.com') return 'resume-open'
+    if (h === 'drive.google.com' || u.pathname.endsWith('/Jay_Naik_Resume.pdf')) return 'resume-open'
     if (h === 'github.com' && u.pathname.includes('/issues/new')) return 'guestbook-sign'
     if (h === 'github.com') return 'link-github'
     if (h.endsWith('linkedin.com')) return 'link-linkedin'
