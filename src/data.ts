@@ -75,7 +75,7 @@ export const featured: Project[] = [
     stack: ['React', 'Tailwind', 'Node.js', 'MongoDB'], url: 'https://skyflixer.fun', repo: GH + 'skyflix',
   },
   {
-    id: 'ambiora', title: 'Ambiora Techfest', tag: 'Technical Convenor · 500+ visitors', year: '2025', hue: 265, image: '/img/ambiora.webp',
+    id: 'ambiora', title: 'Ambiora Techfest', tag: 'Technical Convenor · 500+ visitors', year: '2026', hue: 265, image: '/img/ambiora.webp',
     blurb: 'The official techfest site, live for two days with zero downtime.',
     long: 'Official website for Ambiora Techfest at NMIMS Shirpur. As technical convenor I ran all technical operations across 8+ events, and the site handled 500+ student visitors over the live two-day event with zero downtime.',
     stack: ['React', 'Tailwind', 'Vercel'], stats: [['500+', 'visitors'], ['0', 'downtime']], url: 'https://ambiora-techfest.vercel.app', repo: GH + 'ambiora-techfest',
@@ -594,9 +594,9 @@ export const logbook = [
   { role: 'Google Student Ambassador', org: 'Google · NMIMS MPSTME Shirpur campus', when: 'May 2026 →', now: true, points: ['Run one session a month since May 2026, introducing students to new Gemini features.', 'Complete the program’s other mandatory tasks, including the communication they require.'] },
   { role: 'Coding Club President', org: 'Coding Club · NMIMS MPSTME Shirpur', when: 'Now', now: true, points: ['Leading the club: events, workshops and the people who build them.'] },
   { role: 'Web Developer Intern', org: 'Infotact Solutions · Remote', when: 'May to Jul 2026', points: ['Led a 4-developer team building a real-time B2B SaaS collaboration workspace with React 19, TypeScript, Vite and Socket.IO.', 'Built real-time messaging and presence with Socket.IO, Redis and MongoDB, containerized with Docker. Owned sprint planning and frontend code review.'] },
+  { role: 'Technical Convenor', org: 'Ambiora Techfest', when: 'Jan to Mar 2026', points: ['Site served 500+ visitors over a live two-day event with zero downtime.', 'Owned technical operations across 8+ events.'] },
+  { role: 'Technical Lead', org: 'Flavium Sports Event', when: 'Jan to Feb 2026', points: ['Built the official event site and ran technical setup for 5+ sports events.'] },
   { role: 'Web Development Lead', org: 'GDG on Campus · NMIMS MPSTME Shirpur', when: '2025', points: ['Led a team of 10 across web dev workshops and campus tech events.', 'Top 10 at the GDG On Campus Hackathon out of 30+ teams.', 'Ran 3+ developer workshops for 100+ students.'] },
-  { role: 'Technical Convenor', org: 'Ambiora Techfest', when: 'Jan to Mar 2025', points: ['Site served 500+ visitors over a live two-day event with zero downtime.', 'Owned technical operations across 8+ events.'] },
-  { role: 'Technical Lead', org: 'Flavium Sports Event', when: '2024 →', points: ['Built the official event site and ran technical setup for 5+ sports events.'] },
 ]
 
 export const numbers = [
