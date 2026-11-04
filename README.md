@@ -15,7 +15,7 @@ There's a diver you can interrogate, and a secret at the very bottom.
 ![Three.js](https://img.shields.io/badge/Three.js-0a1f33?style=for-the-badge&logo=threedotjs&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite_8-0a1f33?style=for-the-badge&logo=vite&logoColor=a855f7)
 ![GLSL](https://img.shields.io/badge/GLSL_shaders-0a1f33?style=for-the-badge&logoColor=white)
-![Tests](https://img.shields.io/badge/tests-62_passing-0a1f33?style=for-the-badge&logoColor=white)
+![Tests](https://img.shields.io/badge/tests-70_passing-0a1f33?style=for-the-badge&logoColor=white)
 
 <img src="docs/hero.webp" alt="The surface: JAY NAIK over a bright shallow-water gradient" width="100%">
 
@@ -70,6 +70,12 @@ Drawn on a single `<canvas>` instead of hundreds of animated DOM cells (that one
 ### 📓 Real writeups for all 23 projects
 Every project, featured or not, has the same case-study window: the problem, what was built, numbers, and (where it matters) what it honestly does **not** claim. A test fails the build if any project is missing one. The "why I built it" slot is left blank on purpose until I write it myself.
 
+### 🎓 Credentials wall
+Certificates hang as framed prints on a gallery wall with glass plaques, an issuer ribbon and a viewer. Every Coursera certificate carries its verification link and certificate ID, taken from the PDF itself. A test fails the build if a certificate's image is missing or a Coursera one has no verify link.
+
+### ⚡ Quick view
+`#/quick` is a one-screen summary for a recruiter: who I am, current roles, the projects that matter, and the links. It only shows projects that exist and have something to link to, and a test enforces that.
+
 ### 📖 A guestbook with no server
 Visitors sign through a GitHub Issue form. It appears on the site only after I approve it by labelling the issue. The parser is pure and strict, so it can't render anything unsafe.
 
@@ -87,7 +93,7 @@ Phones get a different pipeline instead of a smaller copy of the desktop one.
 | Pixel ratio | adaptive, warms up then ratchets | lower cap, 30 fps targets |
 | Fallback | none needed | CSS background if WebGL is missing |
 
-Force a tier with `?q=lite` or `?q=high`. Measured in headless Brave at 390×844 with a 6× CPU slowdown, scrolling the whole page: about 59 fps and roughly 17 slow frames, down from 48 fps and 54 slow frames. Desktop shows 0 slow frames. A handful of ~67 ms frames remain around the About section under that throttle, and I haven't tested a real phone.
+Force a tier with `?q=lite` or `?q=high`. Measured in headless Brave with a 4× CPU slowdown at 2× pixel ratio, scrolling the whole page with real wheel events: the hero and About run at about 59 fps, the dive log is the weakest section at about 53 fps, and every other section sits at 57 to 59 fps. A handful of ~67 ms frames remain in the phone-sized test. I haven't tested a real phone.
 
 ## Run it
 
@@ -99,7 +105,7 @@ npm run dev
 | Command | What it does |
 | --- | --- |
 | `npm run build` | Type-check, refresh the contribution snapshot, build to `dist/` |
-| `npm test` | Type-check and run all tests (62) |
+| `npm test` | Type-check and run all tests (70) |
 | `npm run check:links` | Ping every external link on the site |
 | `npm run sync:contrib` | Refresh the contribution snapshot (`GH_TOKEN` or the GitHub CLI) |
 
@@ -145,7 +151,8 @@ To add a project: edit `src/data.ts` (including its writeup) and drop a screensh
 ## Honest notes
 
 - The diver can still misread a passage. That's why every answer shows its sources.
-- Two linked live demos (Finance Tracker, Skyflix) were broken when last checked. They're still linked.
+- The Finance Tracker is linked to its GitHub repository only, not a live demo. The Skyflix demo link (skyflixer.fun) has not been verified.
+- The "why I built it" line on each project is blank until I write it myself.
 - The testimonials block stays hidden until it has real entries.
 
 ---
