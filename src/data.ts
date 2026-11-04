@@ -58,7 +58,7 @@ export const featured: Project[] = [
     id: 'or-studio', title: 'OR/Studio', tag: 'Open source · works offline', year: '2026', hue: 78, image: '/img/or-studio.webp',
     blurb: 'Every pivot, explained.',
     long: 'A free, in-browser Operations Research workbench and a modern replacement for TORA. Exact rational arithmetic, every tableau and ratio test shown and explained, with a step player and a tutor mode. Built to learn, check homework and present a solution to a class.',
-    stack: ['React 19', 'TypeScript', 'Vite 6', 'Tailwind 4'], stats: [['174', 'tests passing'], ['Exact', 'fractions']],
+    stack: ['React 19', 'TypeScript', 'Vite 6', 'Tailwind 4'], stats: [['452', 'tests passing'], ['Exact', 'fractions']],
     url: 'https://or-studio.antideploy.app/#/', repo: GH + 'or-studio',
   },
   {
@@ -257,7 +257,7 @@ export const writeups: Record<string, Writeup> = {
       "A diff mode: type your own working and it finds the first step where it diverged and infers why.",
       "Private by design: no account, no server, no network calls. It installs as an offline app, and exports to PDF, LaTeX, PNG, CSV, JSON and HTML.",
     ],
-    numbers: [["13", "solvers"], ["174", "tests passing"], ["60+", "worked textbook problems, re-solved by the test suite"], ["6", "export formats"]],
+    numbers: [["13", "solvers"], ["452", "tests passing"], ["66", "worked textbook problems, re-solved by the test suite"], ["6", "export formats"]],
     why: "",
     honest: "Unbounded, infeasible, degenerate and cycling problems are detected and explained instead of hidden, and Big-M uses a symbolic M, never a big number.",
   },
